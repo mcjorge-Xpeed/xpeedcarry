@@ -1,20 +1,231 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>XpeedCarry</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XpeedCarry</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0b0f1a;
+      color: white;
+    }
+
+    header {
+      background-color: #11182a;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1f2a44;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #4da3ff;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 15px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px 60px;
+      background: linear-gradient(180deg, #11182a 0%, #0b0f1a 100%);
+    }
+
+    .hero h2 {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #c7d2e3;
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+
+    .hero a {
+      display: inline-block;
+      background-color: #4da3ff;
+      color: white;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .section {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .section h3 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 40px;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .game-card {
+      background-color: #151d31;
+      border: 1px solid #23304d;
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+    }
+
+    .game-card h4 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    .game-card p {
+      color: #c7d2e3;
+      font-size: 14px;
+      min-height: 50px;
+    }
+
+    .game-card a {
+      display: inline-block;
+      margin-top: 10px;
+      color: white;
+      text-decoration: none;
+      background-color: #4da3ff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      text-align: center;
+    }
+
+    .step {
+      background-color: #151d31;
+      border: 1px solid #23304d;
+      border-radius: 12px;
+      padding: 25px;
+    }
+
+    .step h4 {
+      margin-bottom: 10px;
+      color: #4da3ff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid #1f2a44;
+      color: #9fb0c9;
+      font-size: 14px;
+    }
+  </style>
 </head>
-
 <body>
+  <header>
+    <h1>XpeedCarry</h1>
+    <nav>
+      <a href="#games">Games</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="https://wa.me/" target="_blank">Contact</a>
+    </nav>
+  </header>
 
-<h1>XpeedCarry Boosting</h1>
+  <section class="hero">
+    <h2>Fast, Safe and Professional Boosting Services</h2>
+    <p>
+      Choose your game, select your service, complete payment, and get assisted by a pro.
+    </p>
+    <a href="#games">View Games</a>
+  </section>
 
-<p>Select your game</p>
+  <section class="section" id="games">
+    <h3>Our Games</h3>
+    <div class="games-grid">
+      <div class="game-card">
+        <h4>Destiny 2</h4>
+        <p>Raids, dungeons, carries and endgame content.</p>
+        <a href="#">View Services</a>
+      </div>
 
-<ul>
-<li>Valorant</li>
-<li>League of Legends</li>
-<li>Destiny</li>
-</ul>
+      <div class="game-card">
+        <h4>Space Marine 2</h4>
+        <p>Mission help, progression and custom assistance.</p>
+        <a href="#">View Services</a>
+      </div>
 
+      <div class="game-card">
+        <h4>Call of Duty</h4>
+        <p>Ranked help, wins, unlocks and progression support.</p>
+        <a href="#">View Services</a>
+      </div>
+
+      <div class="game-card">
+        <h4>Marvel Rivals</h4>
+        <p>Competitive rank help and match assistance.</p>
+        <a href="#">View Services</a>
+      </div>
+
+      <div class="game-card">
+        <h4>Elden Ring</h4>
+        <p>Boss help, rune farming and progression assistance.</p>
+        <a href="#">View Services</a>
+      </div>
+
+      <div class="game-card">
+        <h4>Borderlands</h4>
+        <p>Leveling, gear farming and coop carry services.</p>
+        <a href="#">View Services</a>
+      </div>
+
+      <div class="game-card">
+        <h4>Diablo 4</h4>
+        <p>Leveling, boss runs, gear help and endgame support.</p>
+        <a href="#">View Services</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how-it-works">
+    <h3>How It Works</h3>
+    <div class="steps">
+      <div class="step">
+        <h4>1. Choose Your Game</h4>
+        <p>Select the game and service you need.</p>
+      </div>
+
+      <div class="step">
+        <h4>2. Complete Payment</h4>
+        <p>Pay safely through PayPal.</p>
+      </div>
+
+      <div class="step">
+        <h4>3. Contact a Pro</h4>
+        <p>Get connected through WhatsApp or Telegram to begin.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 XpeedCarry. All rights reserved.
+  </footer>
 </body>
 </html>
