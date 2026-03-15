@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space Marine 2 | XpeedCarry</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0a0a0f;
+      color: #fff;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .hero {
+      position: relative;
+      padding: 70px 20px 40px;
+      background:
+        linear-gradient(rgba(10,10,15,0.55), rgba(10,10,15,0.92)),
+        url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 3.1rem;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      max-width: 950px;
+      color: #d0d0da;
+      font-size: 1rem;
+      margin-bottom: 24px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn,
+    .back-btn,
+    .buy-btn {
+      display: inline-block;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .tab-btn,
+    .back-btn {
+      padding: 12px 18px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      background: #6c4cff;
+      border-color: #6c4cff;
+    }
+
+    .tab-btn:hover,
+    .back-btn:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .tab-btn.active:hover {
+      background: #5c3ef0;
+    }
+
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 18px;
+    }
+
+    .section-subtitle {
+      color: #c7c7d4;
+      margin-bottom: 26px;
+      max-width: 950px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .service-card {
+      background: #18181f;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-image {
+      height: 170px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .discount-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #6c4cff;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .card-content {
+      padding: 18px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-content h3 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      line-height: 1.05;
+    }
+
+    .features {
+      list-style: none;
+      margin-bottom: 18px;
+    }
+
+    .features li {
+      color: #d1d1dc;
+      margin-bottom: 6px;
+      position: relative;
+      padding-left: 14px;
+      font-size: 0.95rem;
+    }
+
+    .features li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #36d84f;
+    }
+
+    .price-row {
+      margin-top: auto;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .price-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .old-price {
+      color: #8f8f9e;
+      text-decoration: line-through;
+      font-size: 0.95rem;
+    }
+
+    .price {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .price small {
+      font-size: 1rem;
+      vertical-align: top;
+    }
+
+    .buy-btn {
+      padding: 13px 20px;
+      background: #6c4cff;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .buy-btn:hover {
+      background: #5c3ef0;
+    }
+
+    .builds-box {
+      margin-top: 50px;
+      background: #14141b;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 28px;
+    }
+
+    .builds-box h2 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .builds-box p {
+      color: #d0d0da;
+      max-width: 850px;
+      margin-bottom: 20px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .mini-card {
+      background: #1b1b23;
+      border-radius: 14px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .mini-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .mini-card p {
+      margin-bottom: 14px;
+      color: #c9c9d7;
+      font-size: 0.95rem;
+    }
+
+    .footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+      color: #a9a9b8;
+      padding: 28px 20px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+
+      .card-content h3 {
+        font-size: 1.5rem;
+      }
+
+      .price {
+        font-size: 1.7rem;
+      }
+
+      .price-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .buy-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Warhammer 40K Space Marine 2 Leveling</h1>
+      <p>
+        Browse our Warhammer 40K Space Marine 2 leveling services to find the best option for your goals.
+        Whether you need progression help, carries, resource assistance or targeted farming, XpeedCarry keeps the process simple and direct.
+      </p>
+
+      <div class="top-actions">
+        <a href="index.html" class="back-btn">Back to Home</a>
+        <a href="#leveling" class="tab-btn active">Leveling</a>
+        <a href="#builds" class="tab-btn">Builds</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <section id="leveling">
+      <h2 class="section-title">Leveling Services</h2>
+      <p class="section-subtitle">
+        Pick the service that fits your needs. Later we can connect each button to its PayPal checkout link.
+      </p>
+
+      <div class="cards-grid">
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="card-content">
+            <h3>Operations</h3>
+            <ul class="features">
+              <li>Choose Any Difficulty</li>
+              <li>All Operations Here</li>
+              <li>Fair Price</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="price">$2<small>99</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1547394765-185e1e68f34e?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="card-content">
+            <h3>Leveling</h3>
+            <ul class="features">
+              <li>Prestige Available</li>
+              <li>Leveling Options</li>
+              <li>All Classes</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="price">$5<small>04</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="card-content">
+            <h3>Stratagems</h3>
+            <ul class="features">
+              <li>Daily & Weekly</li>
+              <li>Any Difficulty</li>
+              <li>Fast Carries</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="price">$41<small>99</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1511882150382-421056c89033?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="card-content">
+            <h3>Armory Data</h3>
+            <ul class="features">
+              <li>All Data Types</li>
+              <li>Fast Farming</li>
+              <li>Legit & Safe Service</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="price">$2<small>99</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="card-content">
+            <h3>Siege Boost</h3>
+            <ul class="features">
+              <li>Up to Wave 25</li>
+              <li>Earn Unique Skins</li>
+              <li>Fast & Safe Service</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="price">$4<small>99</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="card-content">
+            <h3>Battle-Worn Pauldron Farm</h3>
+            <ul class="features">
+              <li>x8 Absolute Operations</li>
+              <li>Unique Skin Reward</li>
+              <li>Quickly & Guaranteed</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="price">$84<small>99</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop');">
+            <div class="discount-badge">64% off</div>
+          </div>
+          <div class="card-content">
+            <h3>Emperor's Champion Bundle</h3>
+            <ul class="features">
+              <li>Bundle Options Inside</li>
+              <li>Leveling & Gearing</li>
+              <li>A Lot Of Requisition</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="old-price">$139.99</div>
+                <div class="price">$49<small>99</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1505740106531-4243f3831c78?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="card-content">
+            <h3>Ordeals Boost</h3>
+            <ul class="features">
+              <li>Earn Unique Cosmetics</li>
+              <li>Full Page Completions</li>
+              <li>Quickly & Guaranteed</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="price">$0<small>99</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="card-content">
+            <h3>Battle-Worn Blade Farm</h3>
+            <ul class="features">
+              <li>x1 Absolute Operation</li>
+              <li>Unique Skin Reward</li>
+              <li>Quickly & Guaranteed</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="price">$10<small>84</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="card-content">
+            <h3>Lethal Difficulty Skins Farm</h3>
+            <ul class="features">
+              <li>Get Sword and Helm</li>
+              <li>Lethal Skin Rewards</li>
+              <li>Quickly & Guaranteed</li>
+            </ul>
+            <div class="price-row">
+              <div class="price-box">
+                <div class="price">$8<small>99</small></div>
+              </div>
+              <a href="#" class="buy-btn">Buy now</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="builds" class="builds-box">
+      <h2>Builds</h2>
+      <p>
+        This section will be used for class builds, weapon setups, recommended perks, progression paths and custom setup help.
+        For now, you can leave it like this and later we turn each block into a purchasable service.
+      </p>
+
+      <div class="mini-grid">
+        <div class="mini-card">
+          <h3>Tactical Builds</h3>
+          <p>Optimized setups for balanced damage, survivability and progression.</p>
+          <a href="#" class="buy-btn">Coming soon</a>
+        </div>
+
+        <div class="mini-card">
+          <h3>Assault Builds</h3>
+          <p>Recommended melee and aggressive class configurations for faster clears.</p>
+          <a href="#" class="buy-btn">Coming soon</a>
+        </div>
+
+        <div class="mini-card">
+          <h3>Heavy Builds</h3>
+          <p>Tanky and high output setups for safer and stronger team runs.</p>
+          <a href="#" class="buy-btn">Coming soon</a>
+        </div>
+
+        <div class="mini-card">
+          <h3>Custom Build Help</h3>
+          <p>Need a specific playstyle or weapon focus? We can prepare a custom solution.</p>
+          <a href="#" class="buy-btn">Coming soon</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 XpeedCarry. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
