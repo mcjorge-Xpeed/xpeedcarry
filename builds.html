@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Warhammer 40K Space Marine 2 Build Services</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      padding: 18px 14px 30px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.9)),
+        url("images/space-marine-builds-banner.jpg") center/cover no-repeat;
+    }
+
+    .hero h1 {
+      font-size: 58px;
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 18px;
+      color: #fff;
+    }
+
+    .hero p {
+      max-width: 1180px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+
+    .builds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+
+    .build-card {
+      background: linear-gradient(180deg, rgba(36,36,36,0.96), rgba(20,20,20,0.98));
+      border-radius: 16px;
+      overflow: hidden;
+      min-height: 245px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .build-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.6);
+    }
+
+    .card-image {
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)),
+                  url("images/default-build.png") center/contain no-repeat;
+      background-color: #2a2a2a;
+    }
+
+    .card-content {
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .features {
+      list-style: none;
+      margin-bottom: 14px;
+    }
+
+    .features li {
+      position: relative;
+      padding-left: 12px;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .features li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #2dff2d;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .card-footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .price {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .price sup {
+      font-size: 11px;
+      top: -0.6em;
+      position: relative;
+    }
+
+    .buy-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 80px;
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 8px;
+      background: #5a35ff;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .buy-btn:hover {
+      background: #6d4cff;
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 1100px) {
+      .hero h1 {
+        font-size: 46px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: 20px 12px 24px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .hero p {
+        font-size: 13px;
+      }
+
+      .builds-grid {
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .card-title {
+        font-size: 17px;
+      }
+
+      .features li {
+        font-size: 13px;
+      }
+
+      .price {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <h1>Warhammer 40K Space Marine 2 Build Services</h1>
+    <p>
+      Browse the Space Marine 2 builds for sale to dominate the endgame. Any class available; pick the ultimate builds for your Tactical, Vanguard, Assault, Heavy, Sniper, or Bulwark classes. Take on the hardest difficulty with the Meta build services. Available 24/7 with over 200 Warhammer pro players on standby.
+    </p>
+
+    <div class="builds-grid">
+      <div class="build-card">
+        <div class="card-image" style='background-image: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url("images/tactical-build.png");'></div>
+        <div class="card-content">
+          <h3 class="card-title">Tactical Build</h3>
+          <ul class="features">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast &amp; Safe Service</li>
+          </ul>
+          <div class="card-footer">
+            <div class="price">$28<sup>99</sup></div>
+            <a href="#" class="buy-btn">Buy now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="build-card">
+        <div class="card-image" style='background-image: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url("images/bulwark-build.png");'></div>
+        <div class="card-content">
+          <h3 class="card-title">Bulwark Build</h3>
+          <ul class="features">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast &amp; Safe Service</li>
+          </ul>
+          <div class="card-footer">
+            <div class="price">$28<sup>99</sup></div>
+            <a href="#" class="buy-btn">Buy now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="build-card">
+        <div class="card-image" style='background-image: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url("images/heavy-build.png");'></div>
+        <div class="card-content">
+          <h3 class="card-title">Heavy Build</h3>
+          <ul class="features">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast &amp; Safe Service</li>
+          </ul>
+          <div class="card-footer">
+            <div class="price">$28<sup>99</sup></div>
+            <a href="#" class="buy-btn">Buy now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="build-card">
+        <div class="card-image" style='background-image: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url("images/sniper-build.png");'></div>
+        <div class="card-content">
+          <h3 class="card-title">Sniper Build</h3>
+          <ul class="features">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast &amp; Safe Service</li>
+          </ul>
+          <div class="card-footer">
+            <div class="price">$28<sup>99</sup></div>
+            <a href="#" class="buy-btn">Buy now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="build-card">
+        <div class="card-image" style='background-image: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url("images/vanguard-build.png");'></div>
+        <div class="card-content">
+          <h3 class="card-title">Vanguard Build</h3>
+          <ul class="features">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast &amp; Safe Service</li>
+          </ul>
+          <div class="card-footer">
+            <div class="price">$28<sup>99</sup></div>
+            <a href="#" class="buy-btn">Buy now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="build-card">
+        <div class="card-image" style='background-image: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url("images/assault-build.png");'></div>
+        <div class="card-content">
+          <h3 class="card-title">Assault Build</h3>
+          <ul class="features">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast &amp; Safe Service</li>
+          </ul>
+          <div class="card-footer">
+            <div class="price">$28<sup>99</sup></div>
+            <a href="#" class="buy-btn">Buy now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
