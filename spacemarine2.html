@@ -6,16 +6,41 @@
   <title>Space Marine 2 | XpeedCarry</title>
 
   <style>
+    :root {
+      --bg: #070708;
+      --bg-secondary: #111214;
+      --panel: #151618;
+      --panel-soft: #1b1c1f;
+      --text: #f5f2e8;
+      --text-soft: #c8c1af;
+      --text-muted: #8c8576;
+      --gold: #c9a44b;
+      --gold-bright: #f1d27a;
+      --gold-deep: #8e6a24;
+      --border: rgba(201, 164, 75, 0.18);
+      --border-strong: rgba(201, 164, 75, 0.38);
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --transition: 0.28s ease;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      background: #0a0a0f;
-      color: #fff;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(201, 164, 75, 0.08), transparent 35%),
+        linear-gradient(to bottom, #070708, #0d0d0f 35%, #090909 100%);
+      color: var(--text);
       line-height: 1.5;
     }
 
@@ -26,143 +51,222 @@
 
     .hero {
       position: relative;
-      padding: 70px 20px 40px;
+      padding: 88px 20px 56px;
       background:
-        linear-gradient(rgba(10, 10, 15, 0.55), rgba(10, 10, 15, 0.92)),
-        url('images/campaign.png') center/cover no-repeat;
+        linear-gradient(rgba(7, 7, 8, 0.35), rgba(7, 7, 8, 0.88)),
+        linear-gradient(135deg, rgba(201, 164, 75, 0.12), transparent 40%),
+        url("images/campaign.png") center/cover no-repeat;
+      border-bottom: 1px solid rgba(201, 164, 75, 0.12);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(7, 7, 8, 0.98), rgba(7, 7, 8, 0.08)),
+        linear-gradient(to right, rgba(0, 0, 0, 0.35), transparent 55%);
+      pointer-events: none;
     }
 
     .hero-content {
+      position: relative;
+      z-index: 1;
       max-width: 1200px;
       margin: 0 auto;
     }
 
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      color: var(--gold-bright);
+      background: rgba(201, 164, 75, 0.08);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
     .hero h1 {
-      font-size: 3.1rem;
-      line-height: 1.1;
-      margin-bottom: 14px;
+      max-width: 900px;
+      font-size: 3.4rem;
+      line-height: 1.05;
+      margin-bottom: 16px;
+      color: #fffaf0;
+      text-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
     }
 
     .hero p {
-      max-width: 950px;
-      color: #d0d0da;
-      font-size: 1rem;
-      margin-bottom: 24px;
+      max-width: 900px;
+      color: var(--text-soft);
+      font-size: 1.03rem;
+      margin-bottom: 28px;
     }
 
     .top-actions {
       display: flex;
-      gap: 12px;
       flex-wrap: wrap;
+      gap: 12px;
     }
 
     .tab-btn,
     .back-btn,
     .buy-btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 12px;
       font-weight: 700;
-      transition: 0.2s ease;
+      transition: var(--transition);
     }
 
     .tab-btn,
     .back-btn {
+      min-height: 46px;
       padding: 12px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.06);
-      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      backdrop-filter: blur(6px);
+    }
+
+    .back-btn:hover,
+    .tab-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+      background: rgba(201, 164, 75, 0.08);
+      color: #fffaf0;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
     }
 
     .tab-btn.active {
-      background: #6c4cff;
-      border-color: #6c4cff;
-    }
-
-    .tab-btn:hover,
-    .back-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
+      background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+      border-color: rgba(241, 210, 122, 0.55);
+      color: #120f08;
+      box-shadow: 0 10px 28px rgba(201, 164, 75, 0.28);
     }
 
     .tab-btn.active:hover {
-      background: #5c3ef0;
+      transform: translateY(-2px);
+      filter: brightness(1.04);
     }
 
     .section {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 30px 20px 60px;
+      padding: 42px 20px 70px;
+    }
+
+    .section-header {
+      margin-bottom: 28px;
     }
 
     .section-title {
-      font-size: 2rem;
-      margin-bottom: 18px;
+      font-size: 2.15rem;
+      margin-bottom: 10px;
+      color: #fff7e5;
     }
 
     .section-subtitle {
-      color: #c7c7d4;
-      margin-bottom: 26px;
-      max-width: 950px;
+      max-width: 860px;
+      color: var(--text-soft);
+      font-size: 1rem;
     }
 
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
     }
 
     .service-card {
-      background: #18181f;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+      position: relative;
       display: flex;
       flex-direction: column;
       min-height: 100%;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0)),
+        linear-gradient(180deg, #151618, #101113);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .service-card:hover {
+      transform: translateY(-7px) scale(1.01);
+      border-color: rgba(241, 210, 122, 0.38);
+      box-shadow: 0 22px 42px rgba(0, 0, 0, 0.52);
     }
 
     .card-image {
-      height: 170px;
+      position: relative;
+      height: 190px;
       background-size: cover;
       background-position: center;
-      position: relative;
+      overflow: hidden;
+    }
+
+    .card-image::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(10, 10, 10, 0.94), rgba(10, 10, 10, 0.18)),
+        linear-gradient(135deg, rgba(201, 164, 75, 0.12), transparent 45%);
+    }
+
+    .card-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 -50px 70px rgba(0, 0, 0, 0.55);
+      pointer-events: none;
     }
 
     .discount-badge {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      background: #6c4cff;
-      color: #fff;
-      padding: 6px 10px;
+      top: 14px;
+      right: 14px;
+      z-index: 2;
+      padding: 7px 11px;
       border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+      color: #100d06;
+      font-size: 0.82rem;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
     }
 
     .card-content {
-      padding: 18px 16px 16px;
       display: flex;
       flex-direction: column;
       flex: 1;
+      padding: 20px 18px 18px;
     }
 
     .card-content h3 {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
+      font-size: 1.65rem;
       line-height: 1.05;
+      margin-bottom: 14px;
+      color: #fff8ea;
     }
 
     .features {
       list-style: none;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .features li {
-      color: #d1d1dc;
-      margin-bottom: 6px;
       position: relative;
-      padding-left: 14px;
+      padding-left: 16px;
+      margin-bottom: 8px;
+      color: var(--text-soft);
       font-size: 0.95rem;
     }
 
@@ -170,69 +274,88 @@
       content: "•";
       position: absolute;
       left: 0;
-      color: #36d84f;
+      top: 0;
+      color: var(--gold-bright);
+      font-weight: 900;
     }
 
     .price-row {
       margin-top: auto;
       display: flex;
-      align-items: end;
+      align-items: flex-end;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
+      padding-top: 4px;
     }
 
     .price-box {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
 
     .old-price {
-      color: #8f8f9e;
+      color: var(--text-muted);
+      font-size: 0.93rem;
       text-decoration: line-through;
-      font-size: 0.95rem;
     }
 
     .price {
       font-size: 2rem;
       font-weight: 800;
       line-height: 1;
+      color: var(--gold-bright);
+      text-shadow: 0 2px 12px rgba(201, 164, 75, 0.08);
     }
 
     .price small {
-      font-size: 1rem;
+      font-size: 0.95rem;
       vertical-align: top;
     }
 
     .buy-btn {
+      min-height: 46px;
       padding: 13px 20px;
-      background: #6c4cff;
-      color: #fff;
       white-space: nowrap;
+      border: 1px solid rgba(241, 210, 122, 0.32);
+      background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+      color: #120f08;
+      box-shadow: 0 10px 24px rgba(201, 164, 75, 0.2);
     }
 
     .buy-btn:hover {
-      background: #5c3ef0;
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 14px 28px rgba(201, 164, 75, 0.25);
     }
 
     .footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(201, 164, 75, 0.12);
       text-align: center;
-      color: #a9a9b8;
-      padding: 28px 20px;
+      color: var(--text-muted);
+      padding: 30px 20px;
+      background: rgba(255, 255, 255, 0.015);
     }
 
     @media (max-width: 768px) {
+      .hero {
+        padding: 72px 18px 46px;
+      }
+
       .hero h1 {
-        font-size: 2.3rem;
+        font-size: 2.4rem;
+      }
+
+      .section-title {
+        font-size: 1.85rem;
       }
 
       .card-content h3 {
-        font-size: 1.5rem;
+        font-size: 1.45rem;
       }
 
       .price {
-        font-size: 1.7rem;
+        font-size: 1.75rem;
       }
 
       .price-row {
@@ -242,7 +365,21 @@
 
       .buy-btn {
         width: 100%;
-        text-align: center;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p,
+      .section-subtitle {
+        font-size: 0.95rem;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -251,11 +388,13 @@
 
   <header class="hero">
     <div class="hero-content">
+      <span class="eyebrow">XpeedCarry Premium Service</span>
+
       <h1>Warhammer 40K Space Marine 2 Leveling</h1>
 
       <p>
         Browse our Warhammer 40K Space Marine 2 leveling services to find the best option for your goals.
-        Whether you need progression help, carries, resource assistance or targeted farming, XpeedCarry keeps the process simple and direct.
+        Whether you need progression help, carries, resource assistance, or targeted farming, XpeedCarry keeps the process simple, fast, and direct.
       </p>
 
       <div class="top-actions">
@@ -268,15 +407,17 @@
 
   <main class="section">
     <section id="leveling">
-      <h2 class="section-title">Leveling Services</h2>
-
-      <p class="section-subtitle">
-        Pick the service that fits your needs. Later we can connect each button to its PayPal checkout link.
-      </p>
+      <div class="section-header">
+        <h2 class="section-title">Leveling Services</h2>
+        <p class="section-subtitle">
+          Pick the service that fits your needs. Later, each button can be connected directly to its PayPal checkout link.
+        </p>
+      </div>
 
       <div class="cards-grid">
+
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/operations.png');"></div>
+          <div class="card-image" style="background-image: url('images/operations.png');"></div>
           <div class="card-content">
             <h3>Operations</h3>
             <ul class="features">
@@ -288,13 +429,13 @@
               <div class="price-box">
                 <div class="price">$2<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/leveling-25.png');"></div>
+          <div class="card-image" style="background-image: url('images/leveling-25.png');"></div>
           <div class="card-content">
             <h3>Leveling</h3>
             <ul class="features">
@@ -306,13 +447,13 @@
               <div class="price-box">
                 <div class="price">$5<small>04</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/weaplevel.png');"></div>
+          <div class="card-image" style="background-image: url('images/weaplevel.png');"></div>
           <div class="card-content">
             <h3>Weapon Leveling</h3>
             <ul class="features">
@@ -324,13 +465,13 @@
               <div class="price-box">
                 <div class="price">$0<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/campaign.png');"></div>
+          <div class="card-image" style="background-image: url('images/campaign.png');"></div>
           <div class="card-content">
             <h3>Campaign</h3>
             <ul class="features">
@@ -342,13 +483,13 @@
               <div class="price-box">
                 <div class="price">$13<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/reqpoints.png');"></div>
+          <div class="card-image" style="background-image: url('images/reqpoints.png');"></div>
           <div class="card-content">
             <h3>Requisition Farming</h3>
             <ul class="features">
@@ -360,13 +501,13 @@
               <div class="price-box">
                 <div class="price">$2<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/strata.png');"></div>
+          <div class="card-image" style="background-image: url('images/strata.png');"></div>
           <div class="card-content">
             <h3>Stratagems</h3>
             <ul class="features">
@@ -378,13 +519,13 @@
               <div class="price-box">
                 <div class="price">$41<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/armory-data.png');"></div>
+          <div class="card-image" style="background-image: url('images/armory-data.png');"></div>
           <div class="card-content">
             <h3>Armory Data</h3>
             <ul class="features">
@@ -396,13 +537,13 @@
               <div class="price-box">
                 <div class="price">$2<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/horde.png');"></div>
+          <div class="card-image" style="background-image: url('images/horde.png');"></div>
           <div class="card-content">
             <h3>Siege Boost</h3>
             <ul class="features">
@@ -414,13 +555,13 @@
               <div class="price-box">
                 <div class="price">$4<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/worn.png');"></div>
+          <div class="card-image" style="background-image: url('images/worn.png');"></div>
           <div class="card-content">
             <h3>Battle-Worn Pauldron Farm</h3>
             <ul class="features">
@@ -432,14 +573,14 @@
               <div class="price-box">
                 <div class="price">$84<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/emperors-champ-bund.png');">
-            <div class="discount-badge">64% off</div>
+          <div class="card-image" style="background-image: url('images/emperors-champ-bund.png');">
+            <div class="discount-badge">64% Off</div>
           </div>
           <div class="card-content">
             <h3>Emperor's Champion Bundle</h3>
@@ -453,13 +594,13 @@
                 <div class="old-price">$139.99</div>
                 <div class="price">$49<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/ordeals.png');"></div>
+          <div class="card-image" style="background-image: url('images/ordeals.png');"></div>
           <div class="card-content">
             <h3>Ordeals Boost</h3>
             <ul class="features">
@@ -471,13 +612,13 @@
               <div class="price-box">
                 <div class="price">$0<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/battelworn.png');"></div>
+          <div class="card-image" style="background-image: url('images/battelworn.png');"></div>
           <div class="card-content">
             <h3>Battle-Worn Blade Farm</h3>
             <ul class="features">
@@ -489,13 +630,13 @@
               <div class="price-box">
                 <div class="price">$10<small>84</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
 
         <article class="service-card">
-          <div class="card-image" style="background-image:url('images/lethalskinfarm.png');"></div>
+          <div class="card-image" style="background-image: url('images/lethalskinfarm.png');"></div>
           <div class="card-content">
             <h3>Lethal Difficulty Skins Farm</h3>
             <ul class="features">
@@ -507,10 +648,11 @@
               <div class="price-box">
                 <div class="price">$8<small>99</small></div>
               </div>
-              <a href="#" class="buy-btn">Buy now</a>
+              <a href="#" class="buy-btn">Buy Now</a>
             </div>
           </div>
         </article>
+
       </div>
     </section>
   </main>
