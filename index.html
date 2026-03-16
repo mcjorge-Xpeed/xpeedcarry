@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>XpeedCarry</title>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -28,12 +32,16 @@
       color: inherit;
     }
 
+    /* HERO */
+
     .hero {
       position: relative;
       padding: 90px 20px 70px;
       background:
         linear-gradient(rgba(10, 10, 15, 0.55), rgba(10, 10, 15, 0.92)),
-        url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+        url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1600&auto=format&fit=crop')
+        center / cover no-repeat;
+
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
@@ -63,6 +71,8 @@
       flex-wrap: wrap;
     }
 
+    /* BUTTONS */
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -76,14 +86,14 @@
     }
 
     .btn-primary {
-      background: #6c4cff;
-      color: #ffffff;
-      border-color: #6c4cff;
+      background: #d4af37;
+      color: #0a0a0f;
+      border-color: #d4af37;
     }
 
     .btn-primary:hover {
-      background: #5c3ef0;
-      border-color: #5c3ef0;
+      background: #e5c158;
+      border-color: #e5c158;
     }
 
     .btn-secondary {
@@ -95,6 +105,8 @@
     .btn-secondary:hover {
       background: rgba(255, 255, 255, 0.12);
     }
+
+    /* SECTIONS */
 
     .section {
       max-width: 1200px;
@@ -115,6 +127,8 @@
       color: #c7c7d4;
     }
 
+    /* GRIDS */
+
     .games-grid,
     .steps,
     .features {
@@ -123,6 +137,8 @@
       gap: 16px;
       margin-top: 20px;
     }
+
+    /* CARDS */
 
     .game-card,
     .step-card,
@@ -139,7 +155,7 @@
     .step-card:hover,
     .feature-card:hover {
       transform: translateY(-4px);
-      border-color: rgba(108, 76, 255, 0.5);
+      border-color: #d4af37;
     }
 
     .game-card h3,
@@ -162,6 +178,8 @@
       min-height: 48px;
     }
 
+    /* STEP NUMBER */
+
     .step-number {
       display: inline-flex;
       align-items: center;
@@ -169,11 +187,13 @@
       width: 34px;
       height: 34px;
       border-radius: 50%;
-      background: #6c4cff;
-      color: #ffffff;
+      background: #d4af37;
+      color: #0a0a0f;
       font-weight: 700;
       margin-bottom: 12px;
     }
+
+    /* FOOTER */
 
     .footer {
       text-align: center;
@@ -200,36 +220,16 @@
       color: #ffffff;
     }
 
-    @media (max-width: 768px) {
-      .hero {
-        padding: 80px 20px 55px;
-      }
-
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-
-      .hero p {
-        font-size: 1rem;
-      }
-
-      .btn {
-        width: 100%;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-        align-items: stretch;
-        max-width: 340px;
-        margin: 0 auto;
-      }
-    }
   </style>
+
 </head>
+
 <body>
 
   <header class="hero">
+
     <div class="hero-content">
+
       <h1>XpeedCarry</h1>
 
       <p>
@@ -238,19 +238,33 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="#games" class="btn btn-primary">View Services</a>
-        <a href="#contact" class="btn btn-secondary">Contact Support</a>
+
+        <a href="#games" class="btn btn-primary">
+          View Services
+        </a>
+
+        <a href="#contact" class="btn btn-secondary">
+          Contact Support
+        </a>
+
       </div>
+
     </div>
+
   </header>
 
+  <!-- GAMES -->
+
   <section id="games" class="section">
+
     <h2>Our Games</h2>
+
     <p class="section-subtitle">
       Explore current services and choose the game where you need progression help, farming, carries or custom support.
     </p>
 
     <div class="games-grid">
+
       <div class="game-card">
         <h3>Space Marine 2</h3>
         <p>Campaign help, co-op progression, and farming.</p>
@@ -287,45 +301,18 @@
         <a href="#" class="btn btn-primary">View Service</a>
       </div>
 
-      <div class="game-card">
-        <h3>Monster Hunter World</h3>
-        <p>Hunts, decorations, gear progression and farming assistance.</p>
-        <a href="#" class="btn btn-primary">View Service</a>
-      </div>
-
-      <div class="game-card">
-        <h3>7 Deadly Sins</h3>
-        <p>Account progression, farming, event help and custom support.</p>
-        <a href="#" class="btn btn-primary">View Service</a>
-      </div>
-
-      <div class="game-card">
-        <h3>Destiny 2</h3>
-        <p>Raids, dungeons, exotic missions, trials support and more.</p>
-        <a href="#" class="btn btn-primary">View Service</a>
-      </div>
-
-      <div class="game-card">
-        <h3>Xbox Gamescore Boost</h3>
-        <p>Achievement planning, score boosting and guided completion services.</p>
-        <a href="#" class="btn btn-primary">View Service</a>
-      </div>
-
-      <div class="game-card">
-        <h3>More Games Coming Soon</h3>
-        <p>We are expanding our catalog. Contact us if you need a custom service.</p>
-        <a href="#contact" class="btn btn-secondary">Request a Game</a>
-      </div>
     </div>
+
   </section>
 
+  <!-- HOW IT WORKS -->
+
   <section class="section">
+
     <h2>How It Works</h2>
-    <p class="section-subtitle">
-      A simple process designed to keep everything clear, fast and easy.
-    </p>
 
     <div class="steps">
+
       <div class="step-card">
         <div class="step-number">1</div>
         <h3>Choose Your Game</h3>
@@ -349,45 +336,19 @@
         <h3>Contact a Pro</h3>
         <p>After payment, continue through WhatsApp or Telegram for support.</p>
       </div>
+
     </div>
+
   </section>
 
-  <section class="section">
-    <h2>Why Choose XpeedCarry</h2>
-    <p class="section-subtitle">
-      Built to keep the process direct, secure and convenient for every order.
-    </p>
-
-    <div class="features">
-      <div class="feature-card">
-        <h3>Fast Delivery</h3>
-        <p>Quick and efficient service handled by experienced players.</p>
-      </div>
-
-      <div class="feature-card">
-        <h3>Secure Process</h3>
-        <p>A simple flow with direct communication and safe payment handling.</p>
-      </div>
-
-      <div class="feature-card">
-        <h3>Real Support</h3>
-        <p>Talk directly with a real person through WhatsApp or Telegram.</p>
-      </div>
-
-      <div class="feature-card">
-        <h3>Easy Payment</h3>
-        <p>Simple checkout process using PayPal for convenience and speed.</p>
-      </div>
-    </div>
-  </section>
+  <!-- CONTACT -->
 
   <section id="contact" class="section">
+
     <h2>Need Help?</h2>
-    <p class="section-subtitle">
-      Reach out for custom requests, order follow-up or questions before buying.
-    </p>
 
     <div class="features">
+
       <div class="feature-card">
         <h3>WhatsApp Support</h3>
         <p>Use WhatsApp for quick assistance, custom requests and order follow-up.</p>
@@ -399,10 +360,13 @@
         <p>Use Telegram if you prefer direct chat and faster ticket-style support.</p>
         <a href="#" class="btn btn-primary">Open Telegram</a>
       </div>
+
     </div>
+
   </section>
 
   <footer class="footer">
+
     <p>© 2026 XpeedCarry. All rights reserved.</p>
 
     <div class="footer-links">
@@ -412,6 +376,7 @@
       <a href="#">Terms</a>
       <a href="#">Privacy Policy</a>
     </div>
+
   </footer>
 
 </body>
