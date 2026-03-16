@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Marine 2 Builds | XpeedCarry</title>
 
   <style>
@@ -13,10 +14,14 @@
       font-family: Arial, sans-serif;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       background: #0a0a0f;
-      color: #fff;
-      line-height: 1.5;
+      color: #ffffff;
+      line-height: 1.6;
     }
 
     a {
@@ -24,12 +29,16 @@
       color: inherit;
     }
 
+    /* HERO */
+
     .hero {
       position: relative;
-      padding: 70px 20px 40px;
+      padding: 90px 20px 70px;
       background:
-        linear-gradient(rgba(10, 10, 15, 0.55), rgba(10, 10, 15, 0.92)),
-        url('images/emperors-champ-bund.png') center/cover no-repeat;
+        linear-gradient(rgba(10, 10, 15, 0.45), rgba(10, 10, 15, 0.90)),
+        url("images/emperors-champ-bund.png") center / cover no-repeat;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      overflow: hidden;
     }
 
     .hero-content {
@@ -38,192 +47,291 @@
     }
 
     .hero h1 {
-      font-size: 3.1rem;
-      line-height: 1.1;
-      margin-bottom: 14px;
+      font-size: 3.4rem;
+      line-height: 1.05;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     }
 
     .hero p {
-      max-width: 950px;
+      max-width: 820px;
+      margin-bottom: 28px;
       color: #d0d0da;
-      font-size: 1rem;
-      margin-bottom: 24px;
+      font-size: 1.05rem;
     }
 
-    .top-actions {
+    .hero-buttons {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
 
-    .tab-btn,
-    .back-btn,
-    .buy-btn {
-      display: inline-block;
+    /* BUTTONS */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
       border-radius: 12px;
       font-weight: 700;
-      transition: 0.2s ease;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
     }
 
-    .tab-btn,
-    .back-btn {
-      padding: 12px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
+    .btn-primary {
+      background: linear-gradient(180deg, #f1d57a 0%, #d4af37 55%, #b98d1d 100%);
+      color: #0a0a0f;
+      border-color: #d4af37;
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.18);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(180deg, #f6df90 0%, #e0bc4d 55%, #c99b25 100%);
+      border-color: #e5c158;
+      box-shadow: 0 10px 24px rgba(212, 175, 55, 0.28);
+    }
+
+    .btn-secondary {
       background: rgba(255, 255, 255, 0.06);
-      color: #fff;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(4px);
     }
 
-    .tab-btn.active {
-      background: #6c4cff;
-      border-color: #6c4cff;
-    }
-
-    .tab-btn:hover,
-    .back-btn:hover {
+    .btn-secondary:hover {
       background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
     }
 
-    .tab-btn.active:hover {
-      background: #5c3ef0;
+    .btn-tab-active {
+      background: linear-gradient(180deg, #f1d57a 0%, #d4af37 55%, #b98d1d 100%);
+      color: #0a0a0f;
+      border-color: #d4af37;
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.18);
     }
+
+    .btn-tab-active:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(180deg, #f6df90 0%, #e0bc4d 55%, #c99b25 100%);
+      border-color: #e5c158;
+      box-shadow: 0 10px 24px rgba(212, 175, 55, 0.28);
+    }
+
+    /* SECTION */
 
     .section {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 30px 20px 60px;
+      padding: 60px 20px;
     }
 
-    .section-title {
+    .section h2 {
+      margin-bottom: 16px;
       font-size: 2rem;
-      margin-bottom: 18px;
     }
 
     .section-subtitle {
+      max-width: 820px;
+      margin-bottom: 30px;
       color: #c7c7d4;
-      margin-bottom: 26px;
-      max-width: 950px;
     }
 
-    .cards-grid {
+    /* BUILD GRID */
+
+    .services-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+      margin-top: 20px;
     }
 
     .service-card {
-      background: #18181f;
-      border-radius: 18px;
+      position: relative;
+      min-height: 370px;
+      border-radius: 22px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
       display: flex;
-      flex-direction: column;
-      min-height: 100%;
+      align-items: flex-end;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.38);
+      transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+      isolation: isolate;
+      background: #18181f;
     }
 
-    .card-image {
-      height: 170px;
+    .service-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.08) 0%,
+          rgba(0, 0, 0, 0.18) 35%,
+          rgba(0, 0, 0, 0.90) 100%
+        );
+      z-index: 1;
+    }
+
+    .service-card::after {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(212, 175, 55, 0.10) 48%,
+        rgba(255, 255, 255, 0.04) 54%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translateX(-120%) rotate(8deg);
+      transition: transform 0.7s ease;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .service-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: #d4af37;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.48);
+    }
+
+    .service-card:hover::after {
+      transform: translateX(120%) rotate(8deg);
+    }
+
+    .service-card:hover .service-bg {
+      transform: scale(1.08);
+    }
+
+    .service-bg {
+      position: absolute;
+      inset: 0;
       background-size: cover;
       background-position: center;
+      transition: transform 0.55s ease;
+      z-index: 0;
+    }
+
+    .service-overlay {
       position: relative;
+      z-index: 3;
+      width: 100%;
+      padding: 22px;
     }
 
-    .card-content {
-      padding: 18px 16px 16px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .card-content h3 {
-      font-size: 1.8rem;
+    .service-overlay h3 {
       margin-bottom: 10px;
-      line-height: 1.05;
+      font-size: 1.4rem;
+      line-height: 1.15;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
     }
 
-    .features {
+    .features-list {
       list-style: none;
       margin-bottom: 18px;
     }
 
-    .features li {
-      color: #d1d1dc;
-      margin-bottom: 6px;
-      position: relative;
-      padding-left: 14px;
+    .features-list li {
+      color: #d8d8e1;
       font-size: 0.95rem;
+      margin-bottom: 7px;
+      padding-left: 16px;
+      position: relative;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
     }
 
-    .features li::before {
+    .features-list li::before {
       content: "•";
       position: absolute;
       left: 0;
-      color: #36d84f;
+      top: 0;
+      color: #d4af37;
+      font-weight: 700;
     }
 
     .price-row {
-      margin-top: auto;
       display: flex;
-      align-items: end;
       justify-content: space-between;
-      gap: 10px;
+      align-items: flex-end;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .price-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     .price {
       font-size: 2rem;
       font-weight: 800;
       line-height: 1;
+      color: #f1d57a;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
     }
 
     .price small {
-      font-size: 1rem;
+      font-size: 0.95rem;
       vertical-align: top;
     }
 
-    .buy-btn {
-      padding: 13px 20px;
-      background: #6c4cff;
-      color: #fff;
-      white-space: nowrap;
-    }
-
-    .buy-btn:hover {
-      background: #5c3ef0;
-    }
+    /* FOOTER */
 
     .footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
       text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       color: #a9a9b8;
-      padding: 28px 20px;
+      margin-top: 20px;
     }
 
+    /* MOBILE */
+
     @media (max-width: 768px) {
+      .hero {
+        padding: 80px 20px 55px;
+      }
+
       .hero h1 {
-        font-size: 2.3rem;
+        font-size: 2.5rem;
       }
 
-      .card-content h3 {
-        font-size: 1.5rem;
+      .hero p {
+        font-size: 1rem;
       }
 
-      .price {
-        font-size: 1.7rem;
+      .hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 340px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .service-card {
+        min-height: 330px;
       }
 
       .price-row {
         flex-direction: column;
         align-items: flex-start;
       }
-
-      .buy-btn {
-        width: 100%;
-        text-align: center;
-      }
     }
   </style>
 </head>
+
 <body>
+
+  <!-- HERO -->
 
   <header class="hero">
     <div class="hero-content">
@@ -231,139 +339,155 @@
 
       <p>
         Browse our Warhammer 40K Space Marine 2 build services to find the best setup for your class.
-        Whether you need a Tactical, Vanguard, Assault, Heavy, Sniper, or Bulwark build, XpeedCarry helps you get optimized loadouts fast and safely.
+        Whether you need a Tactical, Vanguard, Assault, Heavy, Sniper, Bulwark, or Techmarine build, XpeedCarry helps you get optimized loadouts fast and safely.
       </p>
 
-      <div class="top-actions">
-        <a href="index.html" class="back-btn">Back to Home</a>
-        <a href="spacemarine2.html" class="tab-btn">Leveling</a>
-        <a href="builds.html" class="tab-btn active">Builds</a>
+      <div class="hero-buttons">
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="spacemarine2.html" class="btn btn-secondary">Leveling</a>
+        <a href="builds.html" class="btn btn-tab-active">Builds</a>
       </div>
     </div>
   </header>
 
-  <main class="section">
-    <section id="builds">
-      <h2 class="section-title">Build Services</h2>
+  <!-- BUILD SERVICES -->
 
-      <p class="section-subtitle">
-        Pick the class build you want.
-      </p>
+  <main class="section" id="builds">
+    <h2>Build Services</h2>
 
-      <div class="cards-grid">
-        <article class="service-card">
-          <div class="card-image" style="background-image:url('images/tactical.png');"></div>
-          <div class="card-content">
-            <h3>Tactical Build</h3>
-            <ul class="features">
-              <li>Max Level Build</li>
-              <li>Ruthless Difficulty</li>
-              <li>Fast & Safe Service</li>
-            </ul>
-            <div class="price-row">
+    <p class="section-subtitle">
+      Pick the class build you want and get a fast, optimized setup with the same premium XpeedCarry experience.
+    </p>
+
+    <div class="services-grid">
+
+      <article class="service-card">
+        <div class="service-bg" style="background-image: url('images/tactical.png');"></div>
+        <div class="service-overlay">
+          <h3>Tactical Build</h3>
+          <ul class="features-list">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast & Safe Service</li>
+          </ul>
+          <div class="price-row">
+            <div class="price-box">
               <div class="price">$28<small>99</small></div>
-              <a href="#" class="buy-btn">Buy now</a>
             </div>
+            <a href="#" class="btn btn-primary">Buy Now</a>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <article class="service-card">
-          <div class="card-image" style="background-image:url('images/bulwark.png');"></div>
-          <div class="card-content">
-            <h3>Bulwark Build</h3>
-            <ul class="features">
-              <li>Max Level Build</li>
-              <li>Ruthless Difficulty</li>
-              <li>Fast & Safe Service</li>
-            </ul>
-            <div class="price-row">
+      <article class="service-card">
+        <div class="service-bg" style="background-image: url('images/bulwark.png');"></div>
+        <div class="service-overlay">
+          <h3>Bulwark Build</h3>
+          <ul class="features-list">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast & Safe Service</li>
+          </ul>
+          <div class="price-row">
+            <div class="price-box">
               <div class="price">$28<small>99</small></div>
-              <a href="#" class="buy-btn">Buy now</a>
             </div>
+            <a href="#" class="btn btn-primary">Buy Now</a>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <article class="service-card">
-          <div class="card-image" style="background-image:url('images/heavy.png');"></div>
-          <div class="card-content">
-            <h3>Heavy Build</h3>
-            <ul class="features">
-              <li>Max Level Build</li>
-              <li>Ruthless Difficulty</li>
-              <li>Fast & Safe Service</li>
-            </ul>
-            <div class="price-row">
+      <article class="service-card">
+        <div class="service-bg" style="background-image: url('images/heavy.png');"></div>
+        <div class="service-overlay">
+          <h3>Heavy Build</h3>
+          <ul class="features-list">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast & Safe Service</li>
+          </ul>
+          <div class="price-row">
+            <div class="price-box">
               <div class="price">$28<small>99</small></div>
-              <a href="#" class="buy-btn">Buy now</a>
             </div>
+            <a href="#" class="btn btn-primary">Buy Now</a>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <article class="service-card">
-          <div class="card-image" style="background-image:url('images/sniper.png');"></div>
-          <div class="card-content">
-            <h3>Sniper Build</h3>
-            <ul class="features">
-              <li>Max Level Build</li>
-              <li>Ruthless Difficulty</li>
-              <li>Fast & Safe Service</li>
-            </ul>
-            <div class="price-row">
+      <article class="service-card">
+        <div class="service-bg" style="background-image: url('images/sniper.png');"></div>
+        <div class="service-overlay">
+          <h3>Sniper Build</h3>
+          <ul class="features-list">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast & Safe Service</li>
+          </ul>
+          <div class="price-row">
+            <div class="price-box">
               <div class="price">$28<small>99</small></div>
-              <a href="#" class="buy-btn">Buy now</a>
             </div>
+            <a href="#" class="btn btn-primary">Buy Now</a>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <article class="service-card">
-          <div class="card-image" style="background-image:url('images/vanguard.png');"></div>
-          <div class="card-content">
-            <h3>Vanguard Build</h3>
-            <ul class="features">
-              <li>Max Level Build</li>
-              <li>Ruthless Difficulty</li>
-              <li>Fast & Safe Service</li>
-            </ul>
-            <div class="price-row">
+      <article class="service-card">
+        <div class="service-bg" style="background-image: url('images/vanguard.png');"></div>
+        <div class="service-overlay">
+          <h3>Vanguard Build</h3>
+          <ul class="features-list">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast & Safe Service</li>
+          </ul>
+          <div class="price-row">
+            <div class="price-box">
               <div class="price">$28<small>99</small></div>
-              <a href="#" class="buy-btn">Buy now</a>
             </div>
+            <a href="#" class="btn btn-primary">Buy Now</a>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <article class="service-card">
-          <div class="card-image" style="background-image:url('images/vanguard.png');"></div>
-          <div class="card-content">
-            <h3>Techmarine Build</h3>
-            <ul class="features">
-              <li>Max Level Build</li>
-              <li>Ruthless Difficulty</li>
-              <li>Fast & Safe Service</li>
-            </ul>
-            <div class="price-row">
+      <article class="service-card">
+        <div class="service-bg" style="background-image: url('images/vanguard.png');"></div>
+        <div class="service-overlay">
+          <h3>Techmarine Build</h3>
+          <ul class="features-list">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast & Safe Service</li>
+          </ul>
+          <div class="price-row">
+            <div class="price-box">
               <div class="price">$28<small>99</small></div>
-              <a href="#" class="buy-btn">Buy now</a>
             </div>
+            <a href="#" class="btn btn-primary">Buy Now</a>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <article class="service-card">
-          <div class="card-image" style="background-image:url('images/assault.png');"></div>
-          <div class="card-content">
-            <h3>Assault Build</h3>
-            <ul class="features">
-              <li>Max Level Build</li>
-              <li>Ruthless Difficulty</li>
-              <li>Fast & Safe Service</li>
-            </ul>
-            <div class="price-row">
+      <article class="service-card">
+        <div class="service-bg" style="background-image: url('images/assault.png');"></div>
+        <div class="service-overlay">
+          <h3>Assault Build</h3>
+          <ul class="features-list">
+            <li>Max Level Build</li>
+            <li>Ruthless Difficulty</li>
+            <li>Fast & Safe Service</li>
+          </ul>
+          <div class="price-row">
+            <div class="price-box">
               <div class="price">$28<small>99</small></div>
-              <a href="#" class="buy-btn">Buy now</a>
             </div>
+            <a href="#" class="btn btn-primary">Buy Now</a>
           </div>
-        </article>
-      </div>
-    </section>
+        </div>
+      </article>
+
+    </div>
   </main>
 
   <footer class="footer">
@@ -371,4 +495,5 @@
   </footer>
 
 </body>
+
 </html>
