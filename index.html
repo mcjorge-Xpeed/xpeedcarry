@@ -5,7 +5,6 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>XpeedCarry</title>
 
   <style>
@@ -38,11 +37,9 @@
       position: relative;
       padding: 90px 20px 70px;
       background:
-        linear-gradient(rgba(10, 10, 15, 0.55), rgba(10, 10, 15, 0.92)),
-        url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1600&auto=format&fit=crop')
-        center / cover no-repeat;
-
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        linear-gradient(rgba(10,10,15,0.55), rgba(10,10,15,0.92)),
+        url("images/hero.jpg") center / cover no-repeat;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
     .hero-content {
@@ -53,7 +50,6 @@
 
     .hero h1 {
       font-size: 3.4rem;
-      line-height: 1.05;
       margin-bottom: 16px;
     }
 
@@ -82,7 +78,6 @@
       font-weight: 700;
       transition: 0.2s ease;
       border: 1px solid transparent;
-      white-space: nowrap;
     }
 
     .btn-primary {
@@ -97,13 +92,12 @@
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.06);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.18);
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255,255,255,0.12);
     }
 
     /* SECTIONS */
@@ -127,58 +121,84 @@
       color: #c7c7d4;
     }
 
-    /* GRIDS */
+    /* GAME GRID */
 
-    .games-grid,
-    .steps,
-    .features {
+    .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 16px;
       margin-top: 20px;
     }
 
-    /* CARDS */
-
-    .game-card,
-    .step-card,
-    .feature-card {
-      background: #18181f;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+    .game-card {
+      position: relative;
+      min-height: 210px;
       border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
-      transition: 0.2s ease;
+      overflow: hidden;
+
+      background-size: cover;
+      background-position: center;
+
+      display: flex;
+      align-items: flex-end;
+
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+
+      transition: 0.25s;
     }
 
-    .game-card:hover,
-    .step-card:hover,
-    .feature-card:hover {
-      transform: translateY(-4px);
+    .game-card:hover {
+      transform: translateY(-4px) scale(1.02);
       border-color: #d4af37;
     }
 
-    .game-card h3,
-    .step-card h3,
-    .feature-card h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-      line-height: 1.2;
+    .game-overlay {
+      width: 100%;
+      padding: 22px;
+
+      background: linear-gradient(
+        rgba(0,0,0,0.2),
+        rgba(0,0,0,0.85)
+      );
     }
 
-    .game-card p,
-    .step-card p,
-    .feature-card p {
+    .game-overlay h3 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .game-overlay p {
       color: #d1d1dc;
       font-size: 0.95rem;
       margin-bottom: 16px;
     }
 
-    .game-card p {
-      min-height: 48px;
+    /* STEPS / FEATURES */
+
+    .steps,
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
+      gap: 16px;
+      margin-top: 20px;
     }
 
-    /* STEP NUMBER */
+    .step-card,
+    .feature-card {
+      background: #18181f;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+      transition: 0.2s ease;
+    }
+
+    .step-card:hover,
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: #d4af37;
+    }
 
     .step-number {
       display: inline-flex;
@@ -198,7 +218,7 @@
     .footer {
       text-align: center;
       padding: 30px 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(255,255,255,0.08);
       color: #a9a9b8;
       margin-top: 20px;
     }
@@ -211,11 +231,6 @@
       flex-wrap: wrap;
     }
 
-    .footer-links a {
-      color: #b9bfd0;
-      transition: 0.2s ease;
-    }
-
     .footer-links a:hover {
       color: #ffffff;
     }
@@ -226,6 +241,8 @@
 
 <body>
 
+  <!-- HERO -->
+
   <header class="hero">
 
     <div class="hero-content">
@@ -233,20 +250,13 @@
       <h1>XpeedCarry</h1>
 
       <p>
-        Fast, safe and professional boosting services for popular co-op, PvE, PvP and progression-based games.
-        Choose your game, select your service, complete payment and get assisted by a pro.
+        Fast, safe and professional boosting services for popular co-op,
+        PvE, PvP and progression-based games.
       </p>
 
       <div class="hero-buttons">
-
-        <a href="#games" class="btn btn-primary">
-          View Services
-        </a>
-
-        <a href="#contact" class="btn btn-secondary">
-          Contact Support
-        </a>
-
+        <a href="#games" class="btn btn-primary">View Services</a>
+        <a href="#contact" class="btn btn-secondary">Contact Support</a>
       </div>
 
     </div>
@@ -260,110 +270,48 @@
     <h2>Our Games</h2>
 
     <p class="section-subtitle">
-      Explore current services and choose the game where you need progression help, farming, carries or custom support.
+      Choose the game where you need progression help or farming.
     </p>
 
     <div class="games-grid">
 
-      <div class="game-card">
-        <h3>Space Marine 2</h3>
-        <p>Campaign help, co-op progression, and farming.</p>
-        <a href="spacemarine2.html" class="btn btn-primary">View Service</a>
+      <div class="game-card" style="background-image:url('images/spacemarine2.jpg')">
+        <div class="game-overlay">
+          <h3>Space Marine 2</h3>
+          <p>Campaign help, co-op progression, and farming.</p>
+          <a href="spacemarine2.html" class="btn btn-primary">View Service</a>
+        </div>
       </div>
 
-      <div class="game-card">
-        <h3>Borderlands 4</h3>
-        <p>Leveling, loot help, co-op support and progression boosting.</p>
-        <a href="#" class="btn btn-primary">View Service</a>
+      <div class="game-card" style="background-image:url('images/borderlands.jpg')">
+        <div class="game-overlay">
+          <h3>Borderlands 4</h3>
+          <p>Leveling, loot help and co-op progression.</p>
+          <a href="#" class="btn btn-primary">View Service</a>
+        </div>
       </div>
 
-      <div class="game-card">
-        <h3>Elden Ring</h3>
-        <p>Boss help, rune farming, progression assistance and custom runs.</p>
-        <a href="#" class="btn btn-primary">View Service</a>
+      <div class="game-card" style="background-image:url('images/eldenring.jpg')">
+        <div class="game-overlay">
+          <h3>Elden Ring</h3>
+          <p>Boss help, rune farming and progression runs.</p>
+          <a href="#" class="btn btn-primary">View Service</a>
+        </div>
       </div>
 
-      <div class="game-card">
-        <h3>Helldivers 2</h3>
-        <p>Mission clears, resource farming, leveling support and more.</p>
-        <a href="#" class="btn btn-primary">View Service</a>
-      </div>
-
-      <div class="game-card">
-        <h3>Monster Hunter Wilds</h3>
-        <p>Gear grind, materials farming, hunts and co-op progression support.</p>
-        <a href="#" class="btn btn-primary">View Service</a>
-      </div>
-
-      <div class="game-card">
-        <h3>Call of Duty</h3>
-        <p>Camo grind, account leveling, battle pass progression.</p>
-        <a href="#" class="btn btn-primary">View Service</a>
+      <div class="game-card" style="background-image:url('images/helldivers.jpg')">
+        <div class="game-overlay">
+          <h3>Helldivers 2</h3>
+          <p>Mission clears, resource farming and leveling.</p>
+          <a href="#" class="btn btn-primary">View Service</a>
+        </div>
       </div>
 
     </div>
 
   </section>
 
-  <!-- HOW IT WORKS -->
-
-  <section class="section">
-
-    <h2>How It Works</h2>
-
-    <div class="steps">
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <h3>Choose Your Game</h3>
-        <p>Select the game and the type of service you need.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <h3>Pick Your Service</h3>
-        <p>Choose the boost, carry, grind or progression help you want.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <h3>Complete Payment</h3>
-        <p>Pay securely through PayPal in just a few clicks.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">4</div>
-        <h3>Contact a Pro</h3>
-        <p>After payment, continue through WhatsApp or Telegram for support.</p>
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- CONTACT -->
-
-  <section id="contact" class="section">
-
-    <h2>Need Help?</h2>
-
-    <div class="features">
-
-      <div class="feature-card">
-        <h3>WhatsApp Support</h3>
-        <p>Use WhatsApp for quick assistance, custom requests and order follow-up.</p>
-        <a href="#" class="btn btn-primary">Open WhatsApp</a>
-      </div>
-
-      <div class="feature-card">
-        <h3>Telegram Support</h3>
-        <p>Use Telegram if you prefer direct chat and faster ticket-style support.</p>
-        <a href="#" class="btn btn-primary">Open Telegram</a>
-      </div>
-
-    </div>
-
-  </section>
+  <!-- FOOTER -->
 
   <footer class="footer">
 
