@@ -12,9 +12,9 @@ html {
 }
 
 body {
-  background:
-    linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)),
-    url("../images/background.jpg") center / cover no-repeat fixed;
+  background: #0a0a0f;
+  color: #ffffff;
+  line-height: 1.6;
 }
 
 a {
