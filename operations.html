@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
   <meta charset="UTF-8">
@@ -17,11 +18,13 @@
     <a href="index.html" class="logo">XpeedCarry</a>
   </header>
 
+
   <!-- HERO -->
   <section class="service-hero">
     <h1>Space Marine 2 Operations</h1>
     <p>Complete any operation fast, safe and professionally.</p>
   </section>
+
 
   <!-- MAIN -->
   <main class="product-layout">
@@ -45,6 +48,7 @@
             <strong>1-2h</strong>
             <p>Start Time</p>
           </div>
+
           <div>
             <strong>Flexible</strong>
             <p>Completion</p>
@@ -52,6 +56,7 @@
         </div>
 
       </div>
+
 
       <div class="product-description">
 
@@ -74,12 +79,14 @@
 
     </section>
 
+
     <!-- RIGHT -->
     <aside class="product-right">
 
       <div class="purchase-panel">
 
         <h3>Customize Order</h3>
+
 
         <!-- SERVICE TYPE -->
         <div class="option-group">
@@ -90,6 +97,7 @@
           </select>
         </div>
 
+
         <!-- PLATFORM -->
         <div class="option-group">
           <p>Platform</p>
@@ -99,6 +107,7 @@
             <option>PlayStation</option>
           </select>
         </div>
+
 
         <!-- CLASS -->
         <div class="option-group">
@@ -111,6 +120,7 @@
           </select>
         </div>
 
+
         <!-- METHOD -->
         <div class="option-group">
           <p>Completion Method</p>
@@ -120,18 +130,22 @@
           </select>
         </div>
 
+
         <!-- DIFFICULTY -->
         <div class="option-group">
           <p>Difficulty</p>
+
           <select id="difficulty">
-            <option value="2">Threat: Minimal (+$0.00)</option>
-            <option value="3">Threat: Average (+$3.00)</option>
-            <option value="4">Threat: Substantial (+$4.00)</option>
-            <option value="5">Threat: Ruthless (+$5.00)</option>
-            <option value="6">Threat: Lethal (+$6.00)</option>
+            <option value="0" selected>Threat: Minimal</option>
+            <option value="2">Threat: Average (+$2.00)</option>
+            <option value="3">Threat: Substantial (+$3.00)</option>
+            <option value="4">Threat: Ruthless (+$4.00)</option>
+            <option value="5">Threat: Lethal (+$5.00)</option>
             <option value="7">Threat: Absolute (+$7.00)</option>
           </select>
+
         </div>
+
 
         <!-- RUNS -->
         <div class="option-group">
@@ -139,11 +153,13 @@
           <input type="number" id="runs" value="1" min="1">
         </div>
 
+
         <!-- TOTAL -->
         <div class="total-box">
           <span>Total</span>
-          <strong id="total-price">$4.99</strong>
+          <strong id="total-price">$2.99</strong>
         </div>
+
 
         <!-- BUTTONS -->
         <a href="#" class="btn btn-primary full">Buy Now</a>
@@ -155,6 +171,7 @@
 
   </main>
 
+
   <!-- SCRIPT -->
   <script>
 
@@ -164,9 +181,16 @@
     const difficultySelect = document.getElementById("difficulty");
     const totalDisplay = document.getElementById("total-price");
 
+
     function updatePrice() {
 
-      const runs = parseInt(runsInput.value) || 1;
+      let runs = parseInt(runsInput.value);
+
+      if (!runs || runs < 1) {
+        runs = 1;
+        runsInput.value = 1;
+      }
+
       const difficultyExtra = parseFloat(difficultySelect.value) || 0;
 
       const total = (runs * basePrice) + difficultyExtra;
@@ -174,12 +198,14 @@
       totalDisplay.textContent = "$" + total.toFixed(2);
     }
 
+
     runsInput.addEventListener("input", updatePrice);
     difficultySelect.addEventListener("change", updatePrice);
 
     updatePrice();
 
   </script>
+
 
 </body>
 </html>
