@@ -529,4 +529,58 @@ a {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  /* ===== OPERATIONS PAGE ===== */
+
+.product-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+.product-card {
+  background: rgba(24,24,31,0.5);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(6px);
+}
+
+.product-image {
+  width: 100%;
+  border-radius: 15px;
+}
+
+.purchase-panel {
+  background: rgba(24,24,31,0.7);
+  border-radius: 20px;
+  padding: 25px;
+  backdrop-filter: blur(8px);
+}
+
+.option-group {
+  margin-bottom: 15px;
+}
+
+select, input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: #0a0a0f;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.total-box {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  font-size: 1.2rem;
+}
+
+.full {
+  width: 100%;
+  margin-bottom: 10px;
 }
