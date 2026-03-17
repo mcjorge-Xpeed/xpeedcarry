@@ -1,120 +1,711 @@
-<aside class="product-right">
+<!DOCTYPE html>
+<html lang="en">
 
-  <div class="purchase-panel leveling-panel">
-    <h3>Customize Order</h3>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leveling | XpeedCarry</title>
 
-    <!-- LEVEL RANGE -->
-    <div class="option-group">
-      <p>Level Range</p>
+  <link rel="stylesheet" href="css/styles.css">
 
-      <div class="level-inputs">
-        <div class="level-box">
-          <label for="currentLevel">Current Level</label>
-          <input type="number" id="currentLevel" min="1" max="25" value="1">
+  <style>
+    .leveling-hero {
+      position: relative;
+      padding: 90px 20px 55px;
+      background:
+        linear-gradient(rgba(8, 8, 12, 0.72), rgba(8, 8, 12, 0.92)),
+        url("images/leveling.png") center/cover no-repeat;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.14);
+    }
+
+    .leveling-hero .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .leveling-hero h1 {
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.1;
+      margin-bottom: 18px;
+      color: #ffffff;
+    }
+
+    .leveling-hero p {
+      max-width: 760px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 1.02rem;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .product-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px 70px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.95fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    .product-left,
+    .product-right {
+      min-width: 0;
+    }
+
+    .product-card {
+      background: linear-gradient(180deg, #121212 0%, #0c0c0c 100%);
+      border: 1px solid rgba(212, 175, 55, 0.16);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.34);
+      margin-bottom: 24px;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+    }
+
+    .product-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 20px 20px 8px;
+    }
+
+    .product-highlights span {
+      background: rgba(212, 175, 55, 0.09);
+      color: #f2deb0;
+      border: 1px solid rgba(212, 175, 55, 0.18);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .product-times {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      padding: 20px;
+    }
+
+    .product-times div {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .product-times strong {
+      display: block;
+      color: #d4af37;
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+    }
+
+    .product-times p {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    .product-description {
+      background: linear-gradient(180deg, #101010 0%, #0b0b0b 100%);
+      border: 1px solid rgba(212, 175, 55, 0.12);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    .product-description h2 {
+      margin-bottom: 14px;
+      color: #ffffff;
+      font-size: 1.5rem;
+    }
+
+    .product-description p {
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    .product-description ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+
+    .product-description li {
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 10px;
+      line-height: 1.65;
+    }
+
+    .purchase-panel {
+      position: sticky;
+      top: 24px;
+      background: linear-gradient(180deg, #121212 0%, #0b0b0b 100%);
+      border: 1px solid rgba(212, 175, 55, 0.18);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+    }
+
+    .purchase-panel h3 {
+      font-size: 1.45rem;
+      color: #ffffff;
+      margin-bottom: 22px;
+    }
+
+    .option-group {
+      margin-bottom: 24px;
+    }
+
+    .option-group p {
+      margin: 0 0 14px;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .level-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .level-box label {
+      display: block;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .level-box input[type="number"],
+    .purchase-panel select {
+      width: 100%;
+      background: linear-gradient(180deg, #1b1b1b 0%, #151515 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      color: #ffffff;
+      padding: 14px 14px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+    }
+
+    .level-box input[type="number"]:focus,
+    .purchase-panel select:focus {
+      border-color: rgba(212, 175, 55, 0.55);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+    }
+
+    .range-wrap {
+      position: relative;
+      height: 28px;
+      margin-bottom: 8px;
+    }
+
+    .range-wrap::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 11px;
+      height: 4px;
+      border-radius: 999px;
+      background: #2a2a2a;
+    }
+
+    .range-wrap input[type="range"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      appearance: none;
+      background: transparent;
+      pointer-events: none;
+      margin: 0;
+      height: 28px;
+    }
+
+    .range-wrap input[type="range"]::-webkit-slider-runnable-track {
+      height: 4px;
+      background: transparent;
+      border-radius: 999px;
+    }
+
+    .range-wrap input[type="range"]::-moz-range-track {
+      height: 4px;
+      background: transparent;
+      border-radius: 999px;
+    }
+
+    .range-wrap input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #d4af37;
+      border: 2px solid #111111;
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.18);
+      cursor: pointer;
+      pointer-events: auto;
+      margin-top: -8px;
+    }
+
+    .range-wrap input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #d4af37;
+      border: 2px solid #111111;
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.18);
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.46);
+      font-size: 0.82rem;
+      padding: 0 1px;
+    }
+
+    .radio-option,
+    .check-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .radio-option:last-child,
+    .check-option:last-child {
+      border-bottom: none;
+    }
+
+    .radio-left,
+    .check-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .radio-option input[type="radio"],
+    .check-option input[type="checkbox"] {
+      accent-color: #d4af37;
+      transform: scale(1.08);
+      cursor: pointer;
+    }
+
+    .radio-option span,
+    .check-option span {
+      font-size: 0.96rem;
+      font-weight: 500;
+    }
+
+    .option-price {
+      color: #bdbdbd;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .total-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, #181818 0%, #131313 100%);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin: 26px 0 18px;
+    }
+
+    .total-box span {
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .total-box strong {
+      color: #d4af37;
+      font-size: 1.45rem;
+      letter-spacing: 0.4px;
+    }
+
+    .btn.full {
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 960px) {
+      .product-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .purchase-panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .level-inputs {
+        grid-template-columns: 1fr;
+      }
+
+      .product-image {
+        height: 260px;
+      }
+
+      .purchase-panel,
+      .product-card,
+      .product-description {
+        border-radius: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body id="top">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">XpeedCarry</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="leveling-hero">
+    <div class="hero-content">
+      <h1>Warhammer 40K Space Marine 2 Leveling</h1>
+
+      <p>
+        Buy Space Marine 2 Leveling Boost to level up your class faster, unlock progress efficiently, and avoid the repetitive grind. Choose your desired level range, class, platform, and completion method with a premium experience built for fast and safe progression.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="operations.html" class="btn btn-secondary">Operations</a>
+        <a href="builds.html" class="btn btn-secondary">Builds</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="product-layout">
+
+    <!-- LEFT -->
+    <section class="product-left">
+
+      <div class="product-card">
+        <img src="images/leveling.png" alt="Space Marine 2 Leveling" class="product-image">
+
+        <div class="product-highlights">
+          <span>Fast XP Progress</span>
+          <span>Any Class</span>
+          <span>Safe Service</span>
+          <span>24/7 Support</span>
         </div>
 
-        <div class="level-box">
-          <label for="desiredLevel">Desired Level</label>
-          <input type="number" id="desiredLevel" min="1" max="25" value="10">
+        <div class="product-times">
+          <div>
+            <strong>1-2h</strong>
+            <p>Start Time</p>
+          </div>
+
+          <div>
+            <strong>Flexible</strong>
+            <p>Completion</p>
+          </div>
         </div>
       </div>
 
-      <div class="range-wrap">
-        <input type="range" id="currentLevelRange" min="1" max="25" value="1">
-        <input type="range" id="desiredLevelRange" min="1" max="25" value="10">
+      <div class="product-description">
+        <h2>Description</h2>
+
+        <p>
+          Our Space Marine 2 Leveling service is designed for players who want faster progression without wasting time on repetitive farming. Select your current level, target level, service type, and preferred completion method, then let our professional boosters handle the grind.
+        </p>
+
+        <ul>
+          <li>Custom leveling based on your exact current and desired level</li>
+          <li>Options for full leveling and prestige leveling</li>
+          <li>Available for all classes and platforms</li>
+          <li>Safe, fast, and premium boosting experience</li>
+        </ul>
       </div>
 
-      <div class="range-labels">
-        <span>1</span>
-        <span>5</span>
-        <span>10</span>
-        <span>15</span>
-        <span>20</span>
-        <span>25</span>
-      </div>
-    </div>
+    </section>
 
-    <!-- SERVICE TYPE -->
-    <div class="option-group">
-      <p>Choose the Service Type</p>
+    <!-- RIGHT -->
+    <aside class="product-right">
 
-      <label class="radio-option">
-        <input type="radio" name="serviceType" value="custom" checked>
-        <span>Custom Leveling</span>
-      </label>
+      <div class="purchase-panel">
+        <h3>Customize Order</h3>
 
-      <label class="radio-option">
-        <input type="radio" name="serviceType" value="full">
-        <span>Full 1-25 Leveling</span>
-      </label>
+        <!-- LEVEL RANGE -->
+        <div class="option-group">
+          <p>Level Range</p>
 
-      <label class="radio-option">
-        <input type="radio" name="serviceType" value="prestige">
-        <span>Prestige Leveling</span>
-      </label>
-    </div>
+          <div class="level-inputs">
+            <div class="level-box">
+              <label for="currentLevel">Current Level</label>
+              <input type="number" id="currentLevel" min="1" max="25" value="1">
+            </div>
 
-    <!-- CLASS -->
-    <div class="option-group">
-      <p>Choose the Class</p>
-      <select id="playerClass">
-        <option>Tactical Class</option>
-        <option>Bulwark Class</option>
-        <option>Sniper Class</option>
-        <option>Vanguard Class</option>
-        <option>Heavy Class</option>
-        <option selected>Techmarine Class</option>
-        <option>Assault Class</option>
-      </select>
-    </div>
+            <div class="level-box">
+              <label for="desiredLevel">Desired Level</label>
+              <input type="number" id="desiredLevel" min="1" max="25" value="10">
+            </div>
+          </div>
 
-    <!-- PLATFORM -->
-    <div class="option-group">
-      <p>Select Your Platform</p>
-      <select id="platform">
-        <option selected>PC</option>
-        <option>Xbox</option>
-        <option>PlayStation</option>
-      </select>
-    </div>
+          <div class="range-wrap">
+            <input type="range" id="currentLevelRange" min="1" max="25" value="1">
+            <input type="range" id="desiredLevelRange" min="1" max="25" value="10">
+          </div>
 
-    <!-- COMPLETION METHOD -->
-    <div class="option-group">
-      <p>Completion Method</p>
-
-      <label class="radio-option">
-        <input type="radio" name="completionMethod" value="piloted" checked>
-        <span>Piloted</span>
-      </label>
-
-      <label class="radio-option">
-        <input type="radio" name="completionMethod" value="selfplay">
-        <span>Self-play</span>
-      </label>
-    </div>
-
-    <!-- ADDITIONAL OPTIONS -->
-    <div class="option-group">
-      <p>Additional Options</p>
-
-      <label class="check-option">
-        <div class="check-left">
-          <input type="checkbox" id="trialsCompletion">
-          <span>Add Trials completion</span>
+          <div class="range-labels">
+            <span>1</span>
+            <span>5</span>
+            <span>10</span>
+            <span>15</span>
+            <span>20</span>
+            <span>25</span>
+          </div>
         </div>
-        <span class="option-price">+$4.00</span>
-      </label>
-    </div>
 
-    <!-- TOTAL -->
-    <div class="total-box">
-      <span>Total</span>
-      <strong id="total-price">$8.99</strong>
-    </div>
+        <!-- SERVICE TYPE -->
+        <div class="option-group">
+          <p>Choose the Service Type</p>
 
-    <!-- BUTTONS -->
-    <a href="#" class="btn btn-primary full">Buy Now</a>
-    <a href="#" class="btn btn-secondary full">Chat before order</a>
-  </div>
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="serviceType" value="custom" checked>
+              <span>Custom Leveling</span>
+            </div>
+          </label>
 
-</aside>
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="serviceType" value="full">
+              <span>Full 1-25 Leveling</span>
+            </div>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="serviceType" value="prestige">
+              <span>Prestige Leveling</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- CLASS -->
+        <div class="option-group">
+          <p>Choose the Class</p>
+          <select id="playerClass">
+            <option>Tactical Class</option>
+            <option>Bulwark Class</option>
+            <option>Sniper Class</option>
+            <option>Vanguard Class</option>
+            <option>Heavy Class</option>
+            <option selected>Techmarine Class</option>
+            <option>Assault Class</option>
+          </select>
+        </div>
+
+        <!-- PLATFORM -->
+        <div class="option-group">
+          <p>Select Your Platform</p>
+          <select id="platform">
+            <option selected>PC</option>
+            <option>Xbox</option>
+            <option>PlayStation</option>
+          </select>
+        </div>
+
+        <!-- COMPLETION METHOD -->
+        <div class="option-group">
+          <p>Completion Method</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="piloted" checked>
+              <span>Piloted</span>
+            </div>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="selfplay">
+              <span>Self-play</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- ADDITIONAL OPTIONS -->
+        <div class="option-group">
+          <p>Additional Options</p>
+
+          <label class="check-option">
+            <div class="check-left">
+              <input type="checkbox" id="trialsCompletion">
+              <span>Add Trials completion</span>
+            </div>
+
+            <span class="option-price">+$4.00</span>
+          </label>
+        </div>
+
+        <!-- TOTAL -->
+        <div class="total-box">
+          <span>Total</span>
+          <strong id="total-price">$7.29</strong>
+        </div>
+
+        <!-- BUTTONS -->
+        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <a href="#" class="btn btn-secondary full">Chat before order</a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <script>
+    const currentLevelInput = document.getElementById("currentLevel");
+    const desiredLevelInput = document.getElementById("desiredLevel");
+    const currentLevelRange = document.getElementById("currentLevelRange");
+    const desiredLevelRange = document.getElementById("desiredLevelRange");
+    const totalPriceDisplay = document.getElementById("total-price");
+    const trialsCompletion = document.getElementById("trialsCompletion");
+
+    const serviceTypeInputs = document.querySelectorAll('input[name="serviceType"]');
+    const completionMethodInputs = document.querySelectorAll('input[name="completionMethod"]');
+
+    function getSelectedValue(name) {
+      const selected = document.querySelector(`input[name="${name}"]:checked`);
+      return selected ? selected.value : "";
+    }
+
+    function clampNumber(value, min, max) {
+      const num = parseInt(value, 10) || min;
+      return Math.min(Math.max(num, min), max);
+    }
+
+    function syncLevels(fromInput = true) {
+      let current = clampNumber(currentLevelInput.value, 1, 25);
+      let desired = clampNumber(desiredLevelInput.value, 1, 25);
+
+      if (!fromInput) {
+        current = clampNumber(currentLevelRange.value, 1, 25);
+        desired = clampNumber(desiredLevelRange.value, 1, 25);
+      }
+
+      if (current > desired) {
+        if (document.activeElement === currentLevelInput || document.activeElement === currentLevelRange) {
+          desired = current;
+        } else {
+          current = desired;
+        }
+      }
+
+      currentLevelInput.value = current;
+      desiredLevelInput.value = desired;
+      currentLevelRange.value = current;
+      desiredLevelRange.value = desired;
+    }
+
+    function updatePrice() {
+      syncLevels(true);
+
+      const current = clampNumber(currentLevelInput.value, 1, 25);
+      const desired = clampNumber(desiredLevelInput.value, 1, 25);
+      const serviceType = getSelectedValue("serviceType");
+      const completionMethod = getSelectedValue("completionMethod");
+
+      let total = 0;
+
+      if (serviceType === "custom") {
+        const levelsToGain = Math.max(desired - current, 0);
+        total = 0.99 + (levelsToGain * 0.70);
+      } else if (serviceType === "full") {
+        total = 17.99;
+      } else if (serviceType === "prestige") {
+        total = 24.99;
+      }
+
+      if (completionMethod === "selfplay") {
+        total += 2.00;
+      }
+
+      if (trialsCompletion.checked) {
+        total += 4.00;
+      }
+
+      totalPriceDisplay.textContent = "$" + total.toFixed(2);
+    }
+
+    currentLevelInput.addEventListener("input", () => {
+      currentLevelRange.value = currentLevelInput.value;
+      syncLevels(true);
+      updatePrice();
+    });
+
+    desiredLevelInput.addEventListener("input", () => {
+      desiredLevelRange.value = desiredLevelInput.value;
+      syncLevels(true);
+      updatePrice();
+    });
+
+    currentLevelRange.addEventListener("input", () => {
+      currentLevelInput.value = currentLevelRange.value;
+      syncLevels(false);
+      updatePrice();
+    });
+
+    desiredLevelRange.addEventListener("input", () => {
+      desiredLevelInput.value = desiredLevelRange.value;
+      syncLevels(false);
+      updatePrice();
+    });
+
+    serviceTypeInputs.forEach(input => {
+      input.addEventListener("change", () => {
+        updatePrice();
+      });
+    });
+
+    completionMethodInputs.forEach(input => {
+      input.addEventListener("change", () => {
+        updatePrice();
+      });
+    });
+
+    trialsCompletion.addEventListener("change", updatePrice);
+
+    updatePrice();
+  </script>
+
+</body>
+
+</html>
