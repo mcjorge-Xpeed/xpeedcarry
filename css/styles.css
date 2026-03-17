@@ -12,7 +12,10 @@ html {
 }
 
 body {
-  background: #0a0a0f;
+  background:
+    linear-gradient(rgba(10, 10, 15, 0.85), rgba(10, 10, 15, 0.95)),
+    url("../images/fondoxpeed.png") center / cover no-repeat fixed;
+
   color: #ffffff;
   line-height: 1.6;
 }
