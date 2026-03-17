@@ -1,1 +1,120 @@
+<aside class="product-right">
 
+  <div class="purchase-panel leveling-panel">
+    <h3>Customize Order</h3>
+
+    <!-- LEVEL RANGE -->
+    <div class="option-group">
+      <p>Level Range</p>
+
+      <div class="level-inputs">
+        <div class="level-box">
+          <label for="currentLevel">Current Level</label>
+          <input type="number" id="currentLevel" min="1" max="25" value="1">
+        </div>
+
+        <div class="level-box">
+          <label for="desiredLevel">Desired Level</label>
+          <input type="number" id="desiredLevel" min="1" max="25" value="10">
+        </div>
+      </div>
+
+      <div class="range-wrap">
+        <input type="range" id="currentLevelRange" min="1" max="25" value="1">
+        <input type="range" id="desiredLevelRange" min="1" max="25" value="10">
+      </div>
+
+      <div class="range-labels">
+        <span>1</span>
+        <span>5</span>
+        <span>10</span>
+        <span>15</span>
+        <span>20</span>
+        <span>25</span>
+      </div>
+    </div>
+
+    <!-- SERVICE TYPE -->
+    <div class="option-group">
+      <p>Choose the Service Type</p>
+
+      <label class="radio-option">
+        <input type="radio" name="serviceType" value="custom" checked>
+        <span>Custom Leveling</span>
+      </label>
+
+      <label class="radio-option">
+        <input type="radio" name="serviceType" value="full">
+        <span>Full 1-25 Leveling</span>
+      </label>
+
+      <label class="radio-option">
+        <input type="radio" name="serviceType" value="prestige">
+        <span>Prestige Leveling</span>
+      </label>
+    </div>
+
+    <!-- CLASS -->
+    <div class="option-group">
+      <p>Choose the Class</p>
+      <select id="playerClass">
+        <option>Tactical Class</option>
+        <option>Bulwark Class</option>
+        <option>Sniper Class</option>
+        <option>Vanguard Class</option>
+        <option>Heavy Class</option>
+        <option selected>Techmarine Class</option>
+        <option>Assault Class</option>
+      </select>
+    </div>
+
+    <!-- PLATFORM -->
+    <div class="option-group">
+      <p>Select Your Platform</p>
+      <select id="platform">
+        <option selected>PC</option>
+        <option>Xbox</option>
+        <option>PlayStation</option>
+      </select>
+    </div>
+
+    <!-- COMPLETION METHOD -->
+    <div class="option-group">
+      <p>Completion Method</p>
+
+      <label class="radio-option">
+        <input type="radio" name="completionMethod" value="piloted" checked>
+        <span>Piloted</span>
+      </label>
+
+      <label class="radio-option">
+        <input type="radio" name="completionMethod" value="selfplay">
+        <span>Self-play</span>
+      </label>
+    </div>
+
+    <!-- ADDITIONAL OPTIONS -->
+    <div class="option-group">
+      <p>Additional Options</p>
+
+      <label class="check-option">
+        <div class="check-left">
+          <input type="checkbox" id="trialsCompletion">
+          <span>Add Trials completion</span>
+        </div>
+        <span class="option-price">+$4.00</span>
+      </label>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="total-box">
+      <span>Total</span>
+      <strong id="total-price">$8.99</strong>
+    </div>
+
+    <!-- BUTTONS -->
+    <a href="#" class="btn btn-primary full">Buy Now</a>
+    <a href="#" class="btn btn-secondary full">Chat before order</a>
+  </div>
+
+</aside>
