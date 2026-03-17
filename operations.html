@@ -2,157 +2,184 @@
 <html lang="en">
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operations | XpeedCarry</title>
 
-<title>Operations | XpeedCarry</title>
-
-<link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css">
 
 </head>
 
 <body id="top">
 
-<!-- NAVBAR -->
-<header class="navbar">
-  <a href="index.html" class="logo">XpeedCarry</a>
-</header>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">XpeedCarry</a>
+  </header>
 
-<!-- HERO MINI -->
-<section class="service-hero">
-  <h1>Space Marine 2 Operations</h1>
-  <p>Complete any operation fast, safe and professionally.</p>
-</section>
-
-<!-- MAIN -->
-<main class="product-layout">
-
-  <!-- LEFT -->
-  <section class="product-left">
-
-    <div class="product-card">
-
-      <img src="images/operations.png" class="product-image">
-
-      <div class="product-highlights">
-        <span>Any Difficulty</span>
-        <span>Fast Delivery</span>
-        <span>Safe Service</span>
-        <span>24/7 Support</span>
-      </div>
-
-      <div class="product-times">
-        <div>
-          <strong>1-2h</strong>
-          <p>Start Time</p>
-        </div>
-        <div>
-          <strong>Flexible</strong>
-          <p>Completion</p>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="product-description">
-      <h2>Description</h2>
-
-      <p>
-        Our Space Marine 2 Operations boosting service allows you to complete any
-        operation quickly and efficiently. Choose your difficulty and let our
-        professional players handle the grind.
-      </p>
-
-      <ul>
-        <li>Requisition Tokens and Armory Data</li>
-        <li>Character and Weapon XP</li>
-        <li>Fast and safe runs</li>
-        <li>Any difficulty supported</li>
-      </ul>
-
-    </div>
-
+  <!-- HERO -->
+  <section class="service-hero">
+    <h1>Space Marine 2 Operations</h1>
+    <p>Complete any operation fast, safe and professionally.</p>
   </section>
 
-  <!-- RIGHT -->
-  <aside class="product-right">
+  <!-- MAIN -->
+  <main class="product-layout">
 
-    <div class="purchase-panel">
+    <!-- LEFT -->
+    <section class="product-left">
 
-      <h3>Customize Order</h3>
+      <div class="product-card">
 
-      <!-- TYPE -->
-      <div class="option-group">
-        <p>Service Type</p>
-        <select>
-          <option>Random Operations</option>
-          <option>Specific Operations</option>
-        </select>
+        <img src="images/operations.png" alt="Operations" class="product-image">
+
+        <div class="product-highlights">
+          <span>Any Difficulty</span>
+          <span>Fast Delivery</span>
+          <span>Safe Service</span>
+          <span>24/7 Support</span>
+        </div>
+
+        <div class="product-times">
+          <div>
+            <strong>1-2h</strong>
+            <p>Start Time</p>
+          </div>
+          <div>
+            <strong>Flexible</strong>
+            <p>Completion</p>
+          </div>
+        </div>
+
       </div>
 
-      <!-- PLATFORM -->
-      <div class="option-group">
-        <p>Platform</p>
-        <select>
-          <option>PC</option>
-          <option>Xbox</option>
-          <option>PlayStation</option>
-        </select>
+      <div class="product-description">
+
+        <h2>Description</h2>
+
+        <p>
+          Our Space Marine 2 Operations boosting service allows you to complete any
+          operation quickly and efficiently. Choose your difficulty and let our
+          professional players handle the grind.
+        </p>
+
+        <ul>
+          <li>Requisition Tokens and Armory Data</li>
+          <li>Character and Weapon XP</li>
+          <li>Fast and safe runs</li>
+          <li>Any difficulty supported</li>
+        </ul>
+
       </div>
 
-      <!-- CLASS -->
-      <div class="option-group">
-        <p>Class</p>
-        <select>
-          <option>Any Class</option>
-          <option>Tactical</option>
-          <option>Bulwark</option>
-          <option>Sniper</option>
-        </select>
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="product-right">
+
+      <div class="purchase-panel">
+
+        <h3>Customize Order</h3>
+
+        <!-- SERVICE TYPE -->
+        <div class="option-group">
+          <p>Service Type</p>
+          <select>
+            <option>Random Operations</option>
+            <option>Specific Operations</option>
+          </select>
+        </div>
+
+        <!-- PLATFORM -->
+        <div class="option-group">
+          <p>Platform</p>
+          <select>
+            <option>PC</option>
+            <option>Xbox</option>
+            <option>PlayStation</option>
+          </select>
+        </div>
+
+        <!-- CLASS -->
+        <div class="option-group">
+          <p>Class</p>
+          <select>
+            <option>Any Class</option>
+            <option>Tactical</option>
+            <option>Bulwark</option>
+            <option>Sniper</option>
+          </select>
+        </div>
+
+        <!-- METHOD -->
+        <div class="option-group">
+          <p>Completion Method</p>
+          <select>
+            <option>Self-play</option>
+            <option>Piloted</option>
+          </select>
+        </div>
+
+        <!-- DIFFICULTY -->
+        <div class="option-group">
+          <p>Difficulty</p>
+          <select id="difficulty">
+            <option value="2">Threat: Minimal (+$2.00)</option>
+            <option value="3">Threat: Average (+$3.00)</option>
+            <option value="4">Threat: Substantial (+$4.00)</option>
+            <option value="5">Threat: Ruthless (+$5.00)</option>
+            <option value="6">Threat: Lethal (+$6.00)</option>
+            <option value="7">Threat: Absolute (+$7.00)</option>
+          </select>
+        </div>
+
+        <!-- RUNS -->
+        <div class="option-group">
+          <p>Runs</p>
+          <input type="number" id="runs" value="1" min="1">
+        </div>
+
+        <!-- TOTAL -->
+        <div class="total-box">
+          <span>Total</span>
+          <strong id="total-price">$4.99</strong>
+        </div>
+
+        <!-- BUTTONS -->
+        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <a href="#" class="btn btn-secondary full">Chat before order</a>
+
       </div>
 
-      <!-- METHOD -->
-      <div class="option-group">
-        <p>Completion Method</p>
-        <select>
-          <option>Self-play</option>
-          <option>Piloted</option>
-        </select>
-      </div>
+    </aside>
 
-      <!-- DIFFICULTY -->
-      <div class="option-group">
-        <p>Difficulty</p>
-        <select>
-          <option>Minimal</option>
-          <option>Average</option>
-          <option>Substantial</option>
-          <option>Ruthless</option>
-          <option>Lethal</option>
-        </select>
-      </div>
+  </main>
 
-      <!-- RUNS -->
-      <div class="option-group">
-        <p>Runs</p>
-        <input type="number" value="1" min="1">
-      </div>
+  <!-- SCRIPT -->
+  <script>
 
-      <!-- TOTAL -->
-      <div class="total-box">
-        <span>Total</span>
-        <strong>$2.99</strong>
-      </div>
+    const basePrice = 2.99;
 
-      <!-- BUTTONS -->
-      <a href="#" class="btn btn-primary full">Buy Now</a>
-      <a href="#" class="btn btn-secondary full">Chat before order</a>
+    const runsInput = document.getElementById("runs");
+    const difficultySelect = document.getElementById("difficulty");
+    const totalDisplay = document.getElementById("total-price");
 
-    </div>
+    function updatePrice() {
 
-  </aside>
+      const runs = parseInt(runsInput.value) || 1;
+      const difficultyExtra = parseFloat(difficultySelect.value) || 0;
 
-</main>
+      const total = (runs * basePrice) + difficultyExtra;
+
+      totalDisplay.textContent = "$" + total.toFixed(2);
+    }
+
+    runsInput.addEventListener("input", updatePrice);
+    difficultySelect.addEventListener("change", updatePrice);
+
+    updatePrice();
+
+  </script>
 
 </body>
 </html>
