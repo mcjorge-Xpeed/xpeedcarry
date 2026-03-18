@@ -1,336 +1,549 @@
-<!DOCTYPE html>
-<html lang="en">
+<section class="order-section">
+  <div class="order-card">
+    <h2>Customize Order</h2>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leveling | XpeedCarry</title>
+    <!-- LEVEL RANGE -->
+    <div class="order-group" id="levelRangeGroup">
+      <h3>Level Range</h3>
 
-  <link rel="stylesheet" href="css/styles.css">
+      <div class="level-inputs">
+        <div class="input-box">
+          <label for="currentLevel">Current Level</label>
+          <input type="number" id="currentLevel" min="1" max="25" value="1" />
+        </div>
 
-</head>
+        <div class="input-box">
+          <label for="desiredLevel">Desired Level</label>
+          <input type="number" id="desiredLevel" min="1" max="25" value="10" />
+        </div>
+      </div>
 
-<body id="top">
+      <div class="dual-range-wrapper">
+        <div class="slider-track"></div>
+        <div class="slider-progress" id="sliderProgress"></div>
 
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <a href="index.html" class="logo">XpeedCarry</a>
-  </header>
+        <input type="range" id="rangeCurrent" min="1" max="25" value="1" />
+        <input type="range" id="rangeDesired" min="1" max="25" value="10" />
+      </div>
 
-  <!-- HERO -->
-  <section class="leveling-hero">
-    <div class="hero-content">
-      <h1>Warhammer 40K Space Marine 2 Leveling</h1>
-
-      <p>
-        Buy Space Marine 2 Leveling Boost to level up your class faster, unlock progress efficiently, and avoid the repetitive grind. Choose your desired level range, class, platform, and completion method with a premium experience built for fast and safe progression.
-      </p>
-
-      <div class="hero-buttons">
-        <a href="index.html" class="btn btn-secondary">Back to Home</a>
-        <a href="spacemarine2.html" class="btn btn-secondary">Leveling</a>
-        <a href="builds.html" class="btn btn-secondary">Builds</a>
+      <div class="range-labels">
+        <span>1</span>
+        <span>5</span>
+        <span>10</span>
+        <span>15</span>
+        <span>20</span>
+        <span>25</span>
       </div>
     </div>
-  </section>
 
-  <!-- MAIN -->
-  <main class="product-layout">
+    <!-- SERVICE TYPE -->
+    <div class="order-group">
+      <h3>Choose the Service Type</h3>
 
-    <!-- LEFT -->
-    <section class="product-left">
+      <label class="radio-row">
+        <input type="radio" name="serviceType" value="custom" checked />
+        <span>Custom Leveling</span>
+      </label>
 
-      <div class="product-card">
-        <img src="images/leveling-25.png" alt="Space Marine 2 Leveling" class="product-image">
+      <label class="radio-row">
+        <input type="radio" name="serviceType" value="full" />
+        <span>Full 1-25 Leveling</span>
+      </label>
 
-        <div class="product-highlights">
-          <span>Fast XP Progress</span>
-          <span>Any Class</span>
-          <span>Safe Service</span>
-          <span>24/7 Support</span>
-        </div>
+      <label class="radio-row">
+        <input type="radio" name="serviceType" value="prestige" />
+        <span>Prestige Leveling</span>
+      </label>
+    </div>
 
-        <div class="product-times">
-          <div>
-            <strong>1-2h</strong>
-            <p>Start Time</p>
-          </div>
+    <!-- PRESTIGE RANGE -->
+    <div class="order-group prestige-group hidden" id="prestigeGroup">
+      <h3>Prestige Range</h3>
 
-          <div>
-            <strong>Flexible</strong>
-            <p>Completion</p>
-          </div>
-        </div>
+      <div class="prestige-value-box">
+        <label for="prestigeLevel">Selected Prestige</label>
+        <input type="number" id="prestigeLevel" min="1" max="4" value="1" readonly />
       </div>
 
-      <div class="product-description">
-        <h2>Description</h2>
-
-        <p>
-          Our Space Marine 2 Leveling service is designed for players who want faster progression without wasting time on repetitive farming. Select your current level, target level, service type, and preferred completion method, then let our professional boosters handle the grind.
-        </p>
-
-        <ul>
-          <li>Custom leveling based on your exact current and desired level</li>
-          <li>Options for full leveling and prestige leveling</li>
-          <li>Available for all classes and platforms</li>
-          <li>Safe, fast, and premium boosting experience</li>
-        </ul>
+      <div class="single-range-wrapper">
+        <div class="slider-track"></div>
+        <div class="slider-progress single-progress" id="prestigeProgress"></div>
+        <input type="range" id="prestigeRange" min="1" max="4" value="1" />
       </div>
 
-    </section>
-
-    <!-- RIGHT -->
-    <aside class="product-right">
-
-      <div class="purchase-panel">
-        <h3>Customize Order</h3>
-
-        <!-- LEVEL RANGE -->
-        <div class="option-group">
-          <p>Level Range</p>
-
-          <div class="level-inputs">
-            <div class="level-box">
-              <label for="currentLevel">Current Level</label>
-              <input type="number" id="currentLevel" min="1" max="25" value="1">
-            </div>
-
-            <div class="level-box">
-              <label for="desiredLevel">Desired Level</label>
-              <input type="number" id="desiredLevel" min="1" max="25" value="10">
-            </div>
-          </div>
-
-          <div class="range-wrap">
-            <input type="range" id="currentLevelRange" min="1" max="25" value="1">
-            <input type="range" id="desiredLevelRange" min="1" max="25" value="10">
-          </div>
-
-          <div class="range-labels">
-            <span>1</span>
-            <span>5</span>
-            <span>10</span>
-            <span>15</span>
-            <span>20</span>
-            <span>25</span>
-          </div>
-        </div>
-
-        <!-- SERVICE TYPE -->
-        <div class="option-group">
-          <p>Choose the Service Type</p>
-
-          <label class="radio-option">
-            <div class="radio-left">
-              <input type="radio" name="serviceType" value="custom" checked>
-              <span>Custom Leveling</span>
-            </div>
-          </label>
-
-          <label class="radio-option">
-            <div class="radio-left">
-              <input type="radio" name="serviceType" value="full">
-              <span>Full 1-25 Leveling</span>
-            </div>
-          </label>
-
-          <label class="radio-option">
-            <div class="radio-left">
-              <input type="radio" name="serviceType" value="prestige">
-              <span>Prestige Leveling</span>
-            </div>
-          </label>
-        </div>
-
-        <!-- CLASS -->
-        <div class="option-group">
-          <p>Choose the Class</p>
-          <select id="playerClass">
-            <option>Tactical Class</option>
-            <option>Bulwark Class</option>
-            <option>Sniper Class</option>
-            <option>Vanguard Class</option>
-            <option>Heavy Class</option>
-            <option selected>Techmarine Class</option>
-            <option>Assault Class</option>
-          </select>
-        </div>
-
-        <!-- PLATFORM -->
-        <div class="option-group">
-          <p>Select Your Platform</p>
-          <select id="platform">
-            <option selected>PC</option>
-            <option>Xbox</option>
-            <option>PlayStation</option>
-          </select>
-        </div>
-
-        <!-- COMPLETION METHOD -->
-        <div class="option-group">
-          <p>Completion Method</p>
-
-          <label class="radio-option">
-            <div class="radio-left">
-              <input type="radio" name="completionMethod" value="piloted" checked>
-              <span>Piloted</span>
-            </div>
-          </label>
-
-          <label class="radio-option">
-            <div class="radio-left">
-              <input type="radio" name="completionMethod" value="selfplay">
-              <span>Self-play</span>
-            </div>
-          </label>
-        </div>
-
-        <!-- ADDITIONAL OPTIONS -->
-        <div class="option-group">
-          <p>Additional Options</p>
-
-          <label class="check-option">
-            <div class="check-left">
-              <input type="checkbox" id="trialsCompletion">
-              <span>Add Trials completion</span>
-            </div>
-
-            <span class="option-price">+$4.00</span>
-          </label>
-        </div>
-
-        <!-- TOTAL -->
-        <div class="total-box">
-          <span>Total</span>
-          <strong id="total-price">$7.29</strong>
-        </div>
-
-        <!-- BUTTONS -->
-        <a href="#" class="btn btn-primary full">Buy Now</a>
-        <a href="#" class="btn btn-secondary full">Chat before order</a>
+      <div class="range-labels prestige-labels">
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span>
       </div>
+    </div>
 
-    </aside>
+    <!-- CLASS -->
+    <div class="order-group">
+      <h3>Choose the Class</h3>
+      <select id="classSelect">
+        <option>Techmarine Class</option>
+        <option>Tactical Class</option>
+        <option>Assault Class</option>
+        <option>Vanguard Class</option>
+        <option>Bulwark Class</option>
+        <option>Sniper Class</option>
+        <option>Heavy Class</option>
+      </select>
+    </div>
 
-  </main>
+    <!-- PLATFORM -->
+    <div class="order-group">
+      <h3>Select Your Platform</h3>
+      <select id="platformSelect">
+        <option>PC</option>
+        <option>PlayStation</option>
+        <option>Xbox</option>
+      </select>
+    </div>
 
-  <!-- SCRIPT -->
-  <script>
-    const currentLevelInput = document.getElementById("currentLevel");
-    const desiredLevelInput = document.getElementById("desiredLevel");
-    const currentLevelRange = document.getElementById("currentLevelRange");
-    const desiredLevelRange = document.getElementById("desiredLevelRange");
-    const totalPriceDisplay = document.getElementById("total-price");
-    const trialsCompletion = document.getElementById("trialsCompletion");
+    <!-- COMPLETION -->
+    <div class="order-group">
+      <h3>Completion Method</h3>
 
-    const serviceTypeInputs = document.querySelectorAll('input[name="serviceType"]');
-    const completionMethodInputs = document.querySelectorAll('input[name="completionMethod"]');
+      <label class="radio-row">
+        <input type="radio" name="completionMethod" value="piloted" checked />
+        <span>Piloted</span>
+      </label>
 
-    function getSelectedValue(name) {
-      const selected = document.querySelector(`input[name="${name}"]:checked`);
-      return selected ? selected.value : "";
+      <label class="radio-row">
+        <input type="radio" name="completionMethod" value="selfplay" />
+        <span>Self-play</span>
+      </label>
+    </div>
+
+    <!-- ADDITIONAL -->
+    <div class="order-group">
+      <h3>Additional Options</h3>
+
+      <label class="checkbox-row">
+        <div class="checkbox-left">
+          <input type="checkbox" id="trialsOption" />
+          <span>Add Trials completion</span>
+        </div>
+        <span>+$4.00</span>
+      </label>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="total-box">
+      <span>Total</span>
+      <strong id="totalPrice">$12.60</strong>
+    </div>
+
+    <button class="buy-btn">Buy Now</button>
+    <button class="chat-btn">Chat before order</button>
+  </div>
+</section>
+
+<style>
+  .order-section {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px 80px;
+  }
+
+  .order-card {
+    width: 100%;
+    max-width: 460px;
+    background: linear-gradient(180deg, rgba(15, 15, 18, 0.96), rgba(5, 5, 8, 0.98));
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 18px;
+    padding: 28px 22px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  }
+
+  .order-card h2 {
+    font-size: 2rem;
+    margin-bottom: 28px;
+    color: #ffffff;
+  }
+
+  .order-group {
+    margin-bottom: 28px;
+  }
+
+  .order-group h3 {
+    font-size: 1.15rem;
+    margin-bottom: 16px;
+    color: #ffffff;
+  }
+
+  .level-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .input-box,
+  .prestige-value-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .input-box label,
+  .prestige-value-box label {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .input-box input,
+  .prestige-value-box input,
+  .order-group select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 14px 14px;
+    font-size: 1rem;
+    outline: none;
+  }
+
+  .order-group select {
+    appearance: none;
+  }
+
+  .dual-range-wrapper,
+  .single-range-wrapper {
+    position: relative;
+    height: 30px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .slider-track,
+  .slider-progress {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 4px;
+    border-radius: 999px;
+  }
+
+  .slider-track {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.12);
+    z-index: 1;
+  }
+
+  .slider-progress {
+    background: #d4af37;
+    z-index: 2;
+  }
+
+  .single-progress {
+    left: 0;
+    width: 0%;
+  }
+
+  .dual-range-wrapper input[type="range"],
+  .single-range-wrapper input[type="range"] {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    pointer-events: none;
+    appearance: none;
+    -webkit-appearance: none;
+    z-index: 3;
+  }
+
+  .dual-range-wrapper input[type="range"]::-webkit-slider-thumb,
+  .single-range-wrapper input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #d4af37;
+    border: 3px solid #2b2205;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+  }
+
+  .dual-range-wrapper input[type="range"]::-moz-range-thumb,
+  .single-range-wrapper input[type="range"]::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #d4af37;
+    border: 3px solid #2b2205;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin-top: 8px;
+  }
+
+  .prestige-labels {
+    justify-content: space-between;
+  }
+
+  .radio-row,
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .radio-row:last-child,
+  .checkbox-row:last-child {
+    border-bottom: none;
+  }
+
+  .radio-row input,
+  .checkbox-row input {
+    accent-color: #d4af37;
+  }
+
+  .radio-row span,
+  .checkbox-row span {
+    font-size: 1rem;
+  }
+
+  .checkbox-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .total-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 16px;
+    padding: 18px 18px;
+    margin-top: 10px;
+    margin-bottom: 16px;
+  }
+
+  .total-box span {
+    font-size: 1.05rem;
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .total-box strong {
+    font-size: 1.9rem;
+    color: #d4af37;
+    font-weight: 800;
+  }
+
+  .buy-btn,
+  .chat-btn {
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+
+  .buy-btn {
+    background: linear-gradient(180deg, #f0d36a, #c99c11);
+    color: #111111;
+    margin-bottom: 12px;
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.22);
+  }
+
+  .buy-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .chat-btn {
+    background: rgba(255, 255, 255, 0.04);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .chat-btn:hover {
+    border-color: rgba(212, 175, 55, 0.4);
+    color: #d4af37;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  @media (max-width: 520px) {
+    .level-inputs {
+      grid-template-columns: 1fr;
     }
 
-    function clampNumber(value, min, max) {
-      const num = parseInt(value, 10) || min;
-      return Math.min(Math.max(num, min), max);
+    .order-card {
+      padding: 24px 16px;
+    }
+  }
+</style>
+
+<script>
+  const currentLevelInput = document.getElementById("currentLevel");
+  const desiredLevelInput = document.getElementById("desiredLevel");
+  const rangeCurrent = document.getElementById("rangeCurrent");
+  const rangeDesired = document.getElementById("rangeDesired");
+  const sliderProgress = document.getElementById("sliderProgress");
+
+  const prestigeGroup = document.getElementById("prestigeGroup");
+  const prestigeRange = document.getElementById("prestigeRange");
+  const prestigeLevel = document.getElementById("prestigeLevel");
+  const prestigeProgress = document.getElementById("prestigeProgress");
+
+  const serviceTypes = document.querySelectorAll('input[name="serviceType"]');
+  const trialsOption = document.getElementById("trialsOption");
+  const totalPrice = document.getElementById("totalPrice");
+
+  const LEVEL_PRICE = 1.40;
+  const FULL_LEVELING_PRICE = 14.95;
+  const PRESTIGE_PRICE = 14.90;
+  const TRIALS_PRICE = 4.00;
+
+  function updateDualSlider() {
+    let current = parseInt(rangeCurrent.value, 10);
+    let desired = parseInt(rangeDesired.value, 10);
+
+    if (current >= desired) {
+      current = desired - 1;
+      if (current < 1) current = 1;
+      rangeCurrent.value = current;
     }
 
-    function syncLevels(fromInput = true) {
-      let current = clampNumber(currentLevelInput.value, 1, 25);
-      let desired = clampNumber(desiredLevelInput.value, 1, 25);
+    currentLevelInput.value = current;
+    desiredLevelInput.value = desired;
 
-      if (!fromInput) {
-        current = clampNumber(currentLevelRange.value, 1, 25);
-        desired = clampNumber(desiredLevelRange.value, 1, 25);
+    const min = parseInt(rangeCurrent.min, 10);
+    const max = parseInt(rangeCurrent.max, 10);
+
+    const left = ((current - min) / (max - min)) * 100;
+    const right = ((desired - min) / (max - min)) * 100;
+
+    sliderProgress.style.left = left + "%";
+    sliderProgress.style.width = (right - left) + "%";
+
+    updateTotal();
+  }
+
+  function updateInputsFromBoxes() {
+    let current = parseInt(currentLevelInput.value, 10) || 1;
+    let desired = parseInt(desiredLevelInput.value, 10) || 2;
+
+    if (current < 1) current = 1;
+    if (current > 24) current = 24;
+
+    if (desired < 2) desired = 2;
+    if (desired > 25) desired = 25;
+
+    if (current >= desired) {
+      desired = current + 1;
+      if (desired > 25) {
+        desired = 25;
+        current = 24;
       }
-
-      if (current > desired) {
-        if (document.activeElement === currentLevelInput || document.activeElement === currentLevelRange) {
-          desired = current;
-        } else {
-          current = desired;
-        }
-      }
-
-      currentLevelInput.value = current;
-      desiredLevelInput.value = desired;
-      currentLevelRange.value = current;
-      desiredLevelRange.value = desired;
     }
 
-    function updatePrice() {
-      syncLevels(true);
+    currentLevelInput.value = current;
+    desiredLevelInput.value = desired;
+    rangeCurrent.value = current;
+    rangeDesired.value = desired;
 
-      const current = clampNumber(currentLevelInput.value, 1, 25);
-      const desired = clampNumber(desiredLevelInput.value, 1, 25);
-      const serviceType = getSelectedValue("serviceType");
-      const completionMethod = getSelectedValue("completionMethod");
+    updateDualSlider();
+  }
 
-      let total = 0;
+  function updatePrestigeSlider() {
+    const value = parseInt(prestigeRange.value, 10);
+    prestigeLevel.value = value;
 
-      if (serviceType === "custom") {
-        const levelsToGain = Math.max(desired - current, 0);
-        total = 0.99 + (levelsToGain * 0.70);
-      } else if (serviceType === "full") {
-        total = 17.99;
-      } else if (serviceType === "prestige") {
-        total = 24.99;
-      }
+    const min = parseInt(prestigeRange.min, 10);
+    const max = parseInt(prestigeRange.max, 10);
+    const percent = ((value - min) / (max - min)) * 100;
 
-      if (completionMethod === "selfplay") {
-        total += 2.00;
-      }
+    prestigeProgress.style.width = percent + "%";
 
-      if (trialsCompletion.checked) {
-        total += 4.00;
-      }
+    updateTotal();
+  }
 
-      totalPriceDisplay.textContent = "$" + total.toFixed(2);
+  function getSelectedService() {
+    return document.querySelector('input[name="serviceType"]:checked').value;
+  }
+
+  function updateServiceVisibility() {
+    const selected = getSelectedService();
+
+    if (selected === "prestige") {
+      prestigeGroup.classList.remove("hidden");
+    } else {
+      prestigeGroup.classList.add("hidden");
     }
 
-    currentLevelInput.addEventListener("input", () => {
-      currentLevelRange.value = currentLevelInput.value;
-      syncLevels(true);
-      updatePrice();
-    });
+    updateTotal();
+  }
 
-    desiredLevelInput.addEventListener("input", () => {
-      desiredLevelRange.value = desiredLevelInput.value;
-      syncLevels(true);
-      updatePrice();
-    });
+  function updateTotal() {
+    const selected = getSelectedService();
+    let total = 0;
 
-    currentLevelRange.addEventListener("input", () => {
-      currentLevelInput.value = currentLevelRange.value;
-      syncLevels(false);
-      updatePrice();
-    });
+    if (selected === "custom") {
+      const current = parseInt(currentLevelInput.value, 10);
+      const desired = parseInt(desiredLevelInput.value, 10);
+      const levelsToGain = Math.max(0, desired - current);
+      total = levelsToGain * LEVEL_PRICE;
+    }
 
-    desiredLevelRange.addEventListener("input", () => {
-      desiredLevelInput.value = desiredLevelRange.value;
-      syncLevels(false);
-      updatePrice();
-    });
+    if (selected === "full") {
+      total = FULL_LEVELING_PRICE;
+    }
 
-    serviceTypeInputs.forEach(input => {
-      input.addEventListener("change", () => {
-        updatePrice();
-      });
-    });
+    if (selected === "prestige") {
+      const prestigeCount = parseInt(prestigeRange.value, 10);
+      total = prestigeCount * PRESTIGE_PRICE;
+    }
 
-    completionMethodInputs.forEach(input => {
-      input.addEventListener("change", () => {
-        updatePrice();
-      });
-    });
+    if (trialsOption.checked) {
+      total += TRIALS_PRICE;
+    }
 
-    trialsCompletion.addEventListener("change", updatePrice);
+    totalPrice.textContent = "$" + total.toFixed(2);
+  }
 
-    updatePrice();
-  </script>
+  rangeCurrent.addEventListener("input", updateDualSlider);
+  rangeDesired.addEventListener("input", updateDualSlider);
 
-</body>
+  currentLevelInput.addEventListener("input", updateInputsFromBoxes);
+  desiredLevelInput.addEventListener("input", updateInputsFromBoxes);
 
-</html>
+  prestigeRange.addEventListener("input", updatePrestigeSlider);
+
+  serviceTypes.forEach((radio) => {
+    radio.addEventListener("change", updateServiceVisibility);
+  });
+
+  trialsOption.addEventListener("change", updateTotal);
+
+  updateDualSlider();
+  updatePrestigeSlider();
+  updateServiceVisibility();
+</script>
