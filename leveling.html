@@ -252,6 +252,28 @@
             <strong id="totalPrice">$12.60</strong>
           </div>
 
+          <div class="price-breakdown" id="priceBreakdown">
+            <div class="breakdown-row">
+              <span>Main Service</span>
+              <span id="breakdownMain">$12.60</span>
+            </div>
+
+            <div class="breakdown-row">
+              <span>Classes</span>
+              <span id="breakdownClasses">1 selected</span>
+            </div>
+
+            <div class="breakdown-row hidden" id="breakdownPrestigeRow">
+              <span>Prestige Add-On</span>
+              <span id="breakdownPrestige">$0.00</span>
+            </div>
+
+            <div class="breakdown-row hidden" id="breakdownTrialsRow">
+              <span>Trials</span>
+              <span id="breakdownTrials">$0.00</span>
+            </div>
+          </div>
+
           <a href="#" class="btn btn-primary full">Buy Now</a>
           <a href="#" class="btn btn-secondary full">Chat before order</a>
         </aside>
@@ -284,6 +306,13 @@
     const trialsOption = document.getElementById("trialsOption");
     const totalPrice = document.getElementById("totalPrice");
     const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
+
+    const breakdownMain = document.getElementById("breakdownMain");
+    const breakdownClasses = document.getElementById("breakdownClasses");
+    const breakdownPrestige = document.getElementById("breakdownPrestige");
+    const breakdownTrials = document.getElementById("breakdownTrials");
+    const breakdownPrestigeRow = document.getElementById("breakdownPrestigeRow");
+    const breakdownTrialsRow = document.getElementById("breakdownTrialsRow");
 
     function updateRangeProgress(minEl, maxEl, progressEl, absoluteMin, absoluteMax) {
       const min = parseInt(minEl.value, 10);
@@ -437,18 +466,21 @@
 
       const selected = getSelectedServiceType();
       const selectedClasses = getSelectedClassCount();
-      let total = 0;
+
+      let mainTotal = 0;
+      let prestigeTotal = 0;
+      let trialsTotal = 0;
 
       if (selected === "custom") {
         const current = parseInt(currentLevel.value, 10);
         const desired = parseInt(desiredLevel.value, 10);
         const levels = Math.max(0, desired - current);
 
-        total += levels * LEVEL_PRICE * selectedClasses;
+        mainTotal = levels * LEVEL_PRICE * selectedClasses;
       }
 
       if (selected === "full") {
-        total += FULL_PRICE + (selectedClasses * CLASS_PRICE);
+        mainTotal = FULL_PRICE + (selectedClasses * CLASS_PRICE);
       }
 
       if (prestigeToggle.checked) {
@@ -456,12 +488,35 @@
         const end = parseInt(prestigeEnd.value, 10);
         const prestiges = Math.max(0, end - start);
 
-        total += prestiges * PRESTIGE_PRICE * selectedClasses;
+        prestigeTotal = prestiges * PRESTIGE_PRICE * selectedClasses;
       }
 
       if (trialsOption.checked) {
-        total += TRIALS_PRICE * selectedClasses;
+        trialsTotal = TRIALS_PRICE * selectedClasses;
       }
+
+      const grandTotal = mainTotal + prestigeTotal + trialsTotal;
+
+      totalPrice.textContent = "$" + grandTotal.toFixed(2);
+      breakdownMain.textContent = "$" + mainTotal.toFixed(2);
+      breakdownClasses.textContent = selectedClasses + " selected";
+
+      if (prestigeTotal > 0) {
+        breakdownPrestigeRow.classList.remove("hidden");
+        breakdownPrestige.textContent = "$" + prestigeTotal.toFixed(2);
+      } else {
+        breakdownPrestigeRow.classList.add("hidden");
+        breakdownPrestige.textContent = "$0.00";
+      }
+
+      if (trialsTotal > 0) {
+        breakdownTrialsRow.classList.remove("hidden");
+        breakdownTrials.textContent = "$" + trialsTotal.toFixed(2);
+      } else {
+        breakdownTrialsRow.classList.add("hidden");
+        breakdownTrials.textContent = "$0.00";
+      }
+    }
 
       totalPrice.textContent = "$" + total.toFixed(2);
     }
