@@ -32,7 +32,6 @@
 
     <section class="product-layout">
       <div class="product-left">
-
         <div class="product-card">
           <img
             src="images/leveling-25.png"
@@ -68,19 +67,18 @@
           </p>
 
           <p>
-            You can choose between custom leveling, a full leveling package, or prestige leveling depending on your current progress and your target. Additional options like trials completion can also be added directly from the order panel.
+            You can choose between custom leveling and a full leveling package, then add prestige progression if you want to push the same order further. Additional options like trials completion can also be added directly from the order panel.
           </p>
 
           <ul>
             <li>Custom Leveling at $1.40 per level, per selected class</li>
             <li>Full 1-25 Leveling starts at $0.95 plus $14.00 per selected class</li>
-            <li>Prestige Leveling with range selection</li>
+            <li>Prestige Leveling can be added on top of your main order</li>
             <li>Select one, several, or all classes</li>
             <li>Trials completion at $2.99 per selected class</li>
             <li>Clean premium layout consistent with XpeedCarry style</li>
           </ul>
         </div>
-
       </div>
 
       <div class="product-right">
@@ -134,12 +132,17 @@
                 <span>Full 1-25 Leveling</span>
               </div>
             </label>
+          </div>
 
-            <label class="radio-option">
-              <div class="radio-left">
-                <input type="radio" name="serviceType" value="prestige" />
-                <span>Prestige Leveling</span>
+          <div class="option-group">
+            <p>Prestige Add-On</p>
+
+            <label class="check-option">
+              <div class="check-left">
+                <input type="checkbox" id="prestigeToggle" />
+                <span>Add Prestige Leveling</span>
               </div>
+              <span class="option-price">+$14.90 / prestige / class</span>
             </label>
           </div>
 
@@ -260,7 +263,7 @@
     const LEVEL_PRICE = 1.40;
     const FULL_PRICE = 0.95;
     const CLASS_PRICE = 14.00;
-    const PRESTIGE_PRICE = 14.95;
+    const PRESTIGE_PRICE = 14.90;
     const TRIALS_PRICE = 2.99;
 
     const currentLevel = document.getElementById("currentLevel");
@@ -269,8 +272,8 @@
     const rangeMax = document.getElementById("rangeMax");
     const levelProgress = document.getElementById("levelProgress");
 
+    const prestigeToggle = document.getElementById("prestigeToggle");
     const prestigeGroup = document.getElementById("prestigeGroup");
-    const levelRangeGroup = document.getElementById("levelRangeGroup");
     const prestigeStart = document.getElementById("prestigeStart");
     const prestigeEnd = document.getElementById("prestigeEnd");
     const prestigeMin = document.getElementById("prestigeMin");
@@ -419,15 +422,11 @@
       return document.querySelector('input[name="serviceType"]:checked').value;
     }
 
-    function updateServiceVisibility() {
-      const selected = getSelectedServiceType();
-
-      if (selected === "prestige") {
+    function updatePrestigeVisibility() {
+      if (prestigeToggle.checked) {
         prestigeGroup.classList.remove("hidden");
-        levelRangeGroup.classList.add("hidden");
       } else {
         prestigeGroup.classList.add("hidden");
-        levelRangeGroup.classList.remove("hidden");
       }
 
       updateTotal();
@@ -445,19 +444,19 @@
         const desired = parseInt(desiredLevel.value, 10);
         const levels = Math.max(0, desired - current);
 
-        total = levels * LEVEL_PRICE * selectedClasses;
+        total += levels * LEVEL_PRICE * selectedClasses;
       }
 
       if (selected === "full") {
-        total = FULL_PRICE + (selectedClasses * CLASS_PRICE);
+        total += FULL_PRICE + (selectedClasses * CLASS_PRICE);
       }
 
-      if (selected === "prestige") {
+      if (prestigeToggle.checked) {
         const start = parseInt(prestigeStart.value, 10);
         const end = parseInt(prestigeEnd.value, 10);
         const prestiges = Math.max(0, end - start);
 
-        total = prestiges * PRESTIGE_PRICE * selectedClasses;
+        total += prestiges * PRESTIGE_PRICE * selectedClasses;
       }
 
       if (trialsOption.checked) {
@@ -480,18 +479,19 @@
     prestigeEnd.addEventListener("input", syncPrestigeSlidersFromInputs);
 
     serviceTypeRadios.forEach((radio) => {
-      radio.addEventListener("change", updateServiceVisibility);
+      radio.addEventListener("change", updateTotal);
     });
 
     classOptions.forEach((option) => {
       option.addEventListener("change", updateTotal);
     });
 
+    prestigeToggle.addEventListener("change", updatePrestigeVisibility);
     trialsOption.addEventListener("change", updateTotal);
 
     syncLevelSlidersFromInputs();
     syncPrestigeSlidersFromInputs();
-    updateServiceVisibility();
+    updatePrestigeVisibility();
   </script>
 </body>
 </html>
