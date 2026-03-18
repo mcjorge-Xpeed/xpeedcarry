@@ -72,11 +72,11 @@
           </p>
 
           <ul>
-            <li>Custom Leveling at $1.40 per level</li>
-            <li>Full 1-25 Leveling for $14.95</li>
+            <li>Custom Leveling at $1.40 per level, per selected class</li>
+            <li>Full 1-25 Leveling starts at $0.95 plus $14.00 per selected class</li>
             <li>Prestige Leveling with range selection</li>
-            <li>Choose your class before checkout</li>
-            <li>Extra Trials completion available</li>
+            <li>Select one, several, or all classes</li>
+            <li>Trials completion at $2.99 per selected class</li>
             <li>Clean premium layout consistent with XpeedCarry style</li>
           </ul>
         </div>
@@ -173,17 +173,63 @@
           </div>
 
           <div class="option-group">
-            <p>Choose the Class</p>
+            <p>Select Classes</p>
 
-            <select id="classSelect">
-              <option value="Tactical">Tactical</option>
-              <option value="Assault">Assault</option>
-              <option value="Vanguard">Vanguard</option>
-              <option value="Bulwark">Bulwark</option>
-              <option value="Sniper">Sniper</option>
-              <option value="Heavy">Heavy</option>
-              <option value="Techmarine">Techmarine</option>
-            </select>
+            <label class="check-option">
+              <div class="check-left">
+                <input type="checkbox" class="classOption" value="Tactical" checked />
+                <span>Tactical</span>
+              </div>
+              <span class="option-price">+$14.00</span>
+            </label>
+
+            <label class="check-option">
+              <div class="check-left">
+                <input type="checkbox" class="classOption" value="Assault" />
+                <span>Assault</span>
+              </div>
+              <span class="option-price">+$14.00</span>
+            </label>
+
+            <label class="check-option">
+              <div class="check-left">
+                <input type="checkbox" class="classOption" value="Vanguard" />
+                <span>Vanguard</span>
+              </div>
+              <span class="option-price">+$14.00</span>
+            </label>
+
+            <label class="check-option">
+              <div class="check-left">
+                <input type="checkbox" class="classOption" value="Bulwark" />
+                <span>Bulwark</span>
+              </div>
+              <span class="option-price">+$14.00</span>
+            </label>
+
+            <label class="check-option">
+              <div class="check-left">
+                <input type="checkbox" class="classOption" value="Sniper" />
+                <span>Sniper</span>
+              </div>
+              <span class="option-price">+$14.00</span>
+            </label>
+
+            <label class="check-option">
+              <div class="check-left">
+                <input type="checkbox" class="classOption" value="Heavy" />
+                <span>Heavy</span>
+              </div>
+              <span class="option-price">+$14.00</span>
+            </label>
+
+            <label class="check-option">
+              <div class="check-left">
+                <input type="checkbox" class="classOption" value="Techmarine" />
+                <span>Techmarine</span>
+              </div>
+              <span class="option-price">+$14.00</span>
+            </label>
           </div>
 
           <div class="option-group">
@@ -194,7 +240,7 @@
                 <input type="checkbox" id="trialsOption" />
                 <span>Add Trials completion</span>
               </div>
-              <span class="option-price">+$4.00</span>
+              <span class="option-price">+$2.99 / class</span>
             </label>
           </div>
 
@@ -212,9 +258,10 @@
 
   <script>
     const LEVEL_PRICE = 1.40;
-    const FULL_PRICE = 14.95;
+    const FULL_PRICE = 0.95;
+    const CLASS_PRICE = 14.00;
     const PRESTIGE_PRICE = 14.90;
-    const TRIALS_PRICE = 4.00;
+    const TRIALS_PRICE = 2.99;
 
     const currentLevel = document.getElementById("currentLevel");
     const desiredLevel = document.getElementById("desiredLevel");
@@ -230,7 +277,7 @@
     const prestigeMax = document.getElementById("prestigeMax");
     const prestigeProgress = document.getElementById("prestigeProgress");
 
-    const classSelect = document.getElementById("classSelect");
+    const classOptions = document.querySelectorAll(".classOption");
     const trialsOption = document.getElementById("trialsOption");
     const totalPrice = document.getElementById("totalPrice");
     const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
@@ -288,6 +335,24 @@
       }
 
       return { start, end };
+    }
+
+    function getSelectedClassCount() {
+      let count = 0;
+
+      classOptions.forEach((option) => {
+        if (option.checked) count++;
+      });
+
+      return count;
+    }
+
+    function ensureAtLeastOneClass() {
+      const checkedCount = getSelectedClassCount();
+
+      if (checkedCount === 0) {
+        classOptions[0].checked = true;
+      }
     }
 
     function syncLevelInputsFromSliders() {
@@ -369,27 +434,34 @@
     }
 
     function updateTotal() {
+      ensureAtLeastOneClass();
+
       const selected = getSelectedServiceType();
+      const selectedClasses = getSelectedClassCount();
       let total = 0;
 
       if (selected === "custom") {
         const current = parseInt(currentLevel.value, 10);
         const desired = parseInt(desiredLevel.value, 10);
-        total = Math.max(0, desired - current) * LEVEL_PRICE;
+        const levels = Math.max(0, desired - current);
+
+        total = levels * LEVEL_PRICE * selectedClasses;
       }
 
       if (selected === "full") {
-        total = FULL_PRICE;
+        total = FULL_PRICE + (selectedClasses * CLASS_PRICE);
       }
 
       if (selected === "prestige") {
         const start = parseInt(prestigeStart.value, 10);
         const end = parseInt(prestigeEnd.value, 10);
-        total = Math.max(0, end - start) * PRESTIGE_PRICE;
+        const prestiges = Math.max(0, end - start);
+
+        total = prestiges * PRESTIGE_PRICE * selectedClasses;
       }
 
       if (trialsOption.checked) {
-        total += TRIALS_PRICE;
+        total += TRIALS_PRICE * selectedClasses;
       }
 
       totalPrice.textContent = "$" + total.toFixed(2);
@@ -411,8 +483,11 @@
       radio.addEventListener("change", updateServiceVisibility);
     });
 
+    classOptions.forEach((option) => {
+      option.addEventListener("change", updateTotal);
+    });
+
     trialsOption.addEventListener("change", updateTotal);
-    classSelect.addEventListener("change", updateTotal);
 
     syncLevelSlidersFromInputs();
     syncPrestigeSlidersFromInputs();
