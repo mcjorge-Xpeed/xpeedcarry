@@ -21,7 +21,8 @@
       <h1>Warhammer 40K Space Marine 2 Operations</h1>
 
       <p>
-        Buy Warhammer 40k Space Marine 2 Operations Boost to complete any available operation you want as many times as you want, regardless of the difficulty!
+        Buy Warhammer 40K Space Marine 2 Operations Boost to complete any available
+        operation you want as many times as you want, regardless of the difficulty.
         You can choose our random or specific operations option. It's up to you.
       </p>
 
@@ -135,12 +136,12 @@
           <p>Difficulty</p>
           <select id="difficulty">
             <option value="0">Threat: None (+$0.00)</option>
-            <option value="1">Threat: Minimal (+$1.00)</option>
-            <option value="2">Threat: Average (+$2.00)</option>
-            <option value="3">Threat: Substantial (+$3.00)</option>
-            <option value="4">Threat: Ruthless (+$4.00)</option>
-            <option value="5">Threat: Lethal (+$5.00)</option>
-            <option value="6">Threat: Absolute (+$6.00)</option>
+            <option value="2">Threat: Minimal (+$2.00)</option>
+            <option value="3">Threat: Average (+$3.00)</option>
+            <option value="4">Threat: Substantial (+$4.00)</option>
+            <option value="5">Threat: Ruthless (+$5.00)</option>
+            <option value="6">Threat: Lethal (+$6.00)</option>
+            <option value="7">Threat: Absolute (+$7.00)</option>
           </select>
         </div>
 
@@ -183,7 +184,12 @@
       }
 
       const pricePerRun = basePrice + difficulty;
-      const total = pricePerRun * runs;
+      const subtotal = pricePerRun * runs;
+
+      let discount = Math.floor(runs / 3) * 0.03;
+      discount = Math.min(discount, 0.12);
+
+      const total = subtotal * (1 - discount);
 
       totalEl.textContent = `$${total.toFixed(2)}`;
     }
