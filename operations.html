@@ -2,13 +2,10 @@
 <html lang="en">
 
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Operations | XpeedCarry</title>
-
   <link rel="stylesheet" href="css/styles.css">
-
 </head>
 
 <body id="top">
@@ -18,16 +15,14 @@
     <a href="index.html" class="logo">XpeedCarry</a>
   </header>
 
-
   <!-- HERO -->
   <section class="service-hero">
     <div class="hero-content">
-
       <h1>Warhammer 40K Space Marine 2 Operations</h1>
 
       <p>
-        Buy Warhammer 40k Space Marine 2 Operations Boost to complete any available operation you want as many times as you want, regardless of the difficulty! 
-        You can choose our random or specific operations option; it's up to you.
+        Buy Warhammer 40k Space Marine 2 Operations Boost to complete any available operation you want as many times as you want, regardless of the difficulty!
+        You can choose our random or specific operations option. It's up to you.
       </p>
 
       <div class="hero-buttons">
@@ -35,11 +30,8 @@
         <a href="spacemarine2.html" class="btn btn-secondary">Leveling</a>
         <a href="builds.html" class="btn btn-secondary">Builds</a>
       </div>
-
     </div>
-
   </section>
-
 
   <!-- MAIN -->
   <main class="product-layout">
@@ -48,7 +40,6 @@
     <section class="product-left">
 
       <div class="product-card">
-
         <img src="images/operations.png" alt="Operations" class="product-image">
 
         <div class="product-highlights">
@@ -69,12 +60,9 @@
             <p>Completion</p>
           </div>
         </div>
-
       </div>
 
-
       <div class="product-description">
-
         <h2>Description</h2>
 
         <p>
@@ -89,19 +77,15 @@
           <li>Fast and safe runs</li>
           <li>Any difficulty supported</li>
         </ul>
-
       </div>
 
     </section>
-
 
     <!-- RIGHT -->
     <aside class="product-right">
 
       <div class="purchase-panel">
-
         <h3>Customize Order</h3>
-
 
         <!-- SERVICE TYPE -->
         <div class="option-group">
@@ -112,7 +96,6 @@
           </select>
         </div>
 
-
         <!-- PLATFORM -->
         <div class="option-group">
           <p>Platform</p>
@@ -122,7 +105,6 @@
             <option>PlayStation</option>
           </select>
         </div>
-
 
         <!-- CLASS -->
         <div class="option-group">
@@ -139,7 +121,6 @@
           </select>
         </div>
 
-
         <!-- METHOD -->
         <div class="option-group">
           <p>Completion Method</p>
@@ -149,13 +130,11 @@
           </select>
         </div>
 
-
         <!-- DIFFICULTY -->
         <div class="option-group">
           <p>Difficulty</p>
-
           <select id="difficulty">
-            <option value="0">Threat: None</option>
+            <option value="0">Threat: None (+$0.00)</option>
             <option value="1">Threat: Minimal (+$1.00)</option>
             <option value="2">Threat: Average (+$2.00)</option>
             <option value="3">Threat: Substantial (+$3.00)</option>
@@ -163,9 +142,7 @@
             <option value="5">Threat: Lethal (+$5.00)</option>
             <option value="6">Threat: Absolute (+$6.00)</option>
           </select>
-
         </div>
-
 
         <!-- RUNS -->
         <div class="option-group">
@@ -173,70 +150,49 @@
           <input type="number" id="runs" value="1" min="1">
         </div>
 
-
         <!-- TOTAL -->
         <div class="total-box">
           <span>Total</span>
-          <strong id="total-price">$2.99</strong>
+          <strong id="total-price">$0.99</strong>
         </div>
-
 
         <!-- BUTTONS -->
         <a href="#" class="btn btn-primary full">Buy Now</a>
         <a href="#" class="btn btn-secondary full">Chat before order</a>
-
       </div>
 
     </aside>
 
   </main>
 
-
   <!-- SCRIPT -->
   <script>
-  const basePrice = 0.99;
+    const basePrice = 0.99;
 
-  const threatSelect = document.getElementById("threat");
-  const runsInput = document.getElementById("runs");
-  const totalEl = document.getElementById("total-price");
+    const difficultySelect = document.getElementById("difficulty");
+    const runsInput = document.getElementById("runs");
+    const totalEl = document.getElementById("total-price");
 
-  function getThreatModifier(value) {
-    switch (value) {
-      case "minimal":
-        return 0;
-      case "average":
-        return 1;
-      case "substantial":
-        return 2;
-      case "ruthless":
-        return 3;
-      case "lethal":
-        return 4;
-      case "absolute":
-        return 6;
-      default:
-        return 0;
+    function updateTotal() {
+      const difficulty = Number(difficultySelect.value);
+
+      let runs = parseInt(runsInput.value, 10);
+      if (isNaN(runs) || runs < 1) {
+        runs = 1;
+        runsInput.value = 1;
+      }
+
+      const pricePerRun = basePrice + difficulty;
+      const total = pricePerRun * runs;
+
+      totalEl.textContent = `$${total.toFixed(2)}`;
     }
-  }
 
-  function updateTotal() {
-    const threatValue = threatSelect.value;
-    const threatModifier = getThreatModifier(threatValue);
+    difficultySelect.addEventListener("change", updateTotal);
+    runsInput.addEventListener("input", updateTotal);
 
-    let runs = parseInt(runsInput.value, 10);
-    if (isNaN(runs) || runs < 1) runs = 1;
-
-    const pricePerRun = basePrice + threatModifier;
-    const total = pricePerRun * runs;
-
-    totalEl.textContent = `$${total.toFixed(2)}`;
-  }
-
-  threatSelect.addEventListener("change", updateTotal);
-  runsInput.addEventListener("input", updateTotal);
-
-  updateTotal();
-</script>
+    updateTotal();
+  </script>
 
 </body>
 </html>
