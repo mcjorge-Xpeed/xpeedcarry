@@ -726,6 +726,8 @@ a {
   position: relative;
   height: 28px;
   margin-bottom: 8px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .range-wrap::before {
@@ -745,8 +747,9 @@ a {
   top: 11px;
   height: 4px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #f1d57a 0%, #d4af37 55%, #b98d1d 100%);
+  background: linear-gradient(90deg, #d4af37 0%, #f1d57a 100%);
   z-index: 2;
+  pointer-events: none;
 }
 
 .range-wrap input[type="range"] {
