@@ -73,8 +73,8 @@
           <ul>
             <li>Custom Leveling starts at $1.40 per level with automatic bulk discount</li>
             <li>Custom 1 to 25 Leveling is capped at $19.99 per class</li>
-            <li>Full 1 to 25 Leveling is a fixed $14.00 per selected class</li>
-            <li>Prestige Leveling can be added on top of your main order</li>
+            <li>Full 1 to 25 Leveling starts at $0.95 plus $14.00 per selected class</li>
+            <li>Prestige Leveling can be ordered with or without standard leveling</li>
             <li>Select one, several, or all classes</li>
             <li>Trials completion at $2.99 per selected class</li>
             <li>Clean premium layout consistent with XpeedCarry style</li>
@@ -85,6 +85,17 @@
       <div class="product-right">
         <aside class="purchase-panel" id="order-panel">
           <h3>Customize Order</h3>
+
+          <div class="option-group">
+            <p>Main Service</p>
+
+            <label class="check-option">
+              <div class="check-left">
+                <input type="checkbox" id="levelingToggle" checked />
+                <span>Include Leveling</span>
+              </div>
+            </label>
+          </div>
 
           <div class="option-group" id="levelRangeGroup">
             <p>Level Range</p>
@@ -117,7 +128,7 @@
             </div>
           </div>
 
-          <div class="option-group">
+          <div class="option-group" id="serviceTypeGroup">
             <p>Choose the Service Type</p>
 
             <label class="radio-option">
@@ -309,6 +320,8 @@
     const MAX_LEVEL_GAIN = MAX_LEVEL - MIN_LEVEL;
     const CUSTOM_CAP_TOTAL = 19.99;
 
+    const levelingToggle = document.getElementById("levelingToggle");
+
     const currentLevel = document.getElementById("currentLevel");
     const desiredLevel = document.getElementById("desiredLevel");
     const rangeMin = document.getElementById("rangeMin");
@@ -327,7 +340,9 @@
     const trialsOption = document.getElementById("trialsOption");
     const totalPrice = document.getElementById("totalPrice");
     const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
+
     const levelRangeGroup = document.getElementById("levelRangeGroup");
+    const serviceTypeGroup = document.getElementById("serviceTypeGroup");
 
     const breakdownMain = document.getElementById("breakdownMain");
     const breakdownOriginal = document.getElementById("breakdownOriginal");
@@ -497,7 +512,28 @@
     }
 
     function updateServiceTypeUI() {
+      const levelingEnabled = levelingToggle.checked;
       const selected = getSelectedServiceType();
+
+      if (!levelingEnabled) {
+        levelRangeGroup.style.opacity = "0.45";
+        levelRangeGroup.style.pointerEvents = "none";
+        serviceTypeGroup.style.opacity = "0.45";
+        serviceTypeGroup.style.pointerEvents = "none";
+
+        serviceTypeRadios.forEach((radio) => {
+          radio.disabled = true;
+        });
+
+        return;
+      }
+
+      serviceTypeRadios.forEach((radio) => {
+        radio.disabled = false;
+      });
+
+      serviceTypeGroup.style.opacity = "1";
+      serviceTypeGroup.style.pointerEvents = "auto";
 
       if (selected === "full") {
         levelRangeGroup.style.opacity = "0.55";
@@ -545,6 +581,7 @@
       ensureAtLeastOneClass();
       updateServiceTypeUI();
 
+      const levelingEnabled = levelingToggle.checked;
       const selected = getSelectedServiceType();
       const selectedClasses = getSelectedClassCount();
 
@@ -554,7 +591,7 @@
       let prestigeTotal = 0;
       let trialsTotal = 0;
 
-      if (selected === "custom") {
+      if (levelingEnabled && selected === "custom") {
         const current = parseInt(currentLevel.value, 10);
         const desired = parseInt(desiredLevel.value, 10);
 
@@ -565,7 +602,7 @@
         discountMainTotal = customData.totalDiscount;
       }
 
-      if (selected === "full") {
+      if (levelingEnabled && selected === "full") {
         mainTotal = FULL_BASE_PRICE + (CLASS_PRICE * selectedClasses);
         originalMainTotal = mainTotal;
         discountMainTotal = 0;
@@ -589,7 +626,7 @@
       breakdownMain.textContent = formatMoney(mainTotal);
       breakdownClasses.textContent = selectedClasses + " selected";
 
-      if (selected === "custom" && discountMainTotal > 0.009) {
+      if (levelingEnabled && selected === "custom" && discountMainTotal > 0.009) {
         breakdownOriginalRow.classList.remove("hidden");
         breakdownDiscountRow.classList.remove("hidden");
         breakdownOriginal.textContent = formatMoney(originalMainTotal);
@@ -615,6 +652,24 @@
       } else {
         breakdownTrialsRow.classList.add("hidden");
         breakdownTrials.textContent = formatMoney(0);
+      }
+
+      if (!levelingEnabled && prestigeTotal > 0) {
+        bestValueRow.classList.remove("hidden");
+        bestValueText.textContent = "Prestige-only order selected";
+        return;
+      }
+
+      if (!levelingEnabled && prestigeTotal === 0 && trialsTotal > 0) {
+        bestValueRow.classList.add("hidden");
+        bestValueText.textContent = "Full Leveling is the best value";
+        return;
+      }
+
+      if (!levelingEnabled) {
+        bestValueRow.classList.add("hidden");
+        bestValueText.textContent = "Full Leveling is the best value";
+        return;
       }
 
       if (selected === "custom") {
@@ -655,6 +710,7 @@
       option.addEventListener("change", updateTotal);
     });
 
+    levelingToggle.addEventListener("change", updateTotal);
     prestigeToggle.addEventListener("change", updatePrestigeVisibility);
     trialsOption.addEventListener("change", updateTotal);
 
