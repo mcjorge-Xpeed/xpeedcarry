@@ -35,7 +35,7 @@
 
         <div class="product-card">
           <img
-            src="images/leveling-25.png"
+            src="images/leveling.png"
             alt="Space Marine 2 Leveling Service"
             class="product-image"
           />
@@ -93,12 +93,12 @@
             <div class="level-inputs">
               <div class="level-box">
                 <label for="currentLevel">Current Level</label>
-                <input type="number" id="currentLevel" min="1" max="25" value="1" />
+                <input type="number" id="currentLevel" min="1" max="24" value="1" />
               </div>
 
               <div class="level-box">
                 <label for="desiredLevel">Desired Level</label>
-                <input type="number" id="desiredLevel" min="1" max="25" value="10" />
+                <input type="number" id="desiredLevel" min="2" max="25" value="10" />
               </div>
             </div>
 
@@ -149,12 +149,12 @@
             <div class="level-inputs">
               <div class="level-box">
                 <label for="prestigeStart">Current Prestige</label>
-                <input type="number" id="prestigeStart" min="1" max="4" value="1" />
+                <input type="number" id="prestigeStart" min="1" max="3" value="1" />
               </div>
 
               <div class="level-box">
                 <label for="prestigeEnd">Desired Prestige</label>
-                <input type="number" id="prestigeEnd" min="1" max="4" value="2" />
+                <input type="number" id="prestigeEnd" min="2" max="4" value="2" />
               </div>
             </div>
 
@@ -235,88 +235,118 @@
     const totalPrice = document.getElementById("totalPrice");
     const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
 
-    function updateRangeProgress(minEl, maxEl, progressEl) {
-      let min = parseInt(minEl.value, 10);
-      let max = parseInt(maxEl.value, 10);
+    function updateRangeProgress(minEl, maxEl, progressEl, absoluteMin, absoluteMax) {
+      const min = parseInt(minEl.value, 10);
+      const max = parseInt(maxEl.value, 10);
 
-      if (min >= max) {
-        min = max - 1;
-        minEl.value = min;
-      }
-
-      const minValue = parseInt(minEl.min, 10);
-      const maxValue = parseInt(minEl.max, 10);
-
-      const left = ((min - minValue) / (maxValue - minValue)) * 100;
-      const right = ((max - minValue) / (maxValue - minValue)) * 100;
+      const left = ((min - absoluteMin) / (absoluteMax - absoluteMin)) * 100;
+      const right = ((max - absoluteMin) / (absoluteMax - absoluteMin)) * 100;
 
       progressEl.style.left = left + "%";
       progressEl.style.width = (right - left) + "%";
     }
 
-    function syncLevelInputsFromSliders() {
-      currentLevel.value = rangeMin.value;
-      desiredLevel.value = rangeMax.value;
-      updateRangeProgress(rangeMin, rangeMax, levelProgress);
-      updateTotal();
-    }
-
-    function syncLevelSlidersFromInputs() {
-      let current = parseInt(currentLevel.value, 10) || 1;
-      let desired = parseInt(desiredLevel.value, 10) || 2;
+    function clampLevelPair(current, desired) {
+      if (isNaN(current)) current = 1;
+      if (isNaN(desired)) desired = 2;
 
       if (current < 1) current = 1;
       if (current > 24) current = 24;
+
       if (desired < 2) desired = 2;
       if (desired > 25) desired = 25;
 
       if (current >= desired) {
-        desired = current + 1;
-        if (desired > 25) {
-          desired = 25;
+        if (current >= 24) {
           current = 24;
+          desired = 25;
+        } else {
+          desired = current + 1;
         }
       }
 
-      currentLevel.value = current;
-      desiredLevel.value = desired;
-      rangeMin.value = current;
-      rangeMax.value = desired;
-
-      updateRangeProgress(rangeMin, rangeMax, levelProgress);
-      updateTotal();
+      return { current, desired };
     }
 
-    function syncPrestigeInputsFromSliders() {
-      prestigeStart.value = prestigeMin.value;
-      prestigeEnd.value = prestigeMax.value;
-      updateRangeProgress(prestigeMin, prestigeMax, prestigeProgress);
-      updateTotal();
-    }
-
-    function syncPrestigeSlidersFromInputs() {
-      let start = parseInt(prestigeStart.value, 10) || 1;
-      let end = parseInt(prestigeEnd.value, 10) || 2;
+    function clampPrestigePair(start, end) {
+      if (isNaN(start)) start = 1;
+      if (isNaN(end)) end = 2;
 
       if (start < 1) start = 1;
       if (start > 3) start = 3;
+
       if (end < 2) end = 2;
       if (end > 4) end = 4;
 
       if (start >= end) {
-        end = start + 1;
-        if (end > 4) {
-          end = 4;
+        if (start >= 3) {
           start = 3;
+          end = 4;
+        } else {
+          end = start + 1;
         }
       }
 
-      prestigeStart.value = start;
-      prestigeEnd.value = end;
-      prestigeMin.value = start;
-      prestigeMax.value = end;
+      return { start, end };
+    }
 
-      updateRangeProgress(prestigeMin, prestigeMax, prestigeProgress);
+    function syncLevelInputsFromSliders() {
+      const fixed = clampLevelPair(
+        parseInt(rangeMin.value, 10),
+        parseInt(rangeMax.value, 10)
+      );
+
+      rangeMin.value = fixed.current;
+      rangeMax.value = fixed.desired;
+      currentLevel.value = fixed.current;
+      desiredLevel.value = fixed.desired;
+
+      updateRangeProgress(rangeMin, rangeMax, levelProgress, 1, 25);
+      updateTotal();
+    }
+
+    function syncLevelSlidersFromInputs() {
+      const fixed = clampLevelPair(
+        parseInt(currentLevel.value, 10),
+        parseInt(desiredLevel.value, 10)
+      );
+
+      currentLevel.value = fixed.current;
+      desiredLevel.value = fixed.desired;
+      rangeMin.value = fixed.current;
+      rangeMax.value = fixed.desired;
+
+      updateRangeProgress(rangeMin, rangeMax, levelProgress, 1, 25);
+      updateTotal();
+    }
+
+    function syncPrestigeInputsFromSliders() {
+      const fixed = clampPrestigePair(
+        parseInt(prestigeMin.value, 10),
+        parseInt(prestigeMax.value, 10)
+      );
+
+      prestigeMin.value = fixed.start;
+      prestigeMax.value = fixed.end;
+      prestigeStart.value = fixed.start;
+      prestigeEnd.value = fixed.end;
+
+      updateRangeProgress(prestigeMin, prestigeMax, prestigeProgress, 1, 4);
+      updateTotal();
+    }
+
+    function syncPrestigeSlidersFromInputs() {
+      const fixed = clampPrestigePair(
+        parseInt(prestigeStart.value, 10),
+        parseInt(prestigeEnd.value, 10)
+      );
+
+      prestigeStart.value = fixed.start;
+      prestigeEnd.value = fixed.end;
+      prestigeMin.value = fixed.start;
+      prestigeMax.value = fixed.end;
+
+      updateRangeProgress(prestigeMin, prestigeMax, prestigeProgress, 1, 4);
       updateTotal();
     }
 
