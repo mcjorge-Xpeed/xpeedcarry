@@ -73,7 +73,7 @@
           <ul>
             <li>Custom Leveling starts at $1.40 per level with automatic bulk discount</li>
             <li>Custom 1 to 25 Leveling is capped at $19.99 per class</li>
-            <li>Full 1 to 25 Leveling is a fixed $14.95 per selected class</li>
+            <li>Full 1 to 25 Leveling is a fixed $14.00 per selected class</li>
             <li>Prestige Leveling can be added on top of your main order</li>
             <li>Select one, several, or all classes</li>
             <li>Trials completion at $2.99 per selected class</li>
@@ -184,7 +184,7 @@
                 <input type="checkbox" class="classOption" value="Tactical" checked />
                 <span>Tactical</span>
               </div>
-              <span class="option-price">+$14.95 Full</span>
+              <span class="option-price">+$14.00 Full</span>
             </label>
 
             <label class="check-option">
@@ -192,7 +192,7 @@
                 <input type="checkbox" class="classOption" value="Assault" />
                 <span>Assault</span>
               </div>
-              <span class="option-price">+$14.95 Full</span>
+              <span class="option-price">+$14.00 Full</span>
             </label>
 
             <label class="check-option">
@@ -200,7 +200,7 @@
                 <input type="checkbox" class="classOption" value="Vanguard" />
                 <span>Vanguard</span>
               </div>
-              <span class="option-price">+$14.95 Full</span>
+              <span class="option-price">+$14.00 Full</span>
             </label>
 
             <label class="check-option">
@@ -208,7 +208,7 @@
                 <input type="checkbox" class="classOption" value="Bulwark" />
                 <span>Bulwark</span>
               </div>
-              <span class="option-price">+$14.95 Full</span>
+              <span class="option-price">+$14.00 Full</span>
             </label>
 
             <label class="check-option">
@@ -216,7 +216,7 @@
                 <input type="checkbox" class="classOption" value="Sniper" />
                 <span>Sniper</span>
               </div>
-              <span class="option-price">+$14.95 Full</span>
+              <span class="option-price">+$14.00 Full</span>
             </label>
 
             <label class="check-option">
@@ -224,7 +224,7 @@
                 <input type="checkbox" class="classOption" value="Heavy" />
                 <span>Heavy</span>
               </div>
-              <span class="option-price">+$14.95 Full</span>
+              <span class="option-price">+$14.00 Full</span>
             </label>
 
             <label class="check-option">
@@ -232,7 +232,7 @@
                 <input type="checkbox" class="classOption" value="Techmarine" />
                 <span>Techmarine</span>
               </div>
-              <span class="option-price">+$14.95 Full</span>
+              <span class="option-price">+$14.00 Full</span>
             </label>
           </div>
 
@@ -566,7 +566,7 @@
       }
 
       if (selected === "full") {
-        mainTotal = FULL_LEVELING_PRICE * selectedClasses;
+        mainTotal = FULL_BASE_PRICE + (CLASS_PRICE * selectedClasses);
         originalMainTotal = mainTotal;
         discountMainTotal = 0;
       }
@@ -624,7 +624,7 @@
 
         if (levels >= 18) {
           bestValueRow.classList.remove("hidden");
-          bestValueText.textContent = "Best value: Full Leveling for $14.95 per class";
+          bestValueText.textContent = "Best value: Full Leveling for $14.00 per class";
         } else {
           bestValueRow.classList.add("hidden");
           bestValueText.textContent = "Full Leveling is the best value";
