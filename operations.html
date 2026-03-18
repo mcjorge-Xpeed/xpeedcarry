@@ -151,11 +151,18 @@
           <input type="number" id="runs" value="1" min="1">
         </div>
 
-        <!-- TOTAL -->
+        <!-- TOTALS -->
         <div class="total-box">
-          <span>Total</span>
+          <span>Original Price</span>
+          <strong id="original-price">$0.99</strong>
+        </div>
+
+        <div class="total-box">
+          <span>Discounted Price</span>
           <strong id="total-price">$0.99</strong>
         </div>
+
+        <p id="discount-info" style="margin-top: 10px; font-size: 14px; color: #d4af37;"></p>
 
         <!-- BUTTONS -->
         <a href="#" class="btn btn-primary full">Buy Now</a>
@@ -172,7 +179,9 @@
 
     const difficultySelect = document.getElementById("difficulty");
     const runsInput = document.getElementById("runs");
+    const originalPriceEl = document.getElementById("original-price");
     const totalEl = document.getElementById("total-price");
+    const discountInfoEl = document.getElementById("discount-info");
 
     function updateTotal() {
       const difficulty = Number(difficultySelect.value);
@@ -189,9 +198,23 @@
       let discount = Math.floor(runs / 3) * 0.03;
       discount = Math.min(discount, 0.12);
 
-      const total = subtotal * (1 - discount);
+      const discountedTotal = subtotal * (1 - discount);
+      const savings = subtotal - discountedTotal;
 
-      totalEl.textContent = `$${total.toFixed(2)}`;
+      originalPriceEl.textContent = `$${subtotal.toFixed(2)}`;
+      totalEl.textContent = `$${discountedTotal.toFixed(2)}`;
+
+      if (discount > 0) {
+        const discountPercent = (discount * 100).toFixed(0);
+
+        if (discount === 0.12) {
+          discountInfoEl.textContent = `${discountPercent}% discount applied. You save $${savings.toFixed(2)}. Max discount reached.`;
+        } else {
+          discountInfoEl.textContent = `${discountPercent}% discount applied. You save $${savings.toFixed(2)}.`;
+        }
+      } else {
+        discountInfoEl.textContent = "";
+      }
     }
 
     difficultySelect.addEventListener("change", updateTotal);
