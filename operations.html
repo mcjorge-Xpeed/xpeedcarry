@@ -77,7 +77,6 @@
           <li>Character and Weapon XP</li>
           <li>Fast and safe runs</li>
           <li>Any difficulty supported</li>
-          <li>3% discount every 3 runs (max. 12% disc)</li>
         </ul>
       </div>
 
@@ -136,7 +135,7 @@
         <div class="option-group">
           <p>Difficulty</p>
           <select id="difficulty">
-            <option value="0">Threat: None (+$0.00)</option>
+            <option value="" disabled selected>Select Threat</option>
             <option value="2">Threat: Minimal (+$2.00)</option>
             <option value="3">Threat: Average (+$3.00)</option>
             <option value="4">Threat: Substantial (+$4.00)</option>
@@ -159,7 +158,7 @@
         </div>
 
         <div class="total-box">
-          <span>Final Price</span>
+          <span>Discounted Price</span>
           <strong id="total-price">$0.99</strong>
         </div>
 
@@ -176,7 +175,7 @@
 
   <!-- SCRIPT -->
   <script>
-    const basePrice = 0.75;
+    const basePrice = 0.99;
 
     const difficultySelect = document.getElementById("difficulty");
     const runsInput = document.getElementById("runs");
@@ -185,9 +184,14 @@
     const discountInfoEl = document.getElementById("discount-info");
 
     function updateTotal() {
-      const difficulty = Number(difficultySelect.value);
+      let difficulty = 0;
+
+      if (difficultySelect.value !== "") {
+        difficulty = Number(difficultySelect.value);
+      }
 
       let runs = parseInt(runsInput.value, 10);
+
       if (isNaN(runs) || runs < 1) {
         runs = 1;
         runsInput.value = 1;
