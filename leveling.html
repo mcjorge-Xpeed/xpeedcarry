@@ -75,6 +75,7 @@
             <li>Custom Leveling at $1.40 per level</li>
             <li>Full 1-25 Leveling for $14.95</li>
             <li>Prestige Leveling with range selection</li>
+            <li>Choose your class before checkout</li>
             <li>Extra Trials completion available</li>
             <li>Clean premium layout consistent with XpeedCarry style</li>
           </ul>
@@ -172,6 +173,20 @@
           </div>
 
           <div class="option-group">
+            <p>Choose the Class</p>
+
+            <select id="classSelect">
+              <option value="Tactical">Tactical</option>
+              <option value="Assault">Assault</option>
+              <option value="Vanguard">Vanguard</option>
+              <option value="Bulwark">Bulwark</option>
+              <option value="Sniper">Sniper</option>
+              <option value="Heavy">Heavy</option>
+              <option value="Techmarine">Techmarine</option>
+            </select>
+          </div>
+
+          <div class="option-group">
             <p>Additional Options</p>
 
             <label class="check-option">
@@ -193,7 +208,6 @@
         </aside>
       </div>
     </section>
-
   </main>
 
   <script>
@@ -209,12 +223,14 @@
     const levelProgress = document.getElementById("levelProgress");
 
     const prestigeGroup = document.getElementById("prestigeGroup");
+    const levelRangeGroup = document.getElementById("levelRangeGroup");
     const prestigeStart = document.getElementById("prestigeStart");
     const prestigeEnd = document.getElementById("prestigeEnd");
     const prestigeMin = document.getElementById("prestigeMin");
     const prestigeMax = document.getElementById("prestigeMax");
     const prestigeProgress = document.getElementById("prestigeProgress");
 
+    const classSelect = document.getElementById("classSelect");
     const trialsOption = document.getElementById("trialsOption");
     const totalPrice = document.getElementById("totalPrice");
     const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
@@ -313,10 +329,10 @@
 
       if (selected === "prestige") {
         prestigeGroup.classList.remove("hidden");
-        document.getElementById("levelRangeGroup").classList.add("hidden");
+        levelRangeGroup.classList.add("hidden");
       } else {
         prestigeGroup.classList.add("hidden");
-        document.getElementById("levelRangeGroup").classList.remove("hidden");
+        levelRangeGroup.classList.remove("hidden");
       }
 
       updateTotal();
@@ -351,11 +367,13 @@
 
     rangeMin.addEventListener("input", syncLevelInputsFromSliders);
     rangeMax.addEventListener("input", syncLevelInputsFromSliders);
+
     currentLevel.addEventListener("input", syncLevelSlidersFromInputs);
     desiredLevel.addEventListener("input", syncLevelSlidersFromInputs);
 
     prestigeMin.addEventListener("input", syncPrestigeInputsFromSliders);
     prestigeMax.addEventListener("input", syncPrestigeInputsFromSliders);
+
     prestigeStart.addEventListener("input", syncPrestigeSlidersFromInputs);
     prestigeEnd.addEventListener("input", syncPrestigeSlidersFromInputs);
 
@@ -364,11 +382,11 @@
     });
 
     trialsOption.addEventListener("change", updateTotal);
+    classSelect.addEventListener("change", updateTotal);
 
     syncLevelSlidersFromInputs();
     syncPrestigeSlidersFromInputs();
     updateServiceVisibility();
   </script>
-
 </body>
 </html>
