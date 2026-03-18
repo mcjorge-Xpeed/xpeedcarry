@@ -194,38 +194,49 @@
 
   <!-- SCRIPT -->
   <script>
+  const basePrice = 0.99;
 
-    const basePrice = 0.99;
+  const threatSelect = document.getElementById("threat");
+  const runsInput = document.getElementById("runs");
+  const totalEl = document.getElementById("total-price");
 
-    const runsInput = document.getElementById("runs");
-    const difficultySelect = document.getElementById("difficulty");
-    const totalDisplay = document.getElementById("total-price");
-
-
-    function updatePrice() {
-
-      let runs = parseInt(runsInput.value);
-
-      if (!runs || runs < 1) {
-        runs = 1;
-        runsInput.value = 1;
-      }
-
-      const difficultyExtra = parseFloat(difficultySelect.value) || 0;
-
-      const total = (runs * basePrice) + difficultyExtra;
-
-      totalDisplay.textContent = "$" + total.toFixed(2);
+  function getThreatModifier(value) {
+    switch (value) {
+      case "minimal":
+        return 0;
+      case "average":
+        return 1;
+      case "substantial":
+        return 2;
+      case "ruthless":
+        return 3;
+      case "lethal":
+        return 4;
+      case "absolute":
+        return 6;
+      default:
+        return 0;
     }
+  }
 
+  function updateTotal() {
+    const threatValue = threatSelect.value;
+    const threatModifier = getThreatModifier(threatValue);
 
-    runsInput.addEventListener("input", updatePrice);
-    difficultySelect.addEventListener("change", updatePrice);
+    let runs = parseInt(runsInput.value, 10);
+    if (isNaN(runs) || runs < 1) runs = 1;
 
-    updatePrice();
+    const pricePerRun = basePrice + threatModifier;
+    const total = pricePerRun * runs;
 
-  </script>
+    totalEl.textContent = `$${total.toFixed(2)}`;
+  }
 
+  threatSelect.addEventListener("change", updateTotal);
+  runsInput.addEventListener("input", updateTotal);
+
+  updateTotal();
+</script>
 
 </body>
 </html>
