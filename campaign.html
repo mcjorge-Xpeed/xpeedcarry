@@ -142,7 +142,7 @@
 
           <label class="radio-option">
             <div class="radio-left">
-              <input type="radio" name="difficulty" value="13.99" checked>
+              <input type="radio" name="difficulty" value="13.95" checked>
               <span>Normal</span>
             </div>
             <span class="option-price">+$13.95</span>
@@ -192,9 +192,6 @@
 
     function getSelectedDifficultyLabel() {
       const selected = document.querySelector('input[name="difficulty"]:checked');
-
-      if (!selected) return "Normal";
-
       return selected.parentElement.querySelector("span").textContent;
     }
 
