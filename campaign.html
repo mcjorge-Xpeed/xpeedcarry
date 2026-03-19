@@ -1,1 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campaign | XpeedCarry</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body id="top">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">XpeedCarry</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="service-hero">
+    <div class="hero-content">
+      <h1>Warhammer 40K Space Marine 2 Campaign</h1>
+
+      <p>
+        Buy Warhammer 40K Space Marine 2 Campaign Boost to complete the story faster,
+        clear missions safely, and skip the grind with a premium service built for
+        players who want fast and smooth progression.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="spacemarine2.html" class="btn btn-secondary">Leveling</a>
+        <a href="builds.html" class="btn btn-secondary">Builds</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="product-layout">
+
+    <!-- LEFT -->
+    <section class="product-left">
+
+      <div class="product-card">
+        <img src="images/campaign.png" alt="Campaign" class="product-image">
+
+        <div class="product-highlights">
+          <span>Story Completion</span>
+          <span>Fast Service</span>
+          <span>Safe Boost</span>
+          <span>24/7 Support</span>
+        </div>
+
+        <div class="product-times">
+          <div>
+            <strong>$13.99</strong>
+            <p>Starting Price</p>
+          </div>
+
+          <div>
+            <strong>Flexible</strong>
+            <p>Completion</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <h2>Description</h2>
+
+        <p>
+          Our Space Marine 2 Campaign boosting service helps you complete the campaign
+          quickly and safely without wasting time replaying difficult sections. Choose
+          your preferred difficulty and completion method, and let our team handle the
+          rest.
+        </p>
+
+        <ul>
+          <li>Fast campaign completion</li>
+          <li>Safe and efficient service</li>
+          <li>Different difficulty options available</li>
+          <li>Self-play or piloted completion</li>
+          <li>Premium support from start to finish</li>
+        </ul>
+
+        <h2>Requirements</h2>
+
+        <p>
+          To buy this service, you only need access to the campaign and the selected
+          platform ready for the order.
+        </p>
+
+        <h2>More Info</h2>
+
+        <p>
+          After placing the order, our team will contact you to confirm the details.
+          We follow strict safety standards to keep the process smooth and secure while
+          delivering your campaign completion as fast as possible.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="product-right">
+
+      <div class="purchase-panel">
+        <h3>Customize Order</h3>
+
+        <!-- METHOD -->
+        <div class="option-group">
+          <p>Completion Method</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="0" checked>
+              <span>Self-play</span>
+            </div>
+            <span class="option-price">+$0.00</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="0">
+              <span>Piloted</span>
+            </div>
+            <span class="option-price">+$0.00</span>
+          </label>
+        </div>
+
+        <!-- PLATFORM -->
+        <div class="option-group">
+          <p>Platform</p>
+          <select id="platform">
+            <option>PC</option>
+            <option>Xbox</option>
+            <option>PlayStation</option>
+          </select>
+        </div>
+
+        <!-- DIFFICULTY -->
+        <div class="option-group">
+          <p>Select Difficulty</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="difficulty" value="13.99" checked>
+              <span>Normal</span>
+            </div>
+            <span class="option-price">+$13.99</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="difficulty" value="19.00">
+              <span>Veteran</span>
+            </div>
+            <span class="option-price">+$19.00</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="difficulty" value="24.00">
+              <span>Angel of Death</span>
+            </div>
+            <span class="option-price">+$24.00</span>
+          </label>
+        </div>
+
+        <!-- TOTALS -->
+        <div class="total-box">
+          <span>Total Price</span>
+          <strong id="total-price">$13.99</strong>
+        </div>
+
+        <p id="selection-info" style="margin-top: 10px; font-size: 14px; color: #d4af37;">
+          Normal difficulty selected.
+        </p>
+
+        <!-- BUTTONS -->
+        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <a href="#" class="btn btn-secondary full">Chat before order</a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <script>
+    const totalEl = document.getElementById("total-price");
+    const selectionInfoEl = document.getElementById("selection-info");
+    const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
+
+    function getSelectedDifficultyLabel() {
+      const selected = document.querySelector('input[name="difficulty"]:checked');
+
+      if (!selected) return "Normal";
+
+      return selected.parentElement.querySelector("span").textContent;
+    }
+
+    function updateTotal() {
+      const selectedDifficulty = document.querySelector('input[name="difficulty"]:checked');
+      const total = Number(selectedDifficulty.value);
+      const difficultyLabel = getSelectedDifficultyLabel();
+
+      totalEl.textContent = `$${total.toFixed(2)}`;
+      selectionInfoEl.textContent = `${difficultyLabel} difficulty selected.`;
+    }
+
+    difficultyRadios.forEach((radio) => {
+      radio.addEventListener("change", updateTotal);
+    });
+
+    updateTotal();
+  </script>
+
+</body>
+</html>
