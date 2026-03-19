@@ -334,12 +334,12 @@
         <!-- TOTALS -->
         <div class="total-box">
           <span>Original Price</span>
-          <strong id="original-price">$0.99</strong>
+          <strong id="original-price">$0.95</strong>
         </div>
 
         <div class="total-box">
           <span>Discounted Price</span>
-          <strong id="total-price">$0.99</strong>
+          <strong id="total-price">$0.95</strong>
         </div>
 
         <p id="discount-info" style="margin-top: 10px; font-size: 14px; color: #d4af37;"></p>
@@ -361,7 +361,6 @@
     const totalWeapons = 23;
 
     const packageSelect = document.getElementById("weapon-package");
-    const speedSelect = document.getElementById("speed");
     const originalPriceEl = document.getElementById("original-price");
     const totalEl = document.getElementById("total-price");
     const discountInfoEl = document.getElementById("discount-info");
@@ -398,10 +397,9 @@
 
     function updateTotal() {
       const selectedPackage = packageSelect.value;
-      const speedPrice = Number(speedSelect.value);
       const selectedWeapons = getSelectedWeaponCount();
 
-      let subtotal = basePrice + speedPrice;
+      let subtotal = basePrice;
       let discountedTotal = subtotal;
 
       if (selectedPackage === "specific") {
@@ -436,8 +434,6 @@
       updateWeaponVisibility();
       updateTotal();
     });
-
-    speedSelect.addEventListener("change", updateTotal);
 
     weaponCheckboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", updateTotal);
