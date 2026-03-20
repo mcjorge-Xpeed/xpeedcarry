@@ -28,8 +28,9 @@
 
       <div class="hero-buttons">
         <a href="index.html" class="btn btn-secondary">Back to Home</a>
-        <a href="spacemarine2.html" class="btn btn-tab-active">Leveling Services</a>
+        <a href="spacemarine2.html" class="btn btn-secondary">Leveling Services</a>
         <a href="builds.html" class="btn btn-secondary">Builds</a>
+        <a href="operations.html" class="btn btn-secondary">Operations</a>
       </div>
     </div>
   </section>
@@ -41,7 +42,7 @@
     <section class="product-left">
 
       <div class="product-card">
-        <img src="images/reqpoints.png" alt="Requisition Farming" class="product-image">
+        <img src="images/requisition-farming.png" alt="Requisition Farming" class="product-image">
 
         <div class="product-highlights">
           <span>Fast Farming</span>
@@ -170,8 +171,8 @@
         </div>
 
         <div class="total-box">
-          <span>Current Rate</span>
-          <strong id="current-rate">$3.95 / 100</strong>
+          <span>Base Price</span>
+          <strong id="base-price">$3.95</strong>
         </div>
 
         <div class="total-box">
@@ -196,18 +197,23 @@
   <script>
     const rangeInput = document.getElementById("requisition-range");
     const selectedPointsEl = document.getElementById("selected-points");
-    const currentRateEl = document.getElementById("current-rate");
+    const basePriceEl = document.getElementById("base-price");
     const totalPriceEl = document.getElementById("total-price");
     const priceInfoEl = document.getElementById("price-info");
 
     const minPoints = 100;
     const maxPoints = 1000;
-    const startRate = 3.95;
-    const endRate = 2.95;
 
-    function getRate(points) {
+    const minTotal = 3.95;
+    const maxTotal = 29.95;
+
+    function getBasePrice(points) {
+      return (points / 100) * minTotal;
+    }
+
+    function getDiscountedTotal(points) {
       const progress = (points - minPoints) / (maxPoints - minPoints);
-      return startRate - ((startRate - endRate) * progress);
+      return minTotal + ((maxTotal - minTotal) * progress);
     }
 
     function updatePricing(points) {
@@ -222,19 +228,18 @@
       }
 
       const displayPoints = safePoints === 1000 ? 999 : safePoints;
-      const currentRate = getRate(safePoints);
-      const total = (safePoints / 100) * currentRate;
-      const fullPrice = (safePoints / 100) * startRate;
-      const savings = fullPrice - total;
+      const basePrice = getBasePrice(safePoints);
+      const total = getDiscountedTotal(safePoints);
+      const savings = basePrice - total;
 
       selectedPointsEl.textContent = displayPoints;
-      currentRateEl.textContent = `$${currentRate.toFixed(2)} / 100`;
+      basePriceEl.textContent = `$${basePrice.toFixed(2)}`;
       totalPriceEl.textContent = `$${total.toFixed(2)}`;
 
       if (safePoints === 1000) {
-        priceInfoEl.textContent = `Max tier selected. This covers up to 999 Requisition Points in-game. You save $${savings.toFixed(2)} compared to the base rate. Extra Armory Data rewards may vary.`;
+        priceInfoEl.textContent = `Max tier selected. This covers up to 999 Requisition Points in-game. You save $${savings.toFixed(2)} compared to the base price. Extra Armory Data rewards may vary.`;
       } else if (savings > 0.01) {
-        priceInfoEl.textContent = `Progressive discount applied. You save $${savings.toFixed(2)} compared to the base rate. Extra Armory Data rewards may vary.`;
+        priceInfoEl.textContent = `Progressive discount applied. You save $${savings.toFixed(2)} compared to the base price. Extra Armory Data rewards may vary.`;
       } else {
         priceInfoEl.textContent = `Base rate applied. Extra Armory Data rewards may vary.`;
       }
