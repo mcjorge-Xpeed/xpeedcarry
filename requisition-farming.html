@@ -21,7 +21,7 @@
       <h1>Warhammer 40K Space Marine 2 Requisition Farming</h1>
 
       <p>
-        Buy Warhammer 40K Space Marine 2 Requisition Farming to stack Requisition Points
+        Buy Warhammer 40K Space Marine 2 Requisition Farming to accumulate Requisition Points
         quickly and efficiently. Let our professional players handle the grind while you
         secure extra progression resources for your account.
       </p>
@@ -75,11 +75,11 @@
 
         <ul>
           <li>Fast Requisition Points farming</li>
-          <li>Up to 999 Requisition Points per order</li>
-          <li>Safe and efficient service</li>
-          <li>Extra Armory Data rewards may vary during the farm</li>
-          <li>Any extra Requisition Points and Armory Data obtained are yours to keep</li>
-          <li>Possible Armory Data rewards can include Master-Crafted, Artificer, and Relic tiers</li>
+          <li>Up to 999 Requisition Points in-game</li>
+          <li>Progressive discount on bigger orders</li>
+          <li>Extra Armory Data rewards may vary</li>
+          <li>Any additional rewards obtained are yours to keep</li>
+          <li>Possible Armory Data rewards may include Master-Crafted, Artificer, and Relic tiers</li>
         </ul>
 
         <p>
@@ -140,19 +140,39 @@
           </select>
         </div>
 
-        <!-- REQUISITION -->
+        <!-- REQUISITION RANGE -->
         <div class="option-group">
           <p>Requisition Points</p>
-          <input type="number" id="requisition-points" value="100" min="100" max="999">
-          <small style="display:block; margin-top:8px; color:#b8b8b8;">
-            Maximum allowed: 999 points
-          </small>
+
+          <input
+            type="range"
+            id="requisition-range"
+            min="100"
+            max="1000"
+            step="100"
+            value="100"
+            style="width: 100%; accent-color: #6d4aff;"
+          >
+
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: #b8b8b8; margin-top: 8px;">
+            <span>100</span>
+            <span>300</span>
+            <span>500</span>
+            <span>700</span>
+            <span>900</span>
+            <span>999 Max</span>
+          </div>
         </div>
 
-        <!-- PRICE INFO -->
+        <!-- TOTALS -->
         <div class="total-box">
-          <span>Rate</span>
-          <strong>$3.95 / 100 Points</strong>
+          <span>Selected Points</span>
+          <strong id="selected-points">100</strong>
+        </div>
+
+        <div class="total-box">
+          <span>Current Rate</span>
+          <strong id="current-rate">$3.95 / 100</strong>
         </div>
 
         <div class="total-box">
@@ -161,7 +181,7 @@
         </div>
 
         <p id="price-info" style="margin-top: 10px; font-size: 14px; color: #d4af37;">
-          Extra Armory Data rewards may vary and any additional rewards obtained are yours to keep.
+          Base rate applied. Extra Armory Data rewards may vary.
         </p>
 
         <!-- BUTTONS -->
@@ -175,34 +195,57 @@
 
   <!-- SCRIPT -->
   <script>
-    const pricePer100 = 3.95;
-
-    const requisitionInput = document.getElementById("requisition-points");
+    const rangeInput = document.getElementById("requisition-range");
+    const selectedPointsEl = document.getElementById("selected-points");
+    const currentRateEl = document.getElementById("current-rate");
     const totalPriceEl = document.getElementById("total-price");
     const priceInfoEl = document.getElementById("price-info");
 
-    function updateTotal() {
-      let requisitionPoints = parseInt(requisitionInput.value, 10);
+    const minPoints = 100;
+    const maxPoints = 1000;
+    const startRate = 3.95;
+    const endRate = 2.95;
 
-      if (isNaN(requisitionPoints) || requisitionPoints < 100) {
-        requisitionPoints = 100;
-      }
-
-      if (requisitionPoints > 999) {
-        requisitionPoints = 999;
-      }
-
-      requisitionInput.value = requisitionPoints;
-
-      const totalPrice = (requisitionPoints / 100) * pricePer100;
-
-      totalPriceEl.textContent = `$${totalPrice.toFixed(2)}`;
-      priceInfoEl.textContent = `Selected ${requisitionPoints} Requisition Points. Extra Armory Data rewards may vary and any additional rewards obtained are yours to keep.`;
+    function getRate(points) {
+      const progress = (points - minPoints) / (maxPoints - minPoints);
+      return startRate - ((startRate - endRate) * progress);
     }
 
-    requisitionInput.addEventListener("input", updateTotal);
+    function updatePricing(points) {
+      let safePoints = parseInt(points, 10);
 
-    updateTotal();
+      if (isNaN(safePoints) || safePoints < minPoints) {
+        safePoints = minPoints;
+      }
+
+      if (safePoints > maxPoints) {
+        safePoints = maxPoints;
+      }
+
+      const displayPoints = safePoints === 1000 ? 999 : safePoints;
+      const currentRate = getRate(safePoints);
+      const total = (safePoints / 100) * currentRate;
+      const fullPrice = (safePoints / 100) * startRate;
+      const savings = fullPrice - total;
+
+      selectedPointsEl.textContent = displayPoints;
+      currentRateEl.textContent = `$${currentRate.toFixed(2)} / 100`;
+      totalPriceEl.textContent = `$${total.toFixed(2)}`;
+
+      if (safePoints === 1000) {
+        priceInfoEl.textContent = `Max tier selected. This covers up to 999 Requisition Points in-game. You save $${savings.toFixed(2)} compared to the base rate. Extra Armory Data rewards may vary.`;
+      } else if (savings > 0.01) {
+        priceInfoEl.textContent = `Progressive discount applied. You save $${savings.toFixed(2)} compared to the base rate. Extra Armory Data rewards may vary.`;
+      } else {
+        priceInfoEl.textContent = `Base rate applied. Extra Armory Data rewards may vary.`;
+      }
+    }
+
+    rangeInput.addEventListener("input", function () {
+      updatePricing(this.value);
+    });
+
+    updatePricing(100);
   </script>
 
 </body>
