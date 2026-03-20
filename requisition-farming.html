@@ -1,1 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Requisition Farming | XpeedCarry</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body id="top">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">XpeedCarry</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="service-hero">
+    <div class="hero-content">
+      <h1>Warhammer 40K Space Marine 2 Requisition Farming</h1>
+
+      <p>
+        Buy Warhammer 40K Space Marine 2 Requisition Farming to stack Requisition Points
+        quickly and efficiently. Let our professional players handle the grind while you
+        secure extra progression resources for your account.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="spacemarine2.html" class="btn btn-secondary">Leveling Services</a>
+        <a href="builds.html" class="btn btn-secondary">Builds</a>
+        <a href="operations.html" class="btn btn-secondary">Operations</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="product-layout">
+
+    <!-- LEFT -->
+    <section class="product-left">
+
+      <div class="product-card">
+        <img src="images/requisition-farming.png" alt="Requisition Farming" class="product-image">
+
+        <div class="product-highlights">
+          <span>Fast Farming</span>
+          <span>Safe Service</span>
+          <span>Expert Boosters</span>
+          <span>24/7 Support</span>
+        </div>
+
+        <div class="product-times">
+          <div>
+            <strong>1-2h</strong>
+            <p>Start Time</p>
+          </div>
+
+          <div>
+            <strong>Flexible</strong>
+            <p>Completion</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <h2>Description</h2>
+
+        <p>
+          Our Space Marine 2 Requisition Farming service is built for players who want
+          to unlock gear, upgrades, and progression resources faster without wasting time
+          grinding manually.
+        </p>
+
+        <ul>
+          <li>Fast Requisition Points farming</li>
+          <li>Up to 999 Requisition Points per order</li>
+          <li>Safe and efficient service</li>
+          <li>Extra Armory Data rewards may vary during the farm</li>
+          <li>Any extra Requisition Points and Armory Data obtained are yours to keep</li>
+          <li>Possible Armory Data rewards can include Master-Crafted, Artificer, and Relic tiers</li>
+        </ul>
+
+        <p>
+          Armory Data rewards are not fixed and may vary depending on the farming process,
+          mission flow, and drops obtained during the service.
+        </p>
+      </div>
+
+      <div class="product-description">
+        <h2>Requirements</h2>
+
+        <ul>
+          <li>Active account</li>
+          <li>Valid platform selection</li>
+          <li>Access to Space Marine 2</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="product-right">
+
+      <div class="purchase-panel">
+        <h3>Customize Order</h3>
+
+        <!-- PLATFORM -->
+        <div class="option-group">
+          <p>Platform</p>
+          <select>
+            <option>PC</option>
+            <option>Xbox</option>
+            <option>PlayStation</option>
+          </select>
+        </div>
+
+        <!-- CLASS -->
+        <div class="option-group">
+          <p>Class</p>
+          <select>
+            <option>Any Class</option>
+            <option>Tactical</option>
+            <option>Bulwark</option>
+            <option>Sniper</option>
+            <option>Vanguard</option>
+            <option>Heavy</option>
+            <option>Techmarine</option>
+            <option>Assault</option>
+          </select>
+        </div>
+
+        <!-- METHOD -->
+        <div class="option-group">
+          <p>Completion Method</p>
+          <select>
+            <option>Self-play</option>
+            <option>Piloted</option>
+          </select>
+        </div>
+
+        <!-- REQUISITION -->
+        <div class="option-group">
+          <p>Requisition Points</p>
+          <input type="number" id="requisition-points" value="100" min="100" max="999">
+          <small style="display:block; margin-top:8px; color:#b8b8b8;">
+            Maximum allowed: 999 points
+          </small>
+        </div>
+
+        <!-- PRICE INFO -->
+        <div class="total-box">
+          <span>Rate</span>
+          <strong>$3.95 / 100 Points</strong>
+        </div>
+
+        <div class="total-box">
+          <span>Total Price</span>
+          <strong id="total-price">$3.95</strong>
+        </div>
+
+        <p id="price-info" style="margin-top: 10px; font-size: 14px; color: #d4af37;">
+          Extra Armory Data rewards may vary and any additional rewards obtained are yours to keep.
+        </p>
+
+        <!-- BUTTONS -->
+        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <a href="#" class="btn btn-secondary full">Chat before order</a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <script>
+    const pricePer100 = 3.95;
+
+    const requisitionInput = document.getElementById("requisition-points");
+    const totalPriceEl = document.getElementById("total-price");
+    const priceInfoEl = document.getElementById("price-info");
+
+    function updateTotal() {
+      let requisitionPoints = parseInt(requisitionInput.value, 10);
+
+      if (isNaN(requisitionPoints) || requisitionPoints < 100) {
+        requisitionPoints = 100;
+      }
+
+      if (requisitionPoints > 999) {
+        requisitionPoints = 999;
+      }
+
+      requisitionInput.value = requisitionPoints;
+
+      const totalPrice = (requisitionPoints / 100) * pricePer100;
+
+      totalPriceEl.textContent = `$${totalPrice.toFixed(2)}`;
+      priceInfoEl.textContent = `Selected ${requisitionPoints} Requisition Points. Extra Armory Data rewards may vary and any additional rewards obtained are yours to keep.`;
+    }
+
+    requisitionInput.addEventListener("input", updateTotal);
+
+    updateTotal();
+  </script>
+
+</body>
+</html>
