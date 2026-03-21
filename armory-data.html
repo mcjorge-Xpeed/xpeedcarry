@@ -1,1 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Armory Data | XpeedCarry</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body id="top">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">XpeedCarry</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="service-hero">
+    <div class="hero-content">
+      <h1>Warhammer 40K Space Marine 2 Armory Data</h1>
+
+      <p>
+        Buy Warhammer 40K Space Marine 2 Armory Data to upgrade your weapons faster and
+        skip the farming grind. Choose your data rarity, select the amount you need,
+        and let our boosters handle the process safely and efficiently.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="spacemarine2.html" class="btn btn-secondary">Leveling Services</a>
+        <a href="builds.html" class="btn btn-secondary">Builds</a>
+        <a href="operations.html" class="btn btn-secondary">Operations</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="product-layout">
+
+    <!-- LEFT -->
+    <section class="product-left">
+
+      <div class="product-card">
+        <img src="images/armory-data.png" alt="Armory Data" class="product-image">
+
+        <div class="product-highlights">
+          <span>All Data Types</span>
+          <span>Fast Farming</span>
+          <span>Legit & Safe Service</span>
+          <span>24/7 Support</span>
+        </div>
+
+        <div class="product-times">
+          <div>
+            <strong>30 min</strong>
+            <p>Start Time</p>
+          </div>
+
+          <div>
+            <strong>Flexible</strong>
+            <p>Completion</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <h2>Description</h2>
+
+        <p>
+          Our Space Marine 2 Armory Data service is designed for players who want to
+          upgrade weapons faster without spending hours farming missions repeatedly.
+          Select the rarity you need and choose the total amount directly from the order panel.
+        </p>
+
+        <p>
+          With this Armory Data boosting service, you will get:
+        </p>
+
+        <ul>
+          <li>Fast Armory Data farming</li>
+          <li>Master-Crafted, Artificer, or Relic data options</li>
+          <li>Safe and efficient completion</li>
+          <li>Flexible quantity selection from 2 to 50</li>
+          <li>Professional boosters and premium support</li>
+        </ul>
+      </div>
+
+      <div class="product-description">
+        <h2>Requirements</h2>
+
+        <ul>
+          <li>Active account</li>
+          <li>Game ownership on selected platform</li>
+          <li>Valid platform and rarity selection</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="product-right">
+
+      <div class="purchase-panel">
+        <h3>Customize Order</h3>
+
+        <!-- ARMORY DATA AMOUNT -->
+        <div class="option-group" id="armoryRangeGroup">
+          <p>Armory Data</p>
+
+          <div class="level-inputs">
+            <div class="level-box">
+              <label for="armoryInput">Selected Amount</label>
+              <input type="number" id="armoryInput" min="2" max="50" step="2" value="2">
+            </div>
+          </div>
+
+          <div class="range-wrap">
+            <div class="range-progress" id="armoryProgress"></div>
+            <input type="range" id="armoryRange" min="2" max="50" step="2" value="2">
+          </div>
+
+          <div class="range-labels">
+            <span>2</span>
+            <span>10</span>
+            <span>20</span>
+            <span>30</span>
+            <span>40</span>
+            <span>50</span>
+          </div>
+        </div>
+
+        <!-- PLATFORM -->
+        <div class="option-group">
+          <p>Select Your Platform</p>
+          <select>
+            <option>PC</option>
+            <option>Xbox</option>
+            <option>PlayStation</option>
+          </select>
+        </div>
+
+        <!-- RARITY -->
+        <div class="option-group">
+          <p>Data Rarity</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="rarityType" value="green" checked>
+              <span>Master-Crafted (Green)</span>
+            </div>
+            <span class="option-price">+$1.00 each</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="rarityType" value="purple">
+              <span>Artificer Data (Purple)</span>
+            </div>
+            <span class="option-price">+$2.00 each</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="rarityType" value="yellow">
+              <span>Relic Data (Yellow)</span>
+            </div>
+            <span class="option-price">+$3.00 each</span>
+          </label>
+        </div>
+
+        <!-- COMPLETION METHOD -->
+        <div class="option-group">
+          <p>Completion Method</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="piloted" checked>
+              <span>Piloted</span>
+            </div>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="selfplay">
+              <span>Self-play</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- TOTAL -->
+        <div class="total-box">
+          <span>Total Price</span>
+          <strong id="total-price">$2.00</strong>
+        </div>
+
+        <!-- BREAKDOWN -->
+        <div class="price-breakdown" id="priceBreakdown">
+          <div class="breakdown-row">
+            <span>Selected Amount</span>
+            <span id="breakdown-amount">2</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Rarity</span>
+            <span id="breakdown-rarity">Master-Crafted</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Price Per Data</span>
+            <span id="breakdown-unit-price">$1.00</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Completion Method</span>
+            <span id="breakdown-method">Piloted</span>
+          </div>
+        </div>
+
+        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <a href="#" class="btn btn-secondary full">Chat before order</a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <script>
+    const armoryRange = document.getElementById("armoryRange");
+    const armoryInput = document.getElementById("armoryInput");
+    const armoryProgress = document.getElementById("armoryProgress");
+
+    const totalPriceEl = document.getElementById("total-price");
+    const breakdownAmountEl = document.getElementById("breakdown-amount");
+    const breakdownRarityEl = document.getElementById("breakdown-rarity");
+    const breakdownUnitPriceEl = document.getElementById("breakdown-unit-price");
+    const breakdownMethodEl = document.getElementById("breakdown-method");
+
+    const MIN_AMOUNT = 2;
+    const MAX_AMOUNT = 50;
+
+    const rarityData = {
+      green: {
+        label: "Master-Crafted",
+        unitPrice: 1.00
+      },
+      purple: {
+        label: "Artificer",
+        unitPrice: 2.00
+      },
+      yellow: {
+        label: "Relic",
+        unitPrice: 3.00
+      }
+    };
+
+    function formatMoney(value) {
+      return "$" + value.toFixed(2);
+    }
+
+    function updateRangeProgress(value) {
+      const progress = ((value - MIN_AMOUNT) / (MAX_AMOUNT - MIN_AMOUNT)) * 100;
+      armoryProgress.style.left = "0%";
+      armoryProgress.style.width = progress + "%";
+      armoryProgress.style.background = "#d4af37";
+    }
+
+    function clampAmount(value) {
+      let amount = parseInt(value, 10);
+
+      if (isNaN(amount)) {
+        amount = MIN_AMOUNT;
+      }
+
+      if (amount < MIN_AMOUNT) {
+        amount = MIN_AMOUNT;
+      }
+
+      if (amount > MAX_AMOUNT) {
+        amount = MAX_AMOUNT;
+      }
+
+      amount = Math.round(amount / 2) * 2;
+
+      if (amount < MIN_AMOUNT) {
+        amount = MIN_AMOUNT;
+      }
+
+      if (amount > MAX_AMOUNT) {
+        amount = MAX_AMOUNT;
+      }
+
+      return amount;
+    }
+
+    function getSelectedRarity() {
+      return document.querySelector('input[name="rarityType"]:checked').value;
+    }
+
+    function getSelectedMethod() {
+      return document.querySelector('input[name="completionMethod"]:checked').value;
+    }
+
+    function updateTotal(amountValue) {
+      const safeAmount = clampAmount(amountValue);
+      const rarityKey = getSelectedRarity();
+      const rarity = rarityData[rarityKey];
+      const method = getSelectedMethod();
+
+      const total = safeAmount * rarity.unitPrice;
+
+      armoryRange.value = safeAmount;
+      armoryInput.value = safeAmount;
+
+      updateRangeProgress(safeAmount);
+
+      totalPriceEl.textContent = formatMoney(total);
+      breakdownAmountEl.textContent = safeAmount;
+      breakdownRarityEl.textContent = rarity.label;
+      breakdownUnitPriceEl.textContent = formatMoney(rarity.unitPrice);
+      breakdownMethodEl.textContent = method === "piloted" ? "Piloted" : "Self-play";
+    }
+
+    armoryRange.addEventListener("input", function () {
+      updateTotal(this.value);
+    });
+
+    armoryInput.addEventListener("input", function () {
+      updateTotal(this.value);
+    });
+
+    document.querySelectorAll('input[name="rarityType"]').forEach((radio) => {
+      radio.addEventListener("change", function () {
+        updateTotal(armoryRange.value);
+      });
+    });
+
+    document.querySelectorAll('input[name="completionMethod"]').forEach((radio) => {
+      radio.addEventListener("change", function () {
+        updateTotal(armoryRange.value);
+      });
+    });
+
+    updateTotal(2);
+  </script>
+
+</body>
+</html>
