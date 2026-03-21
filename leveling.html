@@ -1,723 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Warhammer 40K Space Marine 2 Leveling | XpeedCarry</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Requisition Farming | XpeedCarry</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body>
+<body id="top">
+
   <header class="navbar">
     <a href="index.html" class="logo">XpeedCarry</a>
   </header>
 
-  <main class="leveling-page">
-    <section class="service-hero">
-      <div class="hero-content">
-        <h1>Warhammer 40K Space Marine 2 Leveling</h1>
+  <section class="service-hero">
+    <div class="hero-content">
+      <h1>Warhammer 40K Space Marine 2 Requisition Farming</h1>
+
+      <p>
+        Buy Warhammer 40K Space Marine 2 Requisition Farming to accumulate Requisition Points
+        quickly and efficiently. Let our professional players handle the grind while you
+        secure extra progression resources for your account.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="spacemarine2.html" class="btn btn-secondary">Leveling Services</a>
+        <a href="builds.html" class="btn btn-secondary">Builds</a>
+        <a href="operations.html" class="btn btn-secondary">Operations</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="product-layout">
+
+    <section class="product-left">
+
+      <div class="product-card">
+        <img src="images/requisition-farming.png" alt="Requisition Farming" class="product-image">
+
+        <div class="product-highlights">
+          <span>Fast Farming</span>
+          <span>Safe Service</span>
+          <span>Expert Boosters</span>
+          <span>24/7 Support</span>
+        </div>
+
+        <div class="product-times">
+          <div>
+            <strong>1-2h</strong>
+            <p>Start Time</p>
+          </div>
+
+          <div>
+            <strong>Flexible</strong>
+            <p>Completion</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <h2>Description</h2>
+
         <p>
-          Buy Warhammer 40K Space Marine 2 Leveling Boost to progress your class faster,
-          skip the grind, and reach your desired level or prestige with a premium and
-          efficient service.
+          Our Space Marine 2 Requisition Farming service is built for players who want
+          to unlock gear, upgrades, and progression resources faster without wasting time
+          grinding manually.
         </p>
 
-        <div class="hero-buttons">
-          <a href="index.html" class="btn btn-secondary">Back to Home</a>
-          <a href="spacemarine2.html" class="btn btn-tab-active">Leveling Services</a>
-          <a href="builds.html" class="btn btn-secondary">Builds</a>
-        </div>
+        <ul>
+          <li>Fast Requisition Points farming</li>
+          <li>Up to 999 Requisition Points in-game</li>
+          <li>Progressive discount on bigger orders</li>
+          <li>Extra Armory Data rewards may vary</li>
+          <li>Any additional rewards obtained are yours to keep</li>
+          <li>Possible Armory Data rewards may include Master-Crafted, Artificer, and Relic tiers</li>
+        </ul>
+
+        <p>
+          Armory Data rewards are not fixed and may vary depending on the farming process,
+          mission flow, and drops obtained during the service.
+        </p>
       </div>
+
+      <div class="product-description">
+        <h2>Requirements</h2>
+
+        <ul>
+          <li>Active account</li>
+          <li>Valid platform selection</li>
+          <li>Access to Space Marine 2</li>
+        </ul>
+      </div>
+
     </section>
 
-    <section class="product-layout">
-      <div class="product-left">
-        <div class="product-card">
-          <img
-            src="images/leveling-25.png"
-            alt="Space Marine 2 Leveling Service"
-            class="product-image"
-          />
+    <aside class="product-right">
 
-          <div class="product-highlights">
-            <span>Fast Progression</span>
-            <span>Piloted or Self-play</span>
-            <span>Prestige Available</span>
-            <span>Premium Support</span>
+      <div class="purchase-panel">
+        <h3>Customize Order</h3>
+
+        <div class="option-group">
+          <p>Platform</p>
+          <select>
+            <option>PC</option>
+            <option>Xbox</option>
+            <option>PlayStation</option>
+          </select>
+        </div>
+
+        <div class="option-group">
+          <p>Class</p>
+          <select>
+            <option>Any Class</option>
+            <option>Tactical</option>
+            <option>Bulwark</option>
+            <option>Sniper</option>
+            <option>Vanguard</option>
+            <option>Heavy</option>
+            <option>Techmarine</option>
+            <option>Assault</option>
+          </select>
+        </div>
+
+        <div class="option-group">
+          <p>Completion Method</p>
+          <select>
+            <option>Self-play</option>
+            <option>Piloted</option>
+          </select>
+        </div>
+
+        <div class="option-group" id="requisitionRangeGroup">
+          <p>Requisition Points</p>
+
+          <div class="level-inputs">
+            <div class="level-box">
+              <label for="requisitionInput">Selected Amount</label>
+              <input type="number" id="requisitionInput" min="100" max="1000" step="100" value="100">
+            </div>
           </div>
 
-          <div class="product-times">
-            <div>
-              <strong>Starting Price</strong>
-              <p>Custom leveling starts at flexible pricing depending on your selected level range.</p>
-            </div>
+          <div class="range-wrap">
+            <div class="range-progress" id="requisitionProgress"></div>
+            <input type="range" id="requisitionRange" min="100" max="1000" step="100" value="100">
+          </div>
 
-            <div>
-              <strong>Full Leveling</strong>
-              <p>Complete 1 to 25 leveling available as a fixed-price option for easier checkout.</p>
-            </div>
+          <div class="range-labels">
+            <span>100</span>
+            <span>300</span>
+            <span>500</span>
+            <span>700</span>
+            <span>900</span>
+            <span>999 Max</span>
           </div>
         </div>
 
-        <div class="product-description" id="service-info">
-          <h2>Description</h2>
-
-          <p>
-            Our leveling service is designed for players who want to unlock class progression faster without spending hours repeating the same content. Whether you need a few levels, full 1 to 25 progression, or prestige advancement, this service gives you a faster route to endgame readiness.
-          </p>
-
-          <p>
-            You can choose between custom leveling and a full leveling package, then add prestige progression if you want to push the same order further. Additional options like trials completion can also be added directly from the order panel.
-          </p>
-
-          <ul>
-            <li>IMPORTANT REQUIREMENTS: Game ownership on the selected platform is required, also, if you only need the prestige leveling service please make sure your seleccted class is already Lvl.25</li>
-            <li>Custom Leveling starts at $1.40 per level with automatic bulk discount</li>
-            <li>Custom 1 to 25 Leveling is capped at $19.99 per class</li>
-            <li>Full 1 to 25 Leveling starts at $0.95 plus $14.00 per selected class</li>
-            <li>Prestige Leveling can be ordered with or without standard leveling</li>
-            <li>Select one, several, or all classes</li>
-            <li>Trials completion at $2.99 per selected class</li>
-          </ul>
+        <div class="total-box">
+          <span>Selected Points</span>
+          <strong id="selected-points">100</strong>
         </div>
+
+        <div class="total-box">
+          <span>Original Price</span>
+          <strong id="base-price">$3.95</strong>
+        </div>
+
+        <div class="total-box">
+          <span>Total Price</span>
+          <strong id="total-price">$3.95</strong>
+        </div>
+
+        <p id="price-info" style="margin-top: 10px; font-size: 14px; color: #d4af37;">
+          Base rate applied. Extra Armory Data rewards may vary.
+        </p>
+
+        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <a href="#" class="btn btn-secondary full">Chat before order</a>
       </div>
 
-      <div class="product-right">
-        <aside class="purchase-panel" id="order-panel">
-          <h3>Customize Order</h3>
+    </aside>
 
-          <div class="option-group">
-            <p>Main Service</p>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" id="levelingToggle" checked />
-                <span>Leveling</span>
-              </div>
-            </label>
-          </div>
-
-          <div class="option-group" id="levelRangeGroup">
-            <p>Level Range</p>
-
-            <div class="level-inputs">
-              <div class="level-box">
-                <label for="currentLevel">Current Level</label>
-                <input type="number" id="currentLevel" min="1" max="24" value="1" />
-              </div>
-
-              <div class="level-box">
-                <label for="desiredLevel">Desired Level</label>
-                <input type="number" id="desiredLevel" min="2" max="25" value="10" />
-              </div>
-            </div>
-
-            <div class="range-wrap">
-              <div class="range-progress" id="levelProgress"></div>
-              <input type="range" id="rangeMin" min="1" max="25" value="1" />
-              <input type="range" id="rangeMax" min="1" max="25" value="10" />
-            </div>
-
-            <div class="range-labels">
-              <span>1</span>
-              <span>5</span>
-              <span>10</span>
-              <span>15</span>
-              <span>20</span>
-              <span>25</span>
-            </div>
-          </div>
-
-          <div class="option-group" id="serviceTypeGroup">
-            <p>Choose the Service Type</p>
-
-            <label class="radio-option">
-              <div class="radio-left">
-                <input type="radio" name="serviceType" value="custom" checked />
-                <span>Custom Leveling</span>
-              </div>
-            </label>
-
-            <label class="radio-option">
-              <div class="radio-left">
-                <input type="radio" name="serviceType" value="full" />
-                <span>Full 1 to 25 Leveling</span>
-              </div>
-            </label>
-          </div>
-
-          <div class="option-group">
-            <p>Prestige Add-On</p>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" id="prestigeToggle" />
-                <span>Prestige Leveling</span>
-              </div>
-              <span class="option-price">+$14.90 / prestige / class</span>
-            </label>
-          </div>
-
-          <div class="option-group hidden" id="prestigeGroup">
-            <p>Prestige Range</p>
-
-            <div class="level-inputs">
-              <div class="level-box">
-                <label for="prestigeStart">Current Prestige</label>
-                <input type="number" id="prestigeStart" min="1" max="3" value="1" />
-              </div>
-
-              <div class="level-box">
-                <label for="prestigeEnd">Desired Prestige</label>
-                <input type="number" id="prestigeEnd" min="2" max="4" value="2" />
-              </div>
-            </div>
-
-            <div class="range-wrap">
-              <div class="range-progress" id="prestigeProgress"></div>
-              <input type="range" id="prestigeMin" min="1" max="4" value="1" />
-              <input type="range" id="prestigeMax" min="1" max="4" value="2" />
-            </div>
-
-            <div class="range-labels">
-              <span>1</span>
-              <span>2</span>
-              <span>3</span>
-              <span>4</span>
-            </div>
-          </div>
-
-          <div class="option-group">
-            <p>Select Classes</p>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" class="classOption" value="Tactical" checked />
-                <span>Tactical</span>
-              </div>
-              <span class="option-price">+$14.00 Full</span>
-            </label>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" class="classOption" value="Assault" />
-                <span>Assault</span>
-              </div>
-              <span class="option-price">+$14.00 Full</span>
-            </label>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" class="classOption" value="Vanguard" />
-                <span>Vanguard</span>
-              </div>
-              <span class="option-price">+$14.00 Full</span>
-            </label>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" class="classOption" value="Bulwark" />
-                <span>Bulwark</span>
-              </div>
-              <span class="option-price">+$14.00 Full</span>
-            </label>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" class="classOption" value="Sniper" />
-                <span>Sniper</span>
-              </div>
-              <span class="option-price">+$14.00 Full</span>
-            </label>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" class="classOption" value="Heavy" />
-                <span>Heavy</span>
-              </div>
-              <span class="option-price">+$14.00 Full</span>
-            </label>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" class="classOption" value="Techmarine" />
-                <span>Techmarine</span>
-              </div>
-              <span class="option-price">+$14.00 Full</span>
-            </label>
-          </div>
-
-          <div class="option-group">
-            <p>Additional Options</p>
-
-            <label class="check-option">
-              <div class="check-left">
-                <input type="checkbox" id="trialsOption" />
-                <span>Add Trials completion</span>
-              </div>
-              <span class="option-price">+$2.99 / class</span>
-            </label>
-          </div>
-
-          <div class="total-box">
-            <span>Total</span>
-            <strong id="totalPrice">$12.60</strong>
-          </div>
-
-          <div class="price-breakdown" id="priceBreakdown">
-            <div class="breakdown-row">
-              <span>Main Service</span>
-              <span id="breakdownMain">$12.60</span>
-            </div>
-
-            <div class="breakdown-row hidden" id="breakdownOriginalRow">
-              <span>Original Price</span>
-              <span id="breakdownOriginal">$0.00</span>
-            </div>
-
-            <div class="breakdown-row hidden" id="breakdownDiscountRow">
-              <span>Bulk Discount</span>
-              <span id="breakdownDiscount">-$0.00</span>
-            </div>
-
-            <div class="breakdown-row">
-              <span>Classes</span>
-              <span id="breakdownClasses">1 selected</span>
-            </div>
-
-            <div class="breakdown-row hidden" id="breakdownPrestigeRow">
-              <span>Prestige Add-On</span>
-              <span id="breakdownPrestige">$0.00</span>
-            </div>
-
-            <div class="breakdown-row hidden" id="breakdownTrialsRow">
-              <span>Trials</span>
-              <span id="breakdownTrials">$0.00</span>
-            </div>
-
-            <div class="breakdown-row hidden" id="bestValueRow">
-              <span>Attention</span>
-              <span id="bestValueText">Full Leveling is the best value</span>
-            </div>
-          </div>
-
-          <a href="#" class="btn btn-primary full">Buy Now</a>
-          <a href="#" class="btn btn-secondary full">Chat before order</a>
-        </aside>
-      </div>
-    </section>
   </main>
 
   <script>
-    const BASE_LEVEL_PRICE = 1.40;
-    const FULL_BASE_PRICE = 0.95;
-    const CLASS_PRICE = 14.00;
-    const PRESTIGE_PRICE = 14.90;
-    const TRIALS_PRICE = 2.99;
+    const requisitionRange = document.getElementById("requisitionRange");
+    const requisitionInput = document.getElementById("requisitionInput");
+    const requisitionProgress = document.getElementById("requisitionProgress");
 
-    const MIN_LEVEL = 1;
-    const MAX_LEVEL = 25;
-    const MAX_LEVEL_GAIN = MAX_LEVEL - MIN_LEVEL;
-    const CUSTOM_CAP_TOTAL = 19.99;
+    const selectedPointsEl = document.getElementById("selected-points");
+    const basePriceEl = document.getElementById("base-price");
+    const totalPriceEl = document.getElementById("total-price");
+    const priceInfoEl = document.getElementById("price-info");
 
-    const levelingToggle = document.getElementById("levelingToggle");
-
-    const currentLevel = document.getElementById("currentLevel");
-    const desiredLevel = document.getElementById("desiredLevel");
-    const rangeMin = document.getElementById("rangeMin");
-    const rangeMax = document.getElementById("rangeMax");
-    const levelProgress = document.getElementById("levelProgress");
-
-    const prestigeToggle = document.getElementById("prestigeToggle");
-    const prestigeGroup = document.getElementById("prestigeGroup");
-    const prestigeStart = document.getElementById("prestigeStart");
-    const prestigeEnd = document.getElementById("prestigeEnd");
-    const prestigeMin = document.getElementById("prestigeMin");
-    const prestigeMax = document.getElementById("prestigeMax");
-    const prestigeProgress = document.getElementById("prestigeProgress");
-
-    const classOptions = document.querySelectorAll(".classOption");
-    const trialsOption = document.getElementById("trialsOption");
-    const totalPrice = document.getElementById("totalPrice");
-    const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
-
-    const levelRangeGroup = document.getElementById("levelRangeGroup");
-    const serviceTypeGroup = document.getElementById("serviceTypeGroup");
-
-    const breakdownMain = document.getElementById("breakdownMain");
-    const breakdownOriginal = document.getElementById("breakdownOriginal");
-    const breakdownDiscount = document.getElementById("breakdownDiscount");
-    const breakdownClasses = document.getElementById("breakdownClasses");
-    const breakdownPrestige = document.getElementById("breakdownPrestige");
-    const breakdownTrials = document.getElementById("breakdownTrials");
-
-    const breakdownOriginalRow = document.getElementById("breakdownOriginalRow");
-    const breakdownDiscountRow = document.getElementById("breakdownDiscountRow");
-    const breakdownPrestigeRow = document.getElementById("breakdownPrestigeRow");
-    const breakdownTrialsRow = document.getElementById("breakdownTrialsRow");
-    const bestValueRow = document.getElementById("bestValueRow");
-    const bestValueText = document.getElementById("bestValueText");
-
-    const maxDiscountRate = 1 - (CUSTOM_CAP_TOTAL / (MAX_LEVEL_GAIN * BASE_LEVEL_PRICE));
+    const MIN_POINTS = 100;
+    const MAX_POINTS = 1000;
+    const MIN_TOTAL = 3.95;
+    const MAX_TOTAL = 29.95;
+    const BASE_RATE = 3.95;
 
     function formatMoney(value) {
       return "$" + value.toFixed(2);
     }
 
-    function updateRangeProgress(minEl, maxEl, progressEl, absoluteMin, absoluteMax) {
-      const min = parseInt(minEl.value, 10);
-      const max = parseInt(maxEl.value, 10);
-
-      const left = ((min - absoluteMin) / (absoluteMax - absoluteMin)) * 100;
-      const right = ((max - absoluteMin) / (absoluteMax - absoluteMin)) * 100;
-
-      progressEl.style.left = left + "%";
-      progressEl.style.width = (right - left) + "%";
+    function updateRangeProgress(value) {
+      const progress = ((value - MIN_POINTS) / (MAX_POINTS - MIN_POINTS)) * 100;
+      requisitionProgress.style.left = "0%";
+      requisitionProgress.style.width = progress + "%";
+      requisitionProgress.style.background = "#d4af37";
     }
 
-    function clampLevelPair(current, desired) {
-      if (isNaN(current)) current = 1;
-      if (isNaN(desired)) desired = 2;
+    function clampPoints(value) {
+      let points = parseInt(value, 10);
 
-      if (current < 1) current = 1;
-      if (current > 24) current = 24;
-
-      if (desired < 2) desired = 2;
-      if (desired > 25) desired = 25;
-
-      if (current >= desired) {
-        if (current >= 24) {
-          current = 24;
-          desired = 25;
-        } else {
-          desired = current + 1;
-        }
+      if (isNaN(points)) {
+        points = MIN_POINTS;
       }
 
-      return { current, desired };
-    }
-
-    function clampPrestigePair(start, end) {
-      if (isNaN(start)) start = 1;
-      if (isNaN(end)) end = 2;
-
-      if (start < 1) start = 1;
-      if (start > 3) start = 3;
-
-      if (end < 2) end = 2;
-      if (end > 4) end = 4;
-
-      if (start >= end) {
-        if (start >= 3) {
-          start = 3;
-          end = 4;
-        } else {
-          end = start + 1;
-        }
+      if (points < MIN_POINTS) {
+        points = MIN_POINTS;
       }
 
-      return { start, end };
-    }
-
-    function getSelectedClassCount() {
-      let count = 0;
-
-      classOptions.forEach((option) => {
-        if (option.checked) count++;
-      });
-
-      return count;
-    }
-
-    function ensureAtLeastOneClass() {
-      const checkedCount = getSelectedClassCount();
-
-      if (checkedCount === 0) {
-        classOptions[0].checked = true;
+      if (points > MAX_POINTS) {
+        points = MAX_POINTS;
       }
+
+      points = Math.round(points / 100) * 100;
+
+      if (points < MIN_POINTS) {
+        points = MIN_POINTS;
+      }
+
+      if (points > MAX_POINTS) {
+        points = MAX_POINTS;
+      }
+
+      return points;
     }
 
-    function syncLevelInputsFromSliders() {
-      const fixed = clampLevelPair(
-        parseInt(rangeMin.value, 10),
-        parseInt(rangeMax.value, 10)
-      );
-
-      rangeMin.value = fixed.current;
-      rangeMax.value = fixed.desired;
-      currentLevel.value = fixed.current;
-      desiredLevel.value = fixed.desired;
-
-      updateRangeProgress(rangeMin, rangeMax, levelProgress, 1, 25);
-      updateTotal();
+    function getOriginalPrice(points) {
+      return (points / 100) * BASE_RATE;
     }
 
-    function syncLevelSlidersFromInputs() {
-      const fixed = clampLevelPair(
-        parseInt(currentLevel.value, 10),
-        parseInt(desiredLevel.value, 10)
-      );
-
-      currentLevel.value = fixed.current;
-      desiredLevel.value = fixed.desired;
-      rangeMin.value = fixed.current;
-      rangeMax.value = fixed.desired;
-
-      updateRangeProgress(rangeMin, rangeMax, levelProgress, 1, 25);
-      updateTotal();
+    function getDiscountedTotal(points) {
+      const progress = (points - MIN_POINTS) / (MAX_POINTS - MIN_POINTS);
+      return MIN_TOTAL + ((MAX_TOTAL - MIN_TOTAL) * progress);
     }
 
-    function syncPrestigeInputsFromSliders() {
-      const fixed = clampPrestigePair(
-        parseInt(prestigeMin.value, 10),
-        parseInt(prestigeMax.value, 10)
-      );
+    function updatePricing(points) {
+      const safePoints = clampPoints(points);
+      const displayPoints = safePoints === 1000 ? 999 : safePoints;
 
-      prestigeMin.value = fixed.start;
-      prestigeMax.value = fixed.end;
-      prestigeStart.value = fixed.start;
-      prestigeEnd.value = fixed.end;
+      const originalPrice = getOriginalPrice(safePoints);
+      const discountedTotal = getDiscountedTotal(safePoints);
+      const savings = originalPrice - discountedTotal;
 
-      updateRangeProgress(prestigeMin, prestigeMax, prestigeProgress, 1, 4);
-      updateTotal();
-    }
+      requisitionRange.value = safePoints;
+      requisitionInput.value = safePoints;
 
-    function syncPrestigeSlidersFromInputs() {
-      const fixed = clampPrestigePair(
-        parseInt(prestigeStart.value, 10),
-        parseInt(prestigeEnd.value, 10)
-      );
+      updateRangeProgress(safePoints);
 
-      prestigeStart.value = fixed.start;
-      prestigeEnd.value = fixed.end;
-      prestigeMin.value = fixed.start;
-      prestigeMax.value = fixed.end;
+      selectedPointsEl.textContent = displayPoints;
+      basePriceEl.textContent = formatMoney(originalPrice);
+      totalPriceEl.textContent = formatMoney(discountedTotal);
 
-      updateRangeProgress(prestigeMin, prestigeMax, prestigeProgress, 1, 4);
-      updateTotal();
-    }
-
-    function getSelectedServiceType() {
-      return document.querySelector('input[name="serviceType"]:checked').value;
-    }
-
-    function updatePrestigeVisibility() {
-      if (prestigeToggle.checked) {
-        prestigeGroup.classList.remove("hidden");
+      if (safePoints === 1000) {
+        priceInfoEl.textContent = `Max tier selected. This covers up to 999 Requisition Points in-game. You save ${formatMoney(savings)} compared to the original price. Extra Armory Data rewards may vary.`;
+      } else if (savings > 0.01) {
+        priceInfoEl.textContent = `Progressive discount applied. You save ${formatMoney(savings)} compared to the original price. Extra Armory Data rewards may vary.`;
       } else {
-        prestigeGroup.classList.add("hidden");
-      }
-
-      updateTotal();
-    }
-
-    function updateServiceTypeUI() {
-      const levelingEnabled = levelingToggle.checked;
-      const selected = getSelectedServiceType();
-
-      if (!levelingEnabled) {
-        levelRangeGroup.style.opacity = "0.45";
-        levelRangeGroup.style.pointerEvents = "none";
-        serviceTypeGroup.style.opacity = "0.45";
-        serviceTypeGroup.style.pointerEvents = "none";
-
-        serviceTypeRadios.forEach((radio) => {
-          radio.disabled = true;
-        });
-
-        return;
-      }
-
-      serviceTypeRadios.forEach((radio) => {
-        radio.disabled = false;
-      });
-
-      serviceTypeGroup.style.opacity = "1";
-      serviceTypeGroup.style.pointerEvents = "auto";
-
-      if (selected === "full") {
-        levelRangeGroup.style.opacity = "0.55";
-        levelRangeGroup.style.pointerEvents = "none";
-      } else {
-        levelRangeGroup.style.opacity = "1";
-        levelRangeGroup.style.pointerEvents = "auto";
+        priceInfoEl.textContent = `Base rate applied. Extra Armory Data rewards may vary.`;
       }
     }
 
-    function getCustomLevelingData(current, desired, selectedClasses) {
-      const levels = Math.max(0, desired - current);
-      const originalPerClass = levels * BASE_LEVEL_PRICE;
-
-      if (levels === 0) {
-        return {
-          levels,
-          originalPerClass: 0,
-          discountedPerClass: 0,
-          discountPerClass: 0,
-          totalOriginal: 0,
-          totalDiscounted: 0,
-          totalDiscount: 0
-        };
-      }
-
-      const progress = (levels - 1) / (MAX_LEVEL_GAIN - 1);
-      const appliedDiscountRate = progress * maxDiscountRate;
-      const discountedPricePerLevel = BASE_LEVEL_PRICE * (1 - appliedDiscountRate);
-      const discountedPerClass = levels * discountedPricePerLevel;
-      const discountPerClass = originalPerClass - discountedPerClass;
-
-      return {
-        levels,
-        originalPerClass,
-        discountedPerClass,
-        discountPerClass,
-        totalOriginal: originalPerClass * selectedClasses,
-        totalDiscounted: discountedPerClass * selectedClasses,
-        totalDiscount: discountPerClass * selectedClasses
-      };
-    }
-
-    function updateTotal() {
-      ensureAtLeastOneClass();
-      updateServiceTypeUI();
-
-      const levelingEnabled = levelingToggle.checked;
-      const selected = getSelectedServiceType();
-      const selectedClasses = getSelectedClassCount();
-
-      let mainTotal = 0;
-      let originalMainTotal = 0;
-      let discountMainTotal = 0;
-      let prestigeTotal = 0;
-      let trialsTotal = 0;
-
-      if (levelingEnabled && selected === "custom") {
-        const current = parseInt(currentLevel.value, 10);
-        const desired = parseInt(desiredLevel.value, 10);
-
-        const customData = getCustomLevelingData(current, desired, selectedClasses);
-
-        mainTotal = customData.totalDiscounted;
-        originalMainTotal = customData.totalOriginal;
-        discountMainTotal = customData.totalDiscount;
-      }
-
-      if (levelingEnabled && selected === "full") {
-        mainTotal = FULL_BASE_PRICE + (CLASS_PRICE * selectedClasses);
-        originalMainTotal = mainTotal;
-        discountMainTotal = 0;
-      }
-
-      if (prestigeToggle.checked) {
-        const start = parseInt(prestigeStart.value, 10);
-        const end = parseInt(prestigeEnd.value, 10);
-        const prestiges = Math.max(0, end - start);
-
-        prestigeTotal = prestiges * PRESTIGE_PRICE * selectedClasses;
-      }
-
-      if (trialsOption.checked) {
-        trialsTotal = TRIALS_PRICE * selectedClasses;
-      }
-
-      const grandTotal = mainTotal + prestigeTotal + trialsTotal;
-
-      totalPrice.textContent = formatMoney(grandTotal);
-      breakdownMain.textContent = formatMoney(mainTotal);
-      breakdownClasses.textContent = selectedClasses + " selected";
-
-      if (levelingEnabled && selected === "custom" && discountMainTotal > 0.009) {
-        breakdownOriginalRow.classList.remove("hidden");
-        breakdownDiscountRow.classList.remove("hidden");
-        breakdownOriginal.textContent = formatMoney(originalMainTotal);
-        breakdownDiscount.textContent = "-" + formatMoney(discountMainTotal);
-      } else {
-        breakdownOriginalRow.classList.add("hidden");
-        breakdownDiscountRow.classList.add("hidden");
-        breakdownOriginal.textContent = formatMoney(0);
-        breakdownDiscount.textContent = "-" + formatMoney(0);
-      }
-
-      if (prestigeTotal > 0) {
-        breakdownPrestigeRow.classList.remove("hidden");
-        breakdownPrestige.textContent = formatMoney(prestigeTotal);
-      } else {
-        breakdownPrestigeRow.classList.add("hidden");
-        breakdownPrestige.textContent = formatMoney(0);
-      }
-
-      if (trialsTotal > 0) {
-        breakdownTrialsRow.classList.remove("hidden");
-        breakdownTrials.textContent = formatMoney(trialsTotal);
-      } else {
-        breakdownTrialsRow.classList.add("hidden");
-        breakdownTrials.textContent = formatMoney(0);
-      }
-
-      if (!levelingEnabled && prestigeTotal > 0) {
-        bestValueRow.classList.remove("hidden");
-        bestValueText.textContent = "Prestige-only order selected";
-        return;
-      }
-
-      if (!levelingEnabled && prestigeTotal === 0 && trialsTotal > 0) {
-        bestValueRow.classList.add("hidden");
-        bestValueText.textContent = "Full Leveling is the best value";
-        return;
-      }
-
-      if (!levelingEnabled) {
-        bestValueRow.classList.add("hidden");
-        bestValueText.textContent = "Full Leveling is the best value";
-        return;
-      }
-
-      if (selected === "custom") {
-        const current = parseInt(currentLevel.value, 10);
-        const desired = parseInt(desiredLevel.value, 10);
-        const levels = Math.max(0, desired - current);
-
-        if (levels >= 18) {
-          bestValueRow.classList.remove("hidden");
-          bestValueText.textContent = "Best value: Full Leveling starts at $0.95 + $14.00 per class";
-        } else {
-          bestValueRow.classList.add("hidden");
-          bestValueText.textContent = "Full Leveling is the best value";
-        }
-      } else {
-        bestValueRow.classList.remove("hidden");
-        bestValueText.textContent = "You are already on the best value package";
-      }
-    }
-
-    rangeMin.addEventListener("input", syncLevelInputsFromSliders);
-    rangeMax.addEventListener("input", syncLevelInputsFromSliders);
-
-    currentLevel.addEventListener("input", syncLevelSlidersFromInputs);
-    desiredLevel.addEventListener("input", syncLevelSlidersFromInputs);
-
-    prestigeMin.addEventListener("input", syncPrestigeInputsFromSliders);
-    prestigeMax.addEventListener("input", syncPrestigeInputsFromSliders);
-
-    prestigeStart.addEventListener("input", syncPrestigeSlidersFromInputs);
-    prestigeEnd.addEventListener("input", syncPrestigeSlidersFromInputs);
-
-    serviceTypeRadios.forEach((radio) => {
-      radio.addEventListener("change", updateTotal);
+    requisitionRange.addEventListener("input", function () {
+      updatePricing(this.value);
     });
 
-    classOptions.forEach((option) => {
-      option.addEventListener("change", updateTotal);
+    requisitionInput.addEventListener("input", function () {
+      updatePricing(this.value);
     });
 
-    levelingToggle.addEventListener("change", updateTotal);
-    prestigeToggle.addEventListener("change", updatePrestigeVisibility);
-    trialsOption.addEventListener("change", updateTotal);
-
-    syncLevelSlidersFromInputs();
-    syncPrestigeSlidersFromInputs();
-    updatePrestigeVisibility();
-    updateTotal();
+    updatePricing(100);
   </script>
+
 </body>
 </html>
