@@ -28,7 +28,8 @@
 
       <div class="hero-buttons">
         <a href="index.html" class="btn btn-secondary">Back to Home</a>
-        <a href="#" class="btn btn-tab-active">Stratagems</a>
+        <a href="spacemarine2.html" class="btn btn-tab-active">Leveling Services</a>
+        <a href="builds.html" class="btn btn-secondary">Builds</a>
       </div>
     </div>
   </section>
@@ -104,6 +105,7 @@
           <p>Platform</p>
           <select>
             <option>PC</option>
+            <option>Xbox</option>
             <option>PlayStation</option>
           </select>
         </div>
@@ -161,17 +163,13 @@
           </label>
         </div>
 
-        <!-- TOTALS -->
-        <div class="total-box">
-          <span>Base Price</span>
-          <strong id="base-price">$0.95</strong>
-        </div>
-
+        <!-- TOTAL -->
         <div class="total-box">
           <span>Total Price</span>
           <strong id="total-price">$41.95</strong>
         </div>
 
+        <!-- BREAKDOWN -->
         <div class="price-breakdown" id="priceBreakdown">
           <div class="breakdown-row">
             <span>Base</span>
@@ -223,7 +221,6 @@
     };
 
     const difficultyContainer = document.getElementById("difficulty-options");
-    const basePriceEl = document.getElementById("base-price");
     const totalPriceEl = document.getElementById("total-price");
     const breakdownBaseEl = document.getElementById("breakdown-base");
     const breakdownPackageEl = document.getElementById("breakdown-package");
@@ -272,6 +269,7 @@
       });
 
       const difficultyRadios = document.querySelectorAll('input[name="difficultyOption"]');
+
       difficultyRadios.forEach((radio) => {
         radio.addEventListener("change", updateTotal);
       });
@@ -298,7 +296,6 @@
 
       const total = BASE_PRICE + selectedDifficulty.price + methodPrice;
 
-      basePriceEl.textContent = formatMoney(BASE_PRICE);
       totalPriceEl.textContent = formatMoney(total);
       breakdownBaseEl.textContent = formatMoney(BASE_PRICE);
       breakdownPackageEl.textContent = getPackageLabel(selectedType);
