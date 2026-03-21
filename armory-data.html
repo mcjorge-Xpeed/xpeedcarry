@@ -207,8 +207,18 @@
           </div>
 
           <div class="breakdown-row">
-            <span>Price Per Data</span>
-            <span id="breakdown-unit-price">$1.00</span>
+            <span>Original Price</span>
+            <span id="breakdown-original-price">$2.00</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Discount</span>
+            <span id="breakdown-discount">-$0.00</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Effective Rate</span>
+            <span id="breakdown-unit-price">$1.00 each</span>
           </div>
 
           <div class="breakdown-row">
@@ -234,6 +244,8 @@
     const totalPriceEl = document.getElementById("total-price");
     const breakdownAmountEl = document.getElementById("breakdown-amount");
     const breakdownRarityEl = document.getElementById("breakdown-rarity");
+    const breakdownOriginalPriceEl = document.getElementById("breakdown-original-price");
+    const breakdownDiscountEl = document.getElementById("breakdown-discount");
     const breakdownUnitPriceEl = document.getElementById("breakdown-unit-price");
     const breakdownMethodEl = document.getElementById("breakdown-method");
 
@@ -243,15 +255,18 @@
     const rarityData = {
       green: {
         label: "Master-Crafted",
-        unitPrice: 1.00
+        unitPrice: 1.00,
+        maxTotal: 29.95
       },
       purple: {
         label: "Artificer",
-        unitPrice: 2.00
+        unitPrice: 2.00,
+        maxTotal: 40.45
       },
       yellow: {
         label: "Relic",
-        unitPrice: 3.00
+        unitPrice: 3.00,
+        maxTotal: 50.35
       }
     };
 
@@ -302,23 +317,34 @@
       return document.querySelector('input[name="completionMethod"]:checked').value;
     }
 
+    function getDiscountedTotal(amount, rarity) {
+      const minTotal = MIN_AMOUNT * rarity.unitPrice;
+      const progress = (amount - MIN_AMOUNT) / (MAX_AMOUNT - MIN_AMOUNT);
+      return minTotal + ((rarity.maxTotal - minTotal) * progress);
+    }
+
     function updateTotal(amountValue) {
       const safeAmount = clampAmount(amountValue);
       const rarityKey = getSelectedRarity();
       const rarity = rarityData[rarityKey];
       const method = getSelectedMethod();
 
-      const total = safeAmount * rarity.unitPrice;
+      const originalTotal = safeAmount * rarity.unitPrice;
+      const discountedTotal = getDiscountedTotal(safeAmount, rarity);
+      const discountValue = originalTotal - discountedTotal;
+      const effectiveRate = discountedTotal / safeAmount;
 
       armoryRange.value = safeAmount;
       armoryInput.value = safeAmount;
 
       updateRangeProgress(safeAmount);
 
-      totalPriceEl.textContent = formatMoney(total);
+      totalPriceEl.textContent = formatMoney(discountedTotal);
       breakdownAmountEl.textContent = safeAmount;
       breakdownRarityEl.textContent = rarity.label;
-      breakdownUnitPriceEl.textContent = formatMoney(rarity.unitPrice);
+      breakdownOriginalPriceEl.textContent = formatMoney(originalTotal);
+      breakdownDiscountEl.textContent = "-" + formatMoney(discountValue);
+      breakdownUnitPriceEl.textContent = formatMoney(effectiveRate) + " each";
       breakdownMethodEl.textContent = method === "piloted" ? "Piloted" : "Self-play";
     }
 
