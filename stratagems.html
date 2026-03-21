@@ -1,1 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helldivers 2 Stratagems | XpeedCarry</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body id="top">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">XpeedCarry</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="service-hero">
+    <div class="hero-content">
+      <h1>Helldivers 2 Stratagems Unlock</h1>
+
+      <p>
+        Buy Helldivers 2 Stratagems Unlock service to unlock Daily and Weekly Stratagems
+        faster with a safe and efficient service. Choose the mission package you want
+        and let our boosters handle the grind.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="#" class="btn btn-tab-active">Stratagems</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="product-layout">
+
+    <!-- LEFT -->
+    <section class="product-left">
+
+      <div class="product-card">
+        <img src="images/stratagems.png" alt="Helldivers 2 Stratagems" class="product-image">
+
+        <div class="product-highlights">
+          <span>Fast Unlocks</span>
+          <span>Safe Service</span>
+          <span>Expert Boosters</span>
+          <span>24/7 Support</span>
+        </div>
+
+        <div class="product-times">
+          <div>
+            <strong>1-2h</strong>
+            <p>Start Time</p>
+          </div>
+
+          <div>
+            <strong>Flexible</strong>
+            <p>Completion</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <h2>Description</h2>
+
+        <p>
+          Our Helldivers 2 Stratagems Unlock service is designed for players who want
+          to unlock essential mission rewards without wasting time repeating content.
+          Choose your preferred stratagem package, select the difficulty tier, and let
+          our boosters complete the required content for you.
+        </p>
+
+        <ul>
+          <li>Daily and Weekly Stratagem options available</li>
+          <li>Normal and Hard mission packages supported</li>
+          <li>Piloted and Self-play completion methods</li>
+          <li>Fast and safe service</li>
+          <li>Flexible setup for different progression needs</li>
+        </ul>
+      </div>
+
+      <div class="product-description">
+        <h2>Requirements</h2>
+
+        <ul>
+          <li>Active account</li>
+          <li>Game ownership on selected platform</li>
+          <li>Valid completion method selection</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="product-right">
+
+      <div class="purchase-panel">
+        <h3>Customize Order</h3>
+
+        <!-- PLATFORM -->
+        <div class="option-group">
+          <p>Platform</p>
+          <select>
+            <option>PC</option>
+            <option>PlayStation</option>
+          </select>
+        </div>
+
+        <!-- STRATAGEMS -->
+        <div class="option-group">
+          <p>Stratagems</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="stratagemType" value="all" checked>
+              <span>All Daily + All Weekly Stratagems</span>
+            </div>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="stratagemType" value="daily">
+              <span>Daily Stratagems</span>
+            </div>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="stratagemType" value="weekly">
+              <span>Weekly Stratagems</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- DIFFICULTY -->
+        <div class="option-group">
+          <p>Difficulty</p>
+          <div id="difficulty-options"></div>
+        </div>
+
+        <!-- COMPLETION METHOD -->
+        <div class="option-group">
+          <p>Completion Method</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="piloted" checked>
+              <span>Piloted</span>
+            </div>
+            <span class="option-price">+$0.00</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="selfplay">
+              <span>Self-play</span>
+            </div>
+            <span class="option-price">+$0.00</span>
+          </label>
+        </div>
+
+        <!-- TOTALS -->
+        <div class="total-box">
+          <span>Base Price</span>
+          <strong id="base-price">$0.95</strong>
+        </div>
+
+        <div class="total-box">
+          <span>Total Price</span>
+          <strong id="total-price">$41.95</strong>
+        </div>
+
+        <div class="price-breakdown" id="priceBreakdown">
+          <div class="breakdown-row">
+            <span>Base</span>
+            <span id="breakdown-base">$0.95</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Stratagem Package</span>
+            <span id="breakdown-package">All Daily + All Weekly</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Difficulty</span>
+            <span id="breakdown-difficulty">$41.00</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Completion Method</span>
+            <span id="breakdown-method">$0.00</span>
+          </div>
+        </div>
+
+        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <a href="#" class="btn btn-secondary full">Chat before order</a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <script>
+    const BASE_PRICE = 0.95;
+
+    const difficultyMap = {
+      daily: [
+        { value: "daily-normal", label: "All Normal Daily Missions", price: 9.00 },
+        { value: "daily-hard", label: "All Hard Daily Missions", price: 21.00 },
+        { value: "daily-both", label: "All Normal + All Hard Daily Missions", price: 30.00 }
+      ],
+      weekly: [
+        { value: "weekly-normal", label: "Normal Weekly Mission", price: 4.00 },
+        { value: "weekly-hard", label: "Hard Weekly Mission", price: 7.00 },
+        { value: "weekly-both", label: "Normal + Hard Weekly Mission", price: 11.00 }
+      ],
+      all: [
+        { value: "all-complete", label: "All Daily + All Weekly Missions", price: 41.00 }
+      ]
+    };
+
+    const difficultyContainer = document.getElementById("difficulty-options");
+    const basePriceEl = document.getElementById("base-price");
+    const totalPriceEl = document.getElementById("total-price");
+    const breakdownBaseEl = document.getElementById("breakdown-base");
+    const breakdownPackageEl = document.getElementById("breakdown-package");
+    const breakdownDifficultyEl = document.getElementById("breakdown-difficulty");
+    const breakdownMethodEl = document.getElementById("breakdown-method");
+
+    function formatMoney(value) {
+      return "$" + value.toFixed(2);
+    }
+
+    function getSelectedStratagemType() {
+      return document.querySelector('input[name="stratagemType"]:checked').value;
+    }
+
+    function getSelectedMethodPrice() {
+      const selectedMethod = document.querySelector('input[name="completionMethod"]:checked').value;
+
+      if (selectedMethod === "piloted") {
+        return 0;
+      }
+
+      if (selectedMethod === "selfplay") {
+        return 0;
+      }
+
+      return 0;
+    }
+
+    function renderDifficultyOptions(type) {
+      const options = difficultyMap[type];
+      difficultyContainer.innerHTML = "";
+
+      options.forEach((option, index) => {
+        const label = document.createElement("label");
+        label.className = "radio-option";
+
+        label.innerHTML = `
+          <div class="radio-left">
+            <input type="radio" name="difficultyOption" value="${option.value}" ${index === 0 ? "checked" : ""}>
+            <span>${option.label}</span>
+          </div>
+          <span class="option-price">+${formatMoney(option.price)}</span>
+        `;
+
+        difficultyContainer.appendChild(label);
+      });
+
+      const difficultyRadios = document.querySelectorAll('input[name="difficultyOption"]');
+      difficultyRadios.forEach((radio) => {
+        radio.addEventListener("change", updateTotal);
+      });
+    }
+
+    function getSelectedDifficultyData() {
+      const selectedType = getSelectedStratagemType();
+      const selectedDifficulty = document.querySelector('input[name="difficultyOption"]:checked').value;
+      const options = difficultyMap[selectedType];
+
+      return options.find((item) => item.value === selectedDifficulty);
+    }
+
+    function getPackageLabel(type) {
+      if (type === "daily") return "Daily Stratagems";
+      if (type === "weekly") return "Weekly Stratagems";
+      return "All Daily + All Weekly";
+    }
+
+    function updateTotal() {
+      const selectedType = getSelectedStratagemType();
+      const selectedDifficulty = getSelectedDifficultyData();
+      const methodPrice = getSelectedMethodPrice();
+
+      const total = BASE_PRICE + selectedDifficulty.price + methodPrice;
+
+      basePriceEl.textContent = formatMoney(BASE_PRICE);
+      totalPriceEl.textContent = formatMoney(total);
+      breakdownBaseEl.textContent = formatMoney(BASE_PRICE);
+      breakdownPackageEl.textContent = getPackageLabel(selectedType);
+      breakdownDifficultyEl.textContent = formatMoney(selectedDifficulty.price);
+      breakdownMethodEl.textContent = formatMoney(methodPrice);
+    }
+
+    const stratagemRadios = document.querySelectorAll('input[name="stratagemType"]');
+    const methodRadios = document.querySelectorAll('input[name="completionMethod"]');
+
+    stratagemRadios.forEach((radio) => {
+      radio.addEventListener("change", function () {
+        renderDifficultyOptions(this.value);
+        updateTotal();
+      });
+    });
+
+    methodRadios.forEach((radio) => {
+      radio.addEventListener("change", updateTotal);
+    });
+
+    renderDifficultyOptions("all");
+    updateTotal();
+  </script>
+
+</body>
+</html>
