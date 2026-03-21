@@ -28,7 +28,7 @@
 
       <div class="hero-buttons">
         <a href="index.html" class="btn btn-secondary">Back to Home</a>
-        <a href="spacemarine2.html" class="btn btn-tab-active">Leveling Services</a>
+        <a href="spacemarine2.html" class="btn btn-secondary">Leveling Services</a>
         <a href="builds.html" class="btn btn-secondary">Builds</a>
       </div>
     </div>
@@ -116,14 +116,7 @@
 
           <label class="radio-option">
             <div class="radio-left">
-              <input type="radio" name="stratagemType" value="all" checked>
-              <span>All Daily + All Weekly Stratagems</span>
-            </div>
-          </label>
-
-          <label class="radio-option">
-            <div class="radio-left">
-              <input type="radio" name="stratagemType" value="daily">
+              <input type="radio" name="stratagemType" value="daily" checked>
               <span>Daily Stratagems</span>
             </div>
           </label>
@@ -132,6 +125,13 @@
             <div class="radio-left">
               <input type="radio" name="stratagemType" value="weekly">
               <span>Weekly Stratagems</span>
+            </div>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="stratagemType" value="all">
+              <span>All Daily + All Weekly Stratagems</span>
             </div>
           </label>
         </div>
@@ -166,7 +166,7 @@
         <!-- TOTAL -->
         <div class="total-box">
           <span>Total Price</span>
-          <strong id="total-price">$41.95</strong>
+          <strong id="total-price">$9.95</strong>
         </div>
 
         <!-- BREAKDOWN -->
@@ -178,12 +178,12 @@
 
           <div class="breakdown-row">
             <span>Stratagem Package</span>
-            <span id="breakdown-package">All Daily + All Weekly</span>
+            <span id="breakdown-package">Daily Stratagems</span>
           </div>
 
           <div class="breakdown-row">
             <span>Difficulty</span>
-            <span id="breakdown-difficulty">$41.00</span>
+            <span id="breakdown-difficulty">$9.00</span>
           </div>
 
           <div class="breakdown-row">
@@ -317,7 +317,7 @@
       radio.addEventListener("change", updateTotal);
     });
 
-    renderDifficultyOptions("all");
+    renderDifficultyOptions("daily");
     updateTotal();
   </script>
 
