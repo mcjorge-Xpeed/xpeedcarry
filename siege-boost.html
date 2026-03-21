@@ -129,7 +129,7 @@
               <input type="radio" name="completionMethod" value="selfplay">
               <span>Self-play</span>
             </div>
-            <span class="option-price">+$95.00</span>
+            <span class="option-price" id="selfplay-price-label">+$155.00</span>
           </label>
         </div>
 
@@ -290,62 +290,47 @@
 
   <!-- SCRIPT -->
   <script>
+    const SELF_PLAY_BASE = 95.00;
+
     const wavesData = {
       5: {
         label: "5 Waves",
-        xpeedNormalPrice: 3.95,
-        xpeedHardExtra: 4.95,
-        skyNormalPrice: 4.00,
-        skyHardExtra: 4.99,
-        skyNormal50: 199.60,
-        skyHard50: 399.20
+        normalPrice: 3.95,
+        hardExtra: 4.95,
+        selfPlayExtra: 12.00
       },
       10: {
         label: "10 Waves",
-        xpeedNormalPrice: 4.95,
-        xpeedHardExtra: 5.95,
-        skyNormalPrice: 5.00,
-        skyHardExtra: 5.99,
-        skyNormal50: 239.60,
-        skyHard50: 479.20
+        normalPrice: 4.95,
+        hardExtra: 5.95,
+        selfPlayExtra: 24.00
       },
       15: {
         label: "15 Waves",
-        xpeedNormalPrice: 6.95,
-        xpeedHardExtra: 7.95,
-        skyNormalPrice: 7.00,
-        skyHardExtra: 7.99,
-        skyNormal50: 319.60,
-        skyHard50: 639.20
+        normalPrice: 6.95,
+        hardExtra: 7.95,
+        selfPlayExtra: 36.00
       },
       20: {
         label: "20 Waves",
-        xpeedNormalPrice: 9.95,
-        xpeedHardExtra: 10.95,
-        skyNormalPrice: 10.00,
-        skyHardExtra: 10.99,
-        skyNormal50: 439.60,
-        skyHard50: 879.20
+        normalPrice: 9.95,
+        hardExtra: 10.95,
+        selfPlayExtra: 48.00
       },
       25: {
         label: "25 Waves - Full Run",
-        xpeedNormalPrice: 13.95,
-        xpeedHardExtra: 14.95,
-        skyNormalPrice: 14.00,
-        skyHardExtra: 14.99,
-        skyNormal50: 599.60,
-        skyHard50: 1199.20
+        normalPrice: 13.95,
+        hardExtra: 14.95,
+        selfPlayExtra: 60.00
       }
     };
-
-    const SELF_PLAY_ADDON = 95.00;
-    const MAX_DISCOUNT_RUNS = 50;
 
     const runsInput = document.getElementById("runsInput");
     const runsMinus = document.getElementById("runsMinus");
     const runsPlus = document.getElementById("runsPlus");
 
     const hardPriceLabel = document.getElementById("hard-price-label");
+    const selfPlayPriceLabel = document.getElementById("selfplay-price-label");
 
     const totalPriceEl = document.getElementById("total-price");
     const breakdownRunsEl = document.getElementById("breakdown-runs");
@@ -386,56 +371,41 @@
       return document.querySelector('input[name="completionMethod"]:checked').value;
     }
 
-    function getSkyDiscountRate(waveKey, difficulty) {
-      const wave = wavesData[waveKey];
-
-      if (difficulty === "hard") {
-        const skyHardBasePerRun = wave.skyNormalPrice + wave.skyHardExtra;
-        const skyHardBaseTotal = skyHardBasePerRun * 50;
-        return 1 - (wave.skyHard50 / skyHardBaseTotal);
+    function getDiscountRate(runs) {
+      if (runs >= 10) {
+        return 0.20;
       }
 
-      const skyNormalBaseTotal = wave.skyNormalPrice * 50;
-      return 1 - (wave.skyNormal50 / skyNormalBaseTotal);
-    }
-
-    function getXpeedPricePerRun(waveKey, difficulty) {
-      const wave = wavesData[waveKey];
-
-      if (difficulty === "hard") {
-        return wave.xpeedNormalPrice + wave.xpeedHardExtra;
+      if (runs >= 5) {
+        return 0.10;
       }
 
-      return wave.xpeedNormalPrice;
+      return 0;
     }
 
-    function getProgressiveDiscountRate(runs, maxRate) {
-      const effectiveRuns = Math.min(runs, MAX_DISCOUNT_RUNS);
-      const progress = (effectiveRuns - 1) / (MAX_DISCOUNT_RUNS - 1);
-      return maxRate * progress;
-    }
-
-    function updateHardPriceLabel() {
+    function updateDynamicLabels() {
       const waveKey = getSelectedWavesKey();
       const wave = wavesData[waveKey];
-      hardPriceLabel.textContent = "+" + formatMoney(wave.xpeedHardExtra);
+      const selfPlayVisiblePrice = SELF_PLAY_BASE + wave.selfPlayExtra;
+
+      hardPriceLabel.textContent = "+" + formatMoney(wave.hardExtra);
+      selfPlayPriceLabel.textContent = "+" + formatMoney(selfPlayVisiblePrice);
     }
 
     function updateDiscountMessage(runs, discountRate) {
-      if (discountRate <= 0.0001) {
-        discountMessageEl.textContent = "Base rate applied.";
+      if (discountRate === 0) {
+        const needed = 5 - runs;
+        discountMessageEl.textContent = `Add ${needed} more run${needed === 1 ? "" : "s"} to unlock a 10% discount.`;
         return;
       }
 
-      const appliedPercent = (discountRate * 100).toFixed(2);
-
-      if (runs >= MAX_DISCOUNT_RUNS) {
-        discountMessageEl.textContent = `${appliedPercent}% discount applied. Maximum discount reached.`;
+      if (discountRate === 0.10) {
+        const needed = 10 - runs;
+        discountMessageEl.textContent = `10% discount applied. Add ${needed} more run${needed === 1 ? "" : "s"} to unlock the maximum 20% discount.`;
         return;
       }
 
-      const remaining = MAX_DISCOUNT_RUNS - runs;
-      discountMessageEl.textContent = `${appliedPercent}% discount applied. Add ${remaining} more run${remaining === 1 ? "" : "s"} to reach the maximum discount tier.`;
+      discountMessageEl.textContent = "20% discount applied. Maximum discount reached.";
     }
 
     function updateTotal() {
@@ -443,32 +413,36 @@
       const waveKey = getSelectedWavesKey();
       const difficulty = getSelectedDifficulty();
       const completionMethod = getSelectedCompletionMethod();
-
       const wave = wavesData[waveKey];
-      const pricePerRun = getXpeedPricePerRun(waveKey, difficulty);
-      const originalRunsTotal = pricePerRun * runs;
 
-      const maxDiscountRate = getSkyDiscountRate(waveKey, difficulty);
-      const appliedDiscountRate = getProgressiveDiscountRate(runs, maxDiscountRate);
-      const discountValue = originalRunsTotal * appliedDiscountRate;
-      const discountedRunsTotal = originalRunsTotal - discountValue;
+      let pricePerRun = wave.normalPrice;
 
-      const selfPlayValue = completionMethod === "selfplay" ? SELF_PLAY_ADDON : 0;
-      const finalTotal = discountedRunsTotal + selfPlayValue;
+      if (difficulty === "hard") {
+        pricePerRun += wave.hardExtra;
+      }
+
+      if (completionMethod === "selfplay") {
+        pricePerRun += SELF_PLAY_BASE + wave.selfPlayExtra;
+      }
+
+      const originalTotal = pricePerRun * runs;
+      const discountRate = getDiscountRate(runs);
+      const discountValue = originalTotal * discountRate;
+      const finalTotal = originalTotal - discountValue;
 
       runsInput.value = runs;
-      updateHardPriceLabel();
+      updateDynamicLabels();
 
       totalPriceEl.textContent = formatMoney(finalTotal);
 
       breakdownRunsEl.textContent = runs;
       breakdownDifficultyEl.textContent = difficulty === "hard" ? "Hard" : "Normal";
       breakdownWavesEl.textContent = wave.label;
-      breakdownOriginalEl.textContent = formatMoney(originalRunsTotal + selfPlayValue);
+      breakdownOriginalEl.textContent = formatMoney(originalTotal);
       breakdownDiscountEl.textContent = "-" + formatMoney(discountValue);
       breakdownTotalEl.textContent = formatMoney(finalTotal);
 
-      updateDiscountMessage(runs, appliedDiscountRate);
+      updateDiscountMessage(runs, discountRate);
     }
 
     runsMinus.addEventListener("click", function () {
