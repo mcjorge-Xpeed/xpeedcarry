@@ -217,15 +217,18 @@
           </div>
 
           <div class="breakdown-row">
-            <span>Effective Rate</span>
-            <span id="breakdown-unit-price">$1.00 each</span>
-          </div>
-
-          <div class="breakdown-row">
-            <span>Completion Method</span>
-            <span id="breakdown-method">Piloted</span>
+            <span>Total</span>
+            <span id="breakdown-total">$2.00</span>
           </div>
         </div>
+
+        <!-- DISCOUNT MESSAGE -->
+        <p
+          id="discount-message"
+          style="margin-top: 12px; margin-bottom: 14px; font-size: 14px; line-height: 1.45; color: #d4af37;"
+        >
+          Base rate applied.
+        </p>
 
         <a href="#" class="btn btn-primary full">Buy Now</a>
         <a href="#" class="btn btn-secondary full">Chat before order</a>
@@ -246,8 +249,8 @@
     const breakdownRarityEl = document.getElementById("breakdown-rarity");
     const breakdownOriginalPriceEl = document.getElementById("breakdown-original-price");
     const breakdownDiscountEl = document.getElementById("breakdown-discount");
-    const breakdownUnitPriceEl = document.getElementById("breakdown-unit-price");
-    const breakdownMethodEl = document.getElementById("breakdown-method");
+    const breakdownTotalEl = document.getElementById("breakdown-total");
+    const breakdownMessageEl = document.getElementById("discount-message");
 
     const MIN_AMOUNT = 2;
     const MAX_AMOUNT = 50;
@@ -323,6 +326,23 @@
       return minTotal + ((rarity.maxTotal - minTotal) * progress);
     }
 
+    function updateDiscountMessage(amount, originalTotal, discountedTotal, discountValue) {
+      if (discountValue <= 0.01) {
+        breakdownMessageEl.textContent = "Base rate applied.";
+        return;
+      }
+
+      const discountPercent = (discountValue / originalTotal) * 100;
+      const remaining = MAX_AMOUNT - amount;
+
+      if (remaining <= 0) {
+        breakdownMessageEl.textContent = `${discountPercent.toFixed(0)}% discount applied. Maximum discount reached.`;
+        return;
+      }
+
+      breakdownMessageEl.textContent = `${discountPercent.toFixed(0)}% discount applied. Add ${remaining} more Armory Data to unlock the maximum discount tier.`;
+    }
+
     function updateTotal(amountValue) {
       const safeAmount = clampAmount(amountValue);
       const rarityKey = getSelectedRarity();
@@ -332,7 +352,6 @@
       const originalTotal = safeAmount * rarity.unitPrice;
       const discountedTotal = getDiscountedTotal(safeAmount, rarity);
       const discountValue = originalTotal - discountedTotal;
-      const effectiveRate = discountedTotal / safeAmount;
 
       armoryRange.value = safeAmount;
       armoryInput.value = safeAmount;
@@ -344,8 +363,9 @@
       breakdownRarityEl.textContent = rarity.label;
       breakdownOriginalPriceEl.textContent = formatMoney(originalTotal);
       breakdownDiscountEl.textContent = "-" + formatMoney(discountValue);
-      breakdownUnitPriceEl.textContent = formatMoney(effectiveRate) + " each";
-      breakdownMethodEl.textContent = method === "piloted" ? "Piloted" : "Self-play";
+      breakdownTotalEl.textContent = formatMoney(discountedTotal);
+
+      updateDiscountMessage(safeAmount, originalTotal, discountedTotal, discountValue);
     }
 
     armoryRange.addEventListener("input", function () {
