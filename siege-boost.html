@@ -1,1 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siege Boost | XpeedCarry</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body id="top">
+
+  <header class="navbar">
+    <a href="index.html" class="logo">XpeedCarry</a>
+  </header>
+
+  <section class="service-hero">
+    <div class="hero-content">
+      <h1>Warhammer 40K Space Marine 2 Siege Boost</h1>
+
+      <p>
+        Buy Warhammer 40K Space Marine 2 Siege Boost to clear waves faster, secure valuable rewards,
+        and skip the repetitive grind with a safe and efficient service handled by experienced players.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="spacemarine2.html" class="btn btn-secondary">Leveling Services</a>
+        <a href="builds.html" class="btn btn-secondary">Builds</a>
+        <a href="operations.html" class="btn btn-secondary">Operations</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="product-layout">
+
+    <section class="product-left">
+
+      <div class="product-card">
+        <img src="images/siege-boost.png" alt="Siege Boost" class="product-image">
+
+        <div class="product-highlights">
+          <span>Up to Wave 25</span>
+          <span>Earn Unique Skins</span>
+          <span>Fast & Safe Service</span>
+          <span>24/7 Support</span>
+        </div>
+
+        <div class="product-times">
+          <div>
+            <strong>1h</strong>
+            <p>Start Time</p>
+          </div>
+
+          <div>
+            <strong>Flexible</strong>
+            <p>Completion</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <h2>Description</h2>
+
+        <p>
+          Drop into the action with our Space Marine 2 Siege Boost. This service is designed for players
+          who want to complete Siege faster, push deeper into the mode, and collect rewards without
+          spending hours grinding the same content.
+        </p>
+
+        <p>
+          The list of rewards for the Siege mode completion can include:
+        </p>
+
+        <ul>
+          <li>Wave 5: Requisition rewards</li>
+          <li>Wave 10: Armory Data rewards</li>
+          <li>Wave 15: Additional Requisition rewards</li>
+          <li>Wave 20: Higher-tier Armory Data rewards</li>
+          <li>Wave 25: Premium completion rewards</li>
+          <li>Additional drops such as skins may be obtained during the service</li>
+        </ul>
+      </div>
+
+      <div class="product-description">
+        <h2>Requirements</h2>
+
+        <ul>
+          <li>Active Warhammer 40K Space Marine 2 account</li>
+          <li>Access to Siege mode</li>
+          <li>Valid platform selection</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <aside class="product-right">
+
+      <div class="purchase-panel">
+        <h3>Customize Order</h3>
+
+        <div class="option-group">
+          <p>Platform</p>
+          <select id="platform">
+            <option>PC</option>
+            <option>Xbox</option>
+            <option>PlayStation</option>
+          </select>
+        </div>
+
+        <div class="option-group">
+          <p>Completion Method</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="piloted" checked>
+              <span>Piloted</span>
+            </div>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="selfplay">
+              <span>Self-play</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="option-group">
+          <p>Difficulty</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="difficulty" value="normal" checked>
+              <span>Normal</span>
+            </div>
+            <span class="option-price">Free</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="difficulty" value="hard">
+              <span>Hard</span>
+            </div>
+            <span class="option-price">+$14.99</span>
+          </label>
+        </div>
+
+        <div class="option-group">
+          <p>Waves</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="waves" value="5">
+              <span>5 Waves</span>
+            </div>
+            <span class="option-price">+$4.00</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="waves" value="10">
+              <span>10 Waves</span>
+            </div>
+            <span class="option-price">+$5.00</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="waves" value="15">
+              <span>15 Waves</span>
+            </div>
+            <span class="option-price">+$7.00</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="waves" value="20">
+              <span>20 Waves</span>
+            </div>
+            <span class="option-price">+$10.00</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="waves" value="25" checked>
+              <span>25 Waves - Full Run</span>
+            </div>
+            <span class="option-price">+$14.00</span>
+          </label>
+        </div>
+
+        <div class="option-group" id="runsGroup">
+          <p>Runs</p>
+
+          <div class="level-inputs">
+            <div class="level-box">
+              <label for="runsInput">Selected Runs</label>
+              <input type="number" id="runsInput" min="1" max="20" step="1" value="1">
+            </div>
+          </div>
+
+          <div class="range-wrap">
+            <div class="range-progress" id="runsProgress"></div>
+            <input type="range" id="runsRange" min="1" max="20" step="1" value="1">
+          </div>
+
+          <div class="range-labels">
+            <span>1</span>
+            <span>5</span>
+            <span>10</span>
+            <span>15</span>
+            <span>20</span>
+          </div>
+        </div>
+
+        <div class="total-box">
+          <span>Total Price</span>
+          <strong id="total-price">$14.00</strong>
+        </div>
+
+        <div class="price-breakdown" id="priceBreakdown">
+          <div class="breakdown-row">
+            <span>Runs</span>
+            <span id="breakdown-runs">1</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Difficulty</span>
+            <span id="breakdown-difficulty">Normal</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Waves</span>
+            <span id="breakdown-waves">25 Waves - Full Run</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Original Price</span>
+            <span id="breakdown-original">$14.00</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Discount</span>
+            <span id="breakdown-discount">-$0.00</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Total</span>
+            <span id="breakdown-total">$14.00</span>
+          </div>
+        </div>
+
+        <p
+          id="discount-message"
+          style="margin-top: 12px; margin-bottom: 14px; font-size: 14px; line-height: 1.45; color: #d4af37;"
+        >
+          Base rate applied.
+        </p>
+
+        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <a href="#" class="btn btn-secondary full">Chat before order</a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <script>
+    const HARD_PRICE = 14.99;
+
+    const wavesData = {
+      5: { label: "5 Waves", price: 4.00 },
+      10: { label: "10 Waves", price: 5.00 },
+      15: { label: "15 Waves", price: 7.00 },
+      20: { label: "20 Waves", price: 10.00 },
+      25: { label: "25 Waves - Full Run", price: 14.00 }
+    };
+
+    const runsInput = document.getElementById("runsInput");
+    const runsRange = document.getElementById("runsRange");
+    const runsProgress = document.getElementById("runsProgress");
+
+    const totalPriceEl = document.getElementById("total-price");
+    const breakdownRunsEl = document.getElementById("breakdown-runs");
+    const breakdownDifficultyEl = document.getElementById("breakdown-difficulty");
+    const breakdownWavesEl = document.getElementById("breakdown-waves");
+    const breakdownOriginalEl = document.getElementById("breakdown-original");
+    const breakdownDiscountEl = document.getElementById("breakdown-discount");
+    const breakdownTotalEl = document.getElementById("breakdown-total");
+    const discountMessageEl = document.getElementById("discount-message");
+
+    function formatMoney(value) {
+      return "$" + value.toFixed(2);
+    }
+
+    function clampRuns(value) {
+      let runs = parseInt(value, 10);
+
+      if (isNaN(runs) || runs < 1) {
+        runs = 1;
+      }
+
+      if (runs > 20) {
+        runs = 20;
+      }
+
+      return runs;
+    }
+
+    function updateRangeProgress(value) {
+      const min = 1;
+      const max = 20;
+      const progress = ((value - min) / (max - min)) * 100;
+      runsProgress.style.left = "0%";
+      runsProgress.style.width = progress + "%";
+      runsProgress.style.background = "#d4af37";
+    }
+
+    function getSelectedDifficulty() {
+      return document.querySelector('input[name="difficulty"]:checked').value;
+    }
+
+    function getSelectedWaves() {
+      return document.querySelector('input[name="waves"]:checked').value;
+    }
+
+    function getDiscountRate(runs) {
+      if (runs >= 20) return 0.25;
+      if (runs >= 15) return 0.20;
+      if (runs >= 10) return 0.15;
+      if (runs >= 5) return 0.10;
+      return 0;
+    }
+
+    function getNextDiscountTarget(runs) {
+      if (runs < 5) return 5;
+      if (runs < 10) return 10;
+      if (runs < 15) return 15;
+      if (runs < 20) return 20;
+      return null;
+    }
+
+    function updateDiscountMessage(runs, originalTotal, discountValue) {
+      const discountRate = getDiscountRate(runs);
+      const nextTarget = getNextDiscountTarget(runs);
+
+      if (discountRate <= 0) {
+        const needed = 5 - runs;
+        discountMessageEl.textContent = `Add ${needed} more run${needed === 1 ? "" : "s"} for a 10% discount.`;
+        return;
+      }
+
+      if (nextTarget === null) {
+        discountMessageEl.textContent = `${(discountRate * 100).toFixed(0)}% discount applied. Maximum discount reached.`;
+        return;
+      }
+
+      const needed = nextTarget - runs;
+      const nextRate = getDiscountRate(nextTarget) * 100;
+
+      discountMessageEl.textContent = `${(discountRate * 100).toFixed(0)}% discount applied. Add ${needed} more run${needed === 1 ? "" : "s"} to unlock the next ${nextRate.toFixed(0)}% discount tier.`;
+    }
+
+    function updateTotal() {
+      const runs = clampRuns(runsInput.value);
+      const difficulty = getSelectedDifficulty();
+      const waves = getSelectedWaves();
+
+      const baseWavePrice = wavesData[waves].price;
+      const difficultyPrice = difficulty === "hard" ? HARD_PRICE : 0;
+      const pricePerRun = baseWavePrice + difficultyPrice;
+
+      const originalTotal = pricePerRun * runs;
+      const discountRate = getDiscountRate(runs);
+      const discountValue = originalTotal * discountRate;
+      const finalTotal = originalTotal - discountValue;
+
+      runsInput.value = runs;
+      runsRange.value = runs;
+      updateRangeProgress(runs);
+
+      totalPriceEl.textContent = formatMoney(finalTotal);
+
+      breakdownRunsEl.textContent = runs;
+      breakdownDifficultyEl.textContent = difficulty === "hard" ? "Hard" : "Normal";
+      breakdownWavesEl.textContent = wavesData[waves].label;
+      breakdownOriginalEl.textContent = formatMoney(originalTotal);
+      breakdownDiscountEl.textContent = "-" + formatMoney(discountValue);
+      breakdownTotalEl.textContent = formatMoney(finalTotal);
+
+      updateDiscountMessage(runs, originalTotal, discountValue);
+    }
+
+    runsInput.addEventListener("input", function () {
+      const runs = clampRuns(this.value);
+      runsRange.value = runs;
+      updateTotal();
+    });
+
+    runsRange.addEventListener("input", function () {
+      runsInput.value = this.value;
+      updateTotal();
+    });
+
+    document.querySelectorAll('input[name="difficulty"]').forEach((radio) => {
+      radio.addEventListener("change", updateTotal);
+    });
+
+    document.querySelectorAll('input[name="waves"]').forEach((radio) => {
+      radio.addEventListener("change", updateTotal);
+    });
+
+    document.querySelectorAll('input[name="completionMethod"]').forEach((radio) => {
+      radio.addEventListener("change", updateTotal);
+    });
+
+    updateTotal();
+  </script>
+
+</body>
+</html>
