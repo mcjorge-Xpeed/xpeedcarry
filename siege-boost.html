@@ -10,10 +10,12 @@
 
 <body id="top">
 
+  <!-- NAVBAR -->
   <header class="navbar">
     <a href="index.html" class="logo">XpeedCarry</a>
   </header>
 
+  <!-- HERO -->
   <section class="service-hero">
     <div class="hero-content">
       <h1>Warhammer 40K Space Marine 2 Siege Boost</h1>
@@ -32,8 +34,10 @@
     </div>
   </section>
 
+  <!-- MAIN -->
   <main class="product-layout">
 
+    <!-- LEFT -->
     <section class="product-left">
 
       <div class="product-card">
@@ -41,7 +45,7 @@
 
         <div class="product-highlights">
           <span>Up to Wave 25</span>
-          <span>Earn Unique Skins</span>
+          <span>Reward Farming</span>
           <span>Fast & Safe Service</span>
           <span>24/7 Support</span>
         </div>
@@ -63,22 +67,21 @@
         <h2>Description</h2>
 
         <p>
-          Drop into the action with our Space Marine 2 Siege Boost. This service is designed for players
-          who want to complete Siege faster, push deeper into the mode, and collect rewards without
-          spending hours grinding the same content.
+          Our Space Marine 2 Siege Boost is designed for players who want to complete waves faster,
+          push deeper into the mode, and collect rewards without repeating the same grind for hours.
+          Choose your difficulty, select your target wave count, and let our boosters handle the run.
         </p>
 
         <p>
-          The list of rewards for the Siege mode completion can include:
+          With this Siege boosting service, you can earn rewards such as:
         </p>
 
         <ul>
-          <li>Wave 5: Requisition rewards</li>
-          <li>Wave 10: Armory Data rewards</li>
-          <li>Wave 15: Additional Requisition rewards</li>
-          <li>Wave 20: Higher-tier Armory Data rewards</li>
-          <li>Wave 25: Premium completion rewards</li>
-          <li>Additional drops such as skins may be obtained during the service</li>
+          <li>Requisition rewards from early wave milestones</li>
+          <li>Armory Data rewards from deeper wave progression</li>
+          <li>Additional progression rewards from extended runs</li>
+          <li>Possible extra drops obtained during the service</li>
+          <li>Fast and safe completion with experienced boosters</li>
         </ul>
       </div>
 
@@ -94,11 +97,13 @@
 
     </section>
 
+    <!-- RIGHT -->
     <aside class="product-right">
 
       <div class="purchase-panel">
         <h3>Customize Order</h3>
 
+        <!-- PLATFORM -->
         <div class="option-group">
           <p>Platform</p>
           <select id="platform">
@@ -108,6 +113,7 @@
           </select>
         </div>
 
+        <!-- COMPLETION METHOD -->
         <div class="option-group">
           <p>Completion Method</p>
 
@@ -123,29 +129,11 @@
               <input type="radio" name="completionMethod" value="selfplay">
               <span>Self-play</span>
             </div>
+            <span class="option-price">+$95.00</span>
           </label>
         </div>
 
-        <div class="option-group">
-          <p>Difficulty</p>
-
-          <label class="radio-option">
-            <div class="radio-left">
-              <input type="radio" name="difficulty" value="normal" checked>
-              <span>Normal</span>
-            </div>
-            <span class="option-price">Free</span>
-          </label>
-
-          <label class="radio-option">
-            <div class="radio-left">
-              <input type="radio" name="difficulty" value="hard">
-              <span>Hard</span>
-            </div>
-            <span class="option-price">+$14.95</span>
-          </label>
-        </div>
-
+        <!-- WAVES -->
         <div class="option-group">
           <p>Waves</p>
 
@@ -190,6 +178,28 @@
           </label>
         </div>
 
+        <!-- DIFFICULTY -->
+        <div class="option-group">
+          <p>Difficulty</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="difficulty" value="normal" checked>
+              <span>Normal</span>
+            </div>
+            <span class="option-price">Free</span>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="difficulty" value="hard">
+              <span>Hard</span>
+            </div>
+            <span class="option-price" id="hard-price-label">+$14.95</span>
+          </label>
+        </div>
+
+        <!-- RUNS -->
         <div class="option-group">
           <p>Runs</p>
 
@@ -224,11 +234,13 @@
           </div>
         </div>
 
+        <!-- TOTAL -->
         <div class="total-box">
           <span>Total Price</span>
           <strong id="total-price">$13.95</strong>
         </div>
 
+        <!-- BREAKDOWN -->
         <div class="price-breakdown" id="priceBreakdown">
           <div class="breakdown-row">
             <span>Runs</span>
@@ -265,7 +277,7 @@
           id="discount-message"
           style="margin-top: 12px; margin-bottom: 14px; font-size: 14px; line-height: 1.45; color: #d4af37;"
         >
-          Add 4 more runs for a 10% discount.
+          Base rate applied.
         </p>
 
         <a href="#" class="btn btn-primary full">Buy Now</a>
@@ -276,20 +288,64 @@
 
   </main>
 
+  <!-- SCRIPT -->
   <script>
-    const HARD_PRICE = 14.95;
-
     const wavesData = {
-      5: { label: "5 Waves", price: 3.95 },
-      10: { label: "10 Waves", price: 4.95 },
-      15: { label: "15 Waves", price: 6.95 },
-      20: { label: "20 Waves", price: 9.95 },
-      25: { label: "25 Waves - Full Run", price: 13.95 }
+      5: {
+        label: "5 Waves",
+        xpeedNormalPrice: 3.95,
+        xpeedHardExtra: 4.95,
+        skyNormalPrice: 4.00,
+        skyHardExtra: 4.99,
+        skyNormal50: 199.60,
+        skyHard50: 399.20
+      },
+      10: {
+        label: "10 Waves",
+        xpeedNormalPrice: 4.95,
+        xpeedHardExtra: 5.95,
+        skyNormalPrice: 5.00,
+        skyHardExtra: 5.99,
+        skyNormal50: 239.60,
+        skyHard50: 479.20
+      },
+      15: {
+        label: "15 Waves",
+        xpeedNormalPrice: 6.95,
+        xpeedHardExtra: 7.95,
+        skyNormalPrice: 7.00,
+        skyHardExtra: 7.99,
+        skyNormal50: 319.60,
+        skyHard50: 639.20
+      },
+      20: {
+        label: "20 Waves",
+        xpeedNormalPrice: 9.95,
+        xpeedHardExtra: 10.95,
+        skyNormalPrice: 10.00,
+        skyHardExtra: 10.99,
+        skyNormal50: 439.60,
+        skyHard50: 879.20
+      },
+      25: {
+        label: "25 Waves - Full Run",
+        xpeedNormalPrice: 13.95,
+        xpeedHardExtra: 14.95,
+        skyNormalPrice: 14.00,
+        skyHardExtra: 14.99,
+        skyNormal50: 599.60,
+        skyHard50: 1199.20
+      }
     };
+
+    const SELF_PLAY_ADDON = 95.00;
+    const MAX_DISCOUNT_RUNS = 50;
 
     const runsInput = document.getElementById("runsInput");
     const runsMinus = document.getElementById("runsMinus");
     const runsPlus = document.getElementById("runsPlus");
+
+    const hardPriceLabel = document.getElementById("hard-price-label");
 
     const totalPriceEl = document.getElementById("total-price");
     const breakdownRunsEl = document.getElementById("breakdown-runs");
@@ -318,75 +374,101 @@
       return runs;
     }
 
+    function getSelectedWavesKey() {
+      return document.querySelector('input[name="waves"]:checked').value;
+    }
+
     function getSelectedDifficulty() {
       return document.querySelector('input[name="difficulty"]:checked').value;
     }
 
-    function getSelectedWaves() {
-      return document.querySelector('input[name="waves"]:checked').value;
+    function getSelectedCompletionMethod() {
+      return document.querySelector('input[name="completionMethod"]:checked').value;
     }
 
-    function getDiscountRate(runs) {
-      if (runs >= 20) return 0.20;
-      if (runs >= 10) return 0.15;
-      if (runs >= 5) return 0.10;
-      return 0;
+    function getSkyDiscountRate(waveKey, difficulty) {
+      const wave = wavesData[waveKey];
+
+      if (difficulty === "hard") {
+        const skyHardBasePerRun = wave.skyNormalPrice + wave.skyHardExtra;
+        const skyHardBaseTotal = skyHardBasePerRun * 50;
+        return 1 - (wave.skyHard50 / skyHardBaseTotal);
+      }
+
+      const skyNormalBaseTotal = wave.skyNormalPrice * 50;
+      return 1 - (wave.skyNormal50 / skyNormalBaseTotal);
     }
 
-    function getNextDiscountTarget(runs) {
-      if (runs < 5) return 5;
-      if (runs < 10) return 10;
-      if (runs < 20) return 20;
-      return null;
+    function getXpeedPricePerRun(waveKey, difficulty) {
+      const wave = wavesData[waveKey];
+
+      if (difficulty === "hard") {
+        return wave.xpeedNormalPrice + wave.xpeedHardExtra;
+      }
+
+      return wave.xpeedNormalPrice;
     }
 
-    function updateDiscountMessage(runs) {
-      const discountRate = getDiscountRate(runs);
-      const nextTarget = getNextDiscountTarget(runs);
+    function getProgressiveDiscountRate(runs, maxRate) {
+      const effectiveRuns = Math.min(runs, MAX_DISCOUNT_RUNS);
+      const progress = (effectiveRuns - 1) / (MAX_DISCOUNT_RUNS - 1);
+      return maxRate * progress;
+    }
 
-      if (discountRate <= 0) {
-        const needed = 5 - runs;
-        discountMessageEl.textContent = `Add ${needed} more run${needed === 1 ? "" : "s"} for a 10% discount.`;
+    function updateHardPriceLabel() {
+      const waveKey = getSelectedWavesKey();
+      const wave = wavesData[waveKey];
+      hardPriceLabel.textContent = "+" + formatMoney(wave.xpeedHardExtra);
+    }
+
+    function updateDiscountMessage(runs, discountRate) {
+      if (discountRate <= 0.0001) {
+        discountMessageEl.textContent = "Base rate applied.";
         return;
       }
 
-      if (nextTarget === null) {
-        discountMessageEl.textContent = `${(discountRate * 100).toFixed(0)}% discount applied. Maximum discount reached.`;
+      const appliedPercent = (discountRate * 100).toFixed(2);
+
+      if (runs >= MAX_DISCOUNT_RUNS) {
+        discountMessageEl.textContent = `${appliedPercent}% discount applied. Maximum discount reached.`;
         return;
       }
 
-      const needed = nextTarget - runs;
-      const nextRate = getDiscountRate(nextTarget) * 100;
-
-      discountMessageEl.textContent = `${(discountRate * 100).toFixed(0)}% discount applied. Add ${needed} more run${needed === 1 ? "" : "s"} to unlock the next ${nextRate.toFixed(0)}% discount tier.`;
+      const remaining = MAX_DISCOUNT_RUNS - runs;
+      discountMessageEl.textContent = `${appliedPercent}% discount applied. Add ${remaining} more run${remaining === 1 ? "" : "s"} to reach the maximum discount tier.`;
     }
 
     function updateTotal() {
       const runs = clampRuns(runsInput.value);
+      const waveKey = getSelectedWavesKey();
       const difficulty = getSelectedDifficulty();
-      const waves = getSelectedWaves();
+      const completionMethod = getSelectedCompletionMethod();
 
-      const baseWavePrice = wavesData[waves].price;
-      const difficultyPrice = difficulty === "hard" ? HARD_PRICE : 0;
-      const pricePerRun = baseWavePrice + difficultyPrice;
+      const wave = wavesData[waveKey];
+      const pricePerRun = getXpeedPricePerRun(waveKey, difficulty);
+      const originalRunsTotal = pricePerRun * runs;
 
-      const originalTotal = pricePerRun * runs;
-      const discountRate = getDiscountRate(runs);
-      const discountValue = originalTotal * discountRate;
-      const finalTotal = originalTotal - discountValue;
+      const maxDiscountRate = getSkyDiscountRate(waveKey, difficulty);
+      const appliedDiscountRate = getProgressiveDiscountRate(runs, maxDiscountRate);
+      const discountValue = originalRunsTotal * appliedDiscountRate;
+      const discountedRunsTotal = originalRunsTotal - discountValue;
+
+      const selfPlayValue = completionMethod === "selfplay" ? SELF_PLAY_ADDON : 0;
+      const finalTotal = discountedRunsTotal + selfPlayValue;
 
       runsInput.value = runs;
+      updateHardPriceLabel();
 
       totalPriceEl.textContent = formatMoney(finalTotal);
 
       breakdownRunsEl.textContent = runs;
       breakdownDifficultyEl.textContent = difficulty === "hard" ? "Hard" : "Normal";
-      breakdownWavesEl.textContent = wavesData[waves].label;
-      breakdownOriginalEl.textContent = formatMoney(originalTotal);
+      breakdownWavesEl.textContent = wave.label;
+      breakdownOriginalEl.textContent = formatMoney(originalRunsTotal + selfPlayValue);
       breakdownDiscountEl.textContent = "-" + formatMoney(discountValue);
       breakdownTotalEl.textContent = formatMoney(finalTotal);
 
-      updateDiscountMessage(runs);
+      updateDiscountMessage(runs, appliedDiscountRate);
     }
 
     runsMinus.addEventListener("click", function () {
@@ -405,16 +487,22 @@
       updateTotal();
     });
 
-    document.querySelectorAll('input[name="difficulty"]').forEach((radio) => {
-      radio.addEventListener("change", updateTotal);
+    document.querySelectorAll('input[name="waves"]').forEach((radio) => {
+      radio.addEventListener("change", function () {
+        updateTotal();
+      });
     });
 
-    document.querySelectorAll('input[name="waves"]').forEach((radio) => {
-      radio.addEventListener("change", updateTotal);
+    document.querySelectorAll('input[name="difficulty"]').forEach((radio) => {
+      radio.addEventListener("change", function () {
+        updateTotal();
+      });
     });
 
     document.querySelectorAll('input[name="completionMethod"]').forEach((radio) => {
-      radio.addEventListener("change", updateTotal);
+      radio.addEventListener("change", function () {
+        updateTotal();
+      });
     });
 
     updateTotal();
