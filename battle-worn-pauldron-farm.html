@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Battle-Worn Pauldron Farm | XpeedCarry</title>
+
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 
@@ -16,12 +17,12 @@
 
   <section class="service-hero">
     <div class="hero-content">
-      <h1>Battle-Worn Pauldron Farm</h1>
+      <h1>Warhammer 40K Space Marine 2 Battle-Worn Pauldron Farm</h1>
 
       <p>
         Buy Warhammer 40K Space Marine 2 Battle-Worn Pauldron Farm to unlock this unique cosmetic
-        reward faster with a premium service built for players who want to skip the grind and
-        secure the reward efficiently.
+        reward faster. Complete the required Absolute Operations with a premium service built for
+        players who want to skip the grind and secure the reward efficiently.
       </p>
 
       <div class="hero-buttons">
@@ -44,7 +45,7 @@
           <span>x8 Absolute Operations</span>
           <span>Unique Skin Reward</span>
           <span>Safe Service</span>
-          <span>Fast Completion</span>
+          <span>Fast Delivery</span>
         </div>
 
         <div class="media-stats">
@@ -64,13 +65,14 @@
         <h2>Description</h2>
 
         <p>
-          Our Battle-Worn Pauldron Farm service helps you obtain this rare reward without wasting
-          time repeating difficult Operations manually.
+          Our Battle-Worn Pauldron Farm service is made for players who want to unlock this rare
+          cosmetic reward without repeating the required Operations manually for hours.
         </p>
 
         <p>
-          This service is designed for players who want a fast, safe, and efficient solution to
-          complete the required Absolute Operations and secure the cosmetic reward with less effort.
+          To obtain this reward normally, you need to clear multiple Operations on Absolute
+          difficulty. This service helps you secure the cosmetic faster while keeping the process
+          clean, simple, and efficient.
         </p>
 
         <ul>
@@ -78,6 +80,7 @@
           <li>Battle-Worn Blade skin from 1 Absolute Operation completed</li>
           <li>All required runs completed on Absolute difficulty</li>
           <li>Fast and safe completion</li>
+          <li>Time saved and grind skipped</li>
         </ul>
       </div>
 
@@ -135,11 +138,25 @@
         </div>
 
         <div class="form-group">
+          <label for="difficulty">Difficulty</label>
+          <select id="difficulty">
+            <option value="0" selected>Absolute</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label for="speedSelect">Completion Speed</label>
           <select id="speedSelect">
             <option value="0">Standard</option>
             <option value="17">Express</option>
             <option value="34">Super Express</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="runs">Runs</label>
+          <select id="runs">
+            <option value="8" selected>8</option>
           </select>
         </div>
 
@@ -163,28 +180,41 @@
     const BASE_PRICE = 84.00;
     const SERVICE_FEE = 0.99;
 
-    const completionMethod = document.getElementById('completionMethod');
-    const speedSelect = document.getElementById('speedSelect');
+    const completionMethod = document.getElementById("completionMethod");
+    const speedSelect = document.getElementById("speedSelect");
+    const runsSelect = document.getElementById("runs");
 
-    const originalPrice = document.getElementById('originalPrice');
-    const discountedPrice = document.getElementById('discountedPrice');
+    const originalPrice = document.getElementById("originalPrice");
+    const discountedPrice = document.getElementById("discountedPrice");
 
     function formatMoney(value) {
       return `$${value.toFixed(2)}`;
     }
 
+    function getRunsDiscountPercent(runs) {
+      if (runs >= 12) return 12;
+      if (runs >= 9) return 9;
+      if (runs >= 6) return 6;
+      if (runs >= 3) return 3;
+      return 0;
+    }
+
     function updatePrice() {
       const methodValue = Number(completionMethod.value);
       const speedValue = Number(speedSelect.value);
+      const runsValue = Number(runsSelect.value);
 
-      const total = BASE_PRICE + methodValue + speedValue + SERVICE_FEE;
+      const subtotal = BASE_PRICE + methodValue + speedValue + SERVICE_FEE;
+      const discountPercent = getRunsDiscountPercent(runsValue);
+      const discountedTotal = subtotal - (subtotal * discountPercent / 100);
 
-      originalPrice.textContent = formatMoney(total);
-      discountedPrice.textContent = formatMoney(total);
+      originalPrice.textContent = formatMoney(subtotal);
+      discountedPrice.textContent = formatMoney(discountedTotal);
     }
 
-    completionMethod.addEventListener('change', updatePrice);
-    speedSelect.addEventListener('change', updatePrice);
+    completionMethod.addEventListener("change", updatePrice);
+    speedSelect.addEventListener("change", updatePrice);
+    runsSelect.addEventListener("change", updatePrice);
 
     updatePrice();
   </script>
