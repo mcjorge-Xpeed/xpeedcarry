@@ -229,7 +229,7 @@
 
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px;">
             <strong id="research-value" style="font-size: 18px;">9</strong>
-            <span class="option-price" id="research-price">+$18.00</span>
+            <span class="option-price" id="research-price">+$18.95</span>
           </div>
         </div>
 
@@ -319,8 +319,8 @@
   <!-- SCRIPT -->
   <script>
     const SECTION_PRICE = 19.00;
-    const RESEARCH_PRICE_PER_9 = 18.00;
-    const HIDDEN_BASE_FEE = 0.95;
+    const RESEARCH_PRICE_PER_9 = 18.95;
+    const HIDDEN_BASE_FEE = 0.00;
 
     const sectionsGroupEl = document.getElementById("sections-group");
     const researchGroupEl = document.getElementById("research-group");
@@ -410,7 +410,7 @@
         servicePrice = getResearchPrice();
       } else {
         const selectedSections = getSelectedSectionsCount();
-        servicePrice = selectedSections * SECTION_PRICE;
+        servicePrice = selectedSections * SECTION_PRICE + 0.95;
       }
 
       const total = servicePrice + HIDDEN_BASE_FEE;
