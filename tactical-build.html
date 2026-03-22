@@ -40,7 +40,7 @@
     <section class="product-left">
 
       <div class="product-card">
-        <img src="images/tactical.png" alt="Tactical Build" class="product-image">
+        <img src="images/tactical-build.png" alt="Tactical Build" class="product-image">
 
         <div class="product-highlights">
           <span>Max Level Build</span>
@@ -87,23 +87,6 @@
           <li>Primary, Secondary, and Melee weapons upgraded to Relic</li>
           <li>Pre-selected class perks and weapon perks for maximum efficiency</li>
         </ul>
-
-        <p>
-          Choose your weapons directly from the Tactical pool:
-        </p>
-
-        <p style="margin-top: 14px;">
-          Primary max (1): Auto Bolt Rifle, Bolt Rifle, Heavy Bolt Rifle,
-          Stalker Bolt Rifle, Bolt Carbine, Plasma Incinerator, Melta Rifle, Pyreblaster.
-        </p>
-
-        <p>
-          Secondary max (1): Bolt Pistol, Heavy Bolt Pistol, Plasma Pistol.
-        </p>
-
-        <p>
-          Melee max (1): Combat Knife, Chainsword.
-        </p>
 
         <p>
           You can also add Prestige Service if you want to keep pushing the same class further
@@ -278,9 +261,8 @@
             </div>
           </div>
 
-          <div class="range-wrap">
+          <div class="range-wrap prestige-single-wrap">
             <div class="range-progress" id="prestigeProgress"></div>
-            <input type="range" id="prestigeFixed" min="1" max="4" value="1" disabled>
             <input type="range" id="prestigeMax" min="2" max="4" value="2">
           </div>
 
@@ -383,7 +365,6 @@
     const prestigeGroup = document.getElementById("prestigeGroup");
     const prestigeStart = document.getElementById("prestigeStart");
     const prestigeEnd = document.getElementById("prestigeEnd");
-    const prestigeFixed = document.getElementById("prestigeFixed");
     const prestigeMax = document.getElementById("prestigeMax");
     const prestigeProgress = document.getElementById("prestigeProgress");
 
@@ -397,14 +378,12 @@
     }
 
     function updateRangeProgress() {
-      const min = 1;
-      const max = parseInt(prestigeMax.value, 10);
-
-      const left = ((min - 1) / (4 - 1)) * 100;
-      const right = ((max - 1) / (4 - 1)) * 100;
+      const desired = parseInt(prestigeMax.value, 10);
+      const left = 0;
+      const right = ((desired - 1) / (4 - 1)) * 100;
 
       prestigeProgress.style.left = left + "%";
-      prestigeProgress.style.width = (right - left) + "%";
+      prestigeProgress.style.width = right + "%";
     }
 
     function normalizePrestigeEnd(value) {
@@ -421,7 +400,6 @@
       const fixedEnd = normalizePrestigeEnd(prestigeMax.value);
 
       prestigeStart.value = 1;
-      prestigeFixed.value = 1;
       prestigeMax.value = fixedEnd;
       prestigeEnd.value = fixedEnd;
 
@@ -433,7 +411,6 @@
       const fixedEnd = normalizePrestigeEnd(prestigeEnd.value);
 
       prestigeStart.value = 1;
-      prestigeFixed.value = 1;
       prestigeEnd.value = fixedEnd;
       prestigeMax.value = fixedEnd;
 
