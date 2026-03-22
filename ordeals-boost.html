@@ -175,7 +175,7 @@
               <input type="checkbox" class="section-reward" value="honoured">
               <span>Honoured Auto Bolt Rifle</span>
             </div>
-            <span class="option-price">+$19.00</span>
+            <span class="option-price">+$190.00</span>
           </label>
 
           <label class="checkbox-option">
@@ -183,7 +183,7 @@
               <input type="checkbox" class="section-reward" value="inquisition">
               <span>Inquisition Insignia</span>
             </div>
-            <span class="option-price">+$19.00</span>
+            <span class="option-price">+$190.00</span>
           </label>
 
           <label class="checkbox-option">
@@ -191,7 +191,7 @@
               <input type="checkbox" class="section-reward" value="tyrannic">
               <span>Tyrannic War Veteran</span>
             </div>
-            <span class="option-price">+$19.00</span>
+            <span class="option-price">+$190.00</span>
           </label>
 
           <label class="checkbox-option">
@@ -199,7 +199,7 @@
               <input type="checkbox" class="section-reward" value="hammer">
               <span>Traitorous Thunder Hammer</span>
             </div>
-            <span class="option-price">+$19.00</span>
+            <span class="option-price">+$190.00</span>
           </label>
         </div>
 
@@ -280,14 +280,14 @@
         <!-- TOTAL -->
         <div class="total-box">
           <span>Total Price</span>
-          <strong id="total-price">$19.95</strong>
+          <strong id="total-price">$190.95</strong>
         </div>
 
         <!-- BREAKDOWN -->
         <div class="price-breakdown" id="priceBreakdown">
           <div class="breakdown-row">
             <span>Service</span>
-            <span id="breakdown-service">$19.00</span>
+            <span id="breakdown-service">$190.00</span>
           </div>
 
           <div class="breakdown-row">
@@ -297,7 +297,7 @@
 
           <div class="breakdown-row">
             <span>Total</span>
-            <span id="breakdown-total">$19.95</span>
+            <span id="breakdown-total">$190.95</span>
           </div>
         </div>
 
@@ -318,9 +318,9 @@
 
   <!-- SCRIPT -->
   <script>
-    const SECTION_PRICE = 19.00;
+    const SECTION_PRICE = 190.00;
     const RESEARCH_PRICE_PER_9 = 18.95;
-    const HIDDEN_BASE_FEE = 0.00;
+    const HIDDEN_BASE_FEE = 0.95;
 
     const sectionsGroupEl = document.getElementById("sections-group");
     const researchGroupEl = document.getElementById("research-group");
@@ -410,7 +410,7 @@
         servicePrice = getResearchPrice();
       } else {
         const selectedSections = getSelectedSectionsCount();
-        servicePrice = selectedSections * SECTION_PRICE + 0.95;
+        servicePrice = selectedSections * SECTION_PRICE;
       }
 
       const total = servicePrice + HIDDEN_BASE_FEE;
