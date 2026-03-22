@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battle-Worn Blade Farm | XpeedCarry</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body id="top">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">XpeedCarry</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="service-hero">
+    <div class="hero-content">
+      <h1>Warhammer 40K Space Marine 2 Battle-Worn Blade Farm</h1>
+
+      <p>
+        Buy Battle-Worn Blade Farm to unlock this rare cosmetic reward faster with a safe,
+        efficient, and premium service handled by experienced Space Marine 2 players.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="spacemarine2.html" class="btn btn-tab-active">Leveling Services</a>
+        <a href="builds.html" class="btn btn-secondary">Builds</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="product-layout">
+
+    <!-- LEFT -->
+    <section class="product-left">
+
+      <div class="product-card">
+        <img src="images/battle-worn-blade.png" alt="Battle-Worn Blade Farm" class="product-image">
+
+        <div class="product-highlights">
+          <span>x1 Absolute Operation</span>
+          <span>Unique Skin Reward</span>
+          <span>Quickly & Guaranteed</span>
+          <span>24/7 Support</span>
+        </div>
+
+        <div class="product-times">
+          <div>
+            <strong>1-2h</strong>
+            <p>Start Time</p>
+          </div>
+
+          <div>
+            <strong>Flexible</strong>
+            <p>Completion</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <h2>Description</h2>
+
+        <p>
+          Buy Space Marine 2 Battle-Worn Blade Farm and obtain this rare unique cosmetic
+          for your character without having to spend hours repeating difficult Absolute Operations.
+        </p>
+
+        <p>
+          To unlock the Battle-Worn Blade skin manually, you need to complete the required
+          Absolute difficulty challenge, which can be extremely time-consuming and frustrating
+          if you only want the cosmetic reward.
+        </p>
+
+        <p>
+          Our service is made for players who want the reward quickly, safely, and without
+          wasting time on unnecessary grind.
+        </p>
+
+        <p>
+          With this service, you will get:
+        </p>
+
+        <ul>
+          <li>The Battle-Worn Blade skin obtained</li>
+          <li>1 Operation completed on Absolute difficulty</li>
+          <li>Fast completion by experienced players</li>
+          <li>Time saved and guaranteed progress</li>
+        </ul>
+      </div>
+
+      <div class="product-description">
+        <h2>Requirements</h2>
+
+        <ul>
+          <li>Active Warhammer 40K Space Marine 2 account</li>
+          <li>Absolute difficulty unlocked for Operations</li>
+          <li>Selected platform must match your account</li>
+          <li>Piloted orders require account access during the service</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="product-right">
+
+      <div class="purchase-panel">
+        <h3>Customize Order</h3>
+
+        <!-- PLATFORM -->
+        <div class="option-group">
+          <p>Select Your Platform</p>
+          <select id="platform">
+            <option>PC</option>
+            <option>Xbox</option>
+            <option>PlayStation</option>
+          </select>
+        </div>
+
+        <!-- CLASS -->
+        <div class="option-group">
+          <p>Select Your Class</p>
+          <select id="class-select">
+            <option>Any Class</option>
+            <option>Tactical</option>
+            <option>Assault</option>
+            <option>Vanguard</option>
+            <option>Bulwark</option>
+            <option>Sniper</option>
+            <option>Heavy</option>
+            <option>Techmarine</option>
+          </select>
+        </div>
+
+        <!-- COMPLETION METHOD -->
+        <div class="option-group">
+          <p>Completion Method</p>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="selfplay" checked>
+              <span>Self-play</span>
+            </div>
+          </label>
+
+          <label class="radio-option">
+            <div class="radio-left">
+              <input type="radio" name="completionMethod" value="piloted">
+              <span>Piloted</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- TOTAL -->
+        <div class="total-box">
+          <span>Total Price</span>
+          <strong id="total-price">$10.95</strong>
+        </div>
+
+        <!-- BREAKDOWN -->
+        <div class="price-breakdown" id="priceBreakdown">
+          <div class="breakdown-row">
+            <span>Service</span>
+            <span id="breakdown-service">$10.00</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Completion Method</span>
+            <span id="breakdown-method">Self-play</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Total</span>
+            <span id="breakdown-total">$10.95</span>
+          </div>
+        </div>
+
+        <p
+          id="service-note"
+          style="margin-top: 12px; margin-bottom: 14px; font-size: 14px; line-height: 1.45; color: #d4af37;"
+        >
+          Includes 1 Absolute Operation required for the Battle-Worn Blade reward.
+        </p>
+
+        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <a href="#" class="btn btn-secondary full">Chat before order</a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <script>
+    const BASE_SERVICE_PRICE = 10.00;
+    const HIDDEN_BASE_FEE = 0.95;
+
+    const totalPriceEl = document.getElementById("total-price");
+    const breakdownServiceEl = document.getElementById("breakdown-service");
+    const breakdownMethodEl = document.getElementById("breakdown-method");
+    const breakdownTotalEl = document.getElementById("breakdown-total");
+
+    function formatMoney(value) {
+      return "$" + value.toFixed(2);
+    }
+
+    function getSelectedCompletionMethod() {
+      return document.querySelector('input[name="completionMethod"]:checked').value;
+    }
+
+    function updateTotal() {
+      const completionMethod = getSelectedCompletionMethod();
+      const total = BASE_SERVICE_PRICE + HIDDEN_BASE_FEE;
+
+      if (completionMethod === "piloted") {
+        breakdownMethodEl.textContent = "Piloted";
+      } else {
+        breakdownMethodEl.textContent = "Self-play";
+      }
+
+      breakdownServiceEl.textContent = formatMoney(BASE_SERVICE_PRICE);
+      breakdownTotalEl.textContent = formatMoney(total);
+      totalPriceEl.textContent = formatMoney(total);
+    }
+
+    document.querySelectorAll('input[name="completionMethod"]').forEach((radio) => {
+      radio.addEventListener("change", updateTotal);
+    });
+
+    updateTotal();
+  </script>
+
+</body>
+</html>
