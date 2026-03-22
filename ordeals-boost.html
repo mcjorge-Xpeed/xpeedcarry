@@ -40,7 +40,7 @@
     <section class="product-left">
 
       <div class="product-card">
-        <img src="images/ordeals.png" alt="Ordeals Boost" class="product-image">
+        <img src="images/ordealsboost.png" alt="Ordeals Boost" class="product-image">
 
         <div class="product-highlights">
           <span>Unique Rewards</span>
@@ -264,14 +264,7 @@
 
           <label class="radio-option">
             <div class="radio-left">
-              <input type="radio" name="completionMethod" value="selfplay" checked>
-              <span>Self-play</span>
-            </div>
-          </label>
-
-          <label class="radio-option">
-            <div class="radio-left">
-              <input type="radio" name="completionMethod" value="piloted">
+              <input type="radio" name="completionMethod" value="piloted" checked>
               <span>Piloted</span>
             </div>
           </label>
@@ -292,7 +285,7 @@
 
           <div class="breakdown-row">
             <span>Completion Method</span>
-            <span id="breakdown-method">Self-play</span>
+            <span id="breakdown-method">Piloted</span>
           </div>
 
           <div class="breakdown-row">
@@ -402,7 +395,6 @@
 
     function updateTotal() {
       const serviceType = getSelectedRadioValue("serviceType");
-      const completionMethod = getSelectedRadioValue("completionMethod");
 
       let servicePrice = 0;
 
@@ -415,12 +407,7 @@
 
       const total = servicePrice + HIDDEN_BASE_FEE;
 
-      if (completionMethod === "piloted") {
-        breakdownMethodEl.textContent = "Piloted";
-      } else {
-        breakdownMethodEl.textContent = "Self-play";
-      }
-
+      breakdownMethodEl.textContent = "Piloted";
       breakdownServiceEl.textContent = formatMoney(servicePrice);
       breakdownTotalEl.textContent = formatMoney(total);
       totalPriceEl.textContent = formatMoney(total);
@@ -435,10 +422,6 @@
 
     document.querySelectorAll(".section-reward").forEach((checkbox) => {
       checkbox.addEventListener("change", updateTotal);
-    });
-
-    document.querySelectorAll('input[name="completionMethod"]').forEach((radio) => {
-      radio.addEventListener("change", updateTotal);
     });
 
     researchSliderEl.addEventListener("input", () => {
