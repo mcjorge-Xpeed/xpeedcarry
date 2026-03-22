@@ -51,12 +51,12 @@
 
         <div class="product-times">
           <div>
-            <strong>30 min</strong>
+            <strong>1-2h</strong>
             <p>Start Time</p>
           </div>
 
           <div>
-            <strong>5 h</strong>
+            <strong>Flexible</strong>
             <p>Completion</p>
           </div>
         </div>
@@ -93,16 +93,16 @@
         </p>
 
         <p style="margin-top: 14px;">
-          <strong>Primary max (1):</strong> Auto Bolt Rifle, Bolt Rifle, Heavy Bolt Rifle,
+          Primary max (1): Auto Bolt Rifle, Bolt Rifle, Heavy Bolt Rifle,
           Stalker Bolt Rifle, Bolt Carbine, Plasma Incinerator, Melta Rifle, Pyreblaster.
         </p>
 
         <p>
-          <strong>Secondary max (1):</strong> Bolt Pistol, Heavy Bolt Pistol, Plasma Pistol.
+          Secondary max (1): Bolt Pistol, Heavy Bolt Pistol, Plasma Pistol.
         </p>
 
         <p>
-          <strong>Melee max (1):</strong> Combat Knife, Chainsword.
+          Melee max (1): Combat Knife, Chainsword.
         </p>
 
         <p>
@@ -253,8 +253,8 @@
         <div class="option-group">
           <p>Prestige Add-On</p>
 
-          <label class="check-option">
-            <div class="check-left">
+          <label class="checkbox-option">
+            <div class="radio-left">
               <input type="checkbox" id="prestigeToggle">
               <span>Add Prestige Service</span>
             </div>
@@ -269,7 +269,7 @@
           <div class="level-inputs">
             <div class="level-box">
               <label for="prestigeStart">Current Prestige</label>
-              <input type="number" id="prestigeStart" min="1" max="3" value="1">
+              <input type="number" id="prestigeStart" min="1" max="1" value="1" readonly>
             </div>
 
             <div class="level-box">
@@ -280,8 +280,8 @@
 
           <div class="range-wrap">
             <div class="range-progress" id="prestigeProgress"></div>
-            <input type="range" id="prestigeMin" min="1" max="4" value="1">
-            <input type="range" id="prestigeMax" min="1" max="4" value="2">
+            <input type="range" id="prestigeFixed" min="1" max="4" value="1" disabled>
+            <input type="range" id="prestigeMax" min="2" max="4" value="2">
           </div>
 
           <div class="range-labels">
@@ -352,7 +352,7 @@
           id="service-note"
           style="margin-top: 12px; margin-bottom: 14px; font-size: 14px; line-height: 1.45; color: #d4af37;"
         >
-          Prestige Add-On uses the same prestige pricing structure shown in your leveling service logic. :contentReference[oaicite:1]{index=1}
+          Prestige Service is optional and increases the total based on the desired prestige selected.
         </p>
 
         <a href="#" class="btn btn-primary full">Buy Now</a>
@@ -383,7 +383,7 @@
     const prestigeGroup = document.getElementById("prestigeGroup");
     const prestigeStart = document.getElementById("prestigeStart");
     const prestigeEnd = document.getElementById("prestigeEnd");
-    const prestigeMin = document.getElementById("prestigeMin");
+    const prestigeFixed = document.getElementById("prestigeFixed");
     const prestigeMax = document.getElementById("prestigeMax");
     const prestigeProgress = document.getElementById("prestigeProgress");
 
@@ -396,66 +396,48 @@
       return selected.closest("label").querySelector(".radio-left span").textContent;
     }
 
-    function updateRangeProgress(minEl, maxEl, progressEl, absoluteMin, absoluteMax) {
-      const min = parseInt(minEl.value, 10);
-      const max = parseInt(maxEl.value, 10);
+    function updateRangeProgress() {
+      const min = 1;
+      const max = parseInt(prestigeMax.value, 10);
 
-      const left = ((min - absoluteMin) / (absoluteMax - absoluteMin)) * 100;
-      const right = ((max - absoluteMin) / (absoluteMax - absoluteMin)) * 100;
+      const left = ((min - 1) / (4 - 1)) * 100;
+      const right = ((max - 1) / (4 - 1)) * 100;
 
-      progressEl.style.left = left + "%";
-      progressEl.style.width = (right - left) + "%";
+      prestigeProgress.style.left = left + "%";
+      prestigeProgress.style.width = (right - left) + "%";
     }
 
-    function clampPrestigePair(start, end) {
-      if (isNaN(start)) start = 1;
-      if (isNaN(end)) end = 2;
+    function normalizePrestigeEnd(value) {
+      let normalized = parseInt(value, 10);
 
-      if (start < 1) start = 1;
-      if (start > 3) start = 3;
+      if (isNaN(normalized)) normalized = 2;
+      if (normalized < 2) normalized = 2;
+      if (normalized > 4) normalized = 4;
 
-      if (end < 2) end = 2;
-      if (end > 4) end = 4;
-
-      if (start >= end) {
-        if (start >= 3) {
-          start = 3;
-          end = 4;
-        } else {
-          end = start + 1;
-        }
-      }
-
-      return { start, end };
+      return normalized;
     }
 
-    function syncPrestigeInputsFromSliders() {
-      const fixed = clampPrestigePair(
-        parseInt(prestigeMin.value, 10),
-        parseInt(prestigeMax.value, 10)
-      );
+    function syncPrestigeFromSlider() {
+      const fixedEnd = normalizePrestigeEnd(prestigeMax.value);
 
-      prestigeMin.value = fixed.start;
-      prestigeMax.value = fixed.end;
-      prestigeStart.value = fixed.start;
-      prestigeEnd.value = fixed.end;
+      prestigeStart.value = 1;
+      prestigeFixed.value = 1;
+      prestigeMax.value = fixedEnd;
+      prestigeEnd.value = fixedEnd;
 
-      updateRangeProgress(prestigeMin, prestigeMax, prestigeProgress, 1, 4);
+      updateRangeProgress();
       updateTotal();
     }
 
-    function syncPrestigeSlidersFromInputs() {
-      const fixed = clampPrestigePair(
-        parseInt(prestigeStart.value, 10),
-        parseInt(prestigeEnd.value, 10)
-      );
+    function syncPrestigeFromInput() {
+      const fixedEnd = normalizePrestigeEnd(prestigeEnd.value);
 
-      prestigeStart.value = fixed.start;
-      prestigeEnd.value = fixed.end;
-      prestigeMin.value = fixed.start;
-      prestigeMax.value = fixed.end;
+      prestigeStart.value = 1;
+      prestigeFixed.value = 1;
+      prestigeEnd.value = fixedEnd;
+      prestigeMax.value = fixedEnd;
 
-      updateRangeProgress(prestigeMin, prestigeMax, prestigeProgress, 1, 4);
+      updateRangeProgress();
       updateTotal();
     }
 
@@ -473,7 +455,7 @@
       let prestigeTotal = 0;
 
       if (prestigeToggle.checked) {
-        const start = parseInt(prestigeStart.value, 10);
+        const start = 1;
         const end = parseInt(prestigeEnd.value, 10);
         const prestiges = Math.max(0, end - start);
 
@@ -509,14 +491,11 @@
     });
 
     prestigeToggle.addEventListener("change", updatePrestigeVisibility);
+    prestigeMax.addEventListener("input", syncPrestigeFromSlider);
+    prestigeEnd.addEventListener("input", syncPrestigeFromInput);
+    prestigeEnd.addEventListener("change", syncPrestigeFromInput);
 
-    prestigeMin.addEventListener("input", syncPrestigeInputsFromSliders);
-    prestigeMax.addEventListener("input", syncPrestigeInputsFromSliders);
-
-    prestigeStart.addEventListener("input", syncPrestigeSlidersFromInputs);
-    prestigeEnd.addEventListener("input", syncPrestigeSlidersFromInputs);
-
-    syncPrestigeSlidersFromInputs();
+    syncPrestigeFromInput();
     updatePrestigeVisibility();
     updateTotal();
   </script>
