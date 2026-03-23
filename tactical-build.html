@@ -40,7 +40,7 @@
     <section class="product-left">
 
       <div class="product-card">
-        <img src="images/tactichorizon.png" alt="Tactical Build" class="product-image">
+        <img src="images/tactical-build.png" alt="Tactical Build" class="product-image">
 
         <div class="product-highlights">
           <span>Max Level Build</span>
@@ -379,11 +379,12 @@
 
     function updateRangeProgress() {
       const desired = parseInt(prestigeMax.value, 10);
-      const left = 0;
-      const right = ((desired - 1) / (4 - 1)) * 100;
+      const percent = ((desired - 1) / (4 - 1)) * 100;
+      const thumbSize = 18;
+      const correctionPx = thumbSize / 2;
 
-      prestigeProgress.style.left = left + "%";
-      prestigeProgress.style.width = right + "%";
+      prestigeProgress.style.left = "0px";
+      prestigeProgress.style.width = `calc(${percent}% - ${correctionPx}px)`;
     }
 
     function normalizePrestigeEnd(value) {
@@ -472,9 +473,11 @@
     prestigeEnd.addEventListener("input", syncPrestigeFromInput);
     prestigeEnd.addEventListener("change", syncPrestigeFromInput);
 
-    syncPrestigeFromInput();
-    updatePrestigeVisibility();
-    updateTotal();
+    window.addEventListener("load", () => {
+      syncPrestigeFromInput();
+      updatePrestigeVisibility();
+      updateTotal();
+    });
   </script>
 
 </body>
