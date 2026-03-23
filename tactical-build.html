@@ -249,7 +249,7 @@
         <div class="option-group hidden" id="prestigeGroup">
           <p>Prestige Range</p>
 
-          <div class="level-inputs">
+          <div class="level-inputs" style="margin-bottom: 14px;">
             <div class="level-box">
               <label for="prestigeStart">Current Prestige</label>
               <input type="number" id="prestigeStart" min="1" max="1" value="1" readonly>
@@ -257,13 +257,13 @@
 
             <div class="level-box">
               <label for="prestigeEnd">Desired Prestige</label>
-              <input type="number" id="prestigeEnd" min="2" max="4" value="2">
+              <input type="number" id="prestigeEnd" min="2" max="4" step="1" value="2">
             </div>
           </div>
 
           <div class="range-wrap">
             <div class="range-progress" id="prestigeProgress"></div>
-            <input type="range" id="prestigeMax" min="2" max="4" value="2">
+            <input type="range" id="prestigeSlider" min="1" max="4" step="1" value="2">
           </div>
 
           <div class="range-labels">
@@ -350,10 +350,6 @@
     const BASE_BUILD_PRICE = 28.00;
     const HIDDEN_BASE_FEE = 0.95;
     const PRESTIGE_PRICE = 14.90;
-    const PRESTIGE_START = 1;
-    const PRESTIGE_END_MIN = 2;
-    const PRESTIGE_END_MAX = 4;
-    const THUMB_SIZE = 18;
 
     const totalPriceEl = document.getElementById("total-price");
     const breakdownBuildEl = document.getElementById("breakdown-build");
@@ -365,11 +361,11 @@
     const breakdownPrestigeEl = document.getElementById("breakdown-prestige");
     const breakdownTotalEl = document.getElementById("breakdown-total");
 
-    const prestigeToggle = document.getElementById("prestigeToggle");
-    const prestigeGroup = document.getElementById("prestigeGroup");
+    const prestigeToggleEl = document.getElementById("prestigeToggle");
+    const prestigeGroupEl = document.getElementById("prestigeGroup");
     const prestigeStartEl = document.getElementById("prestigeStart");
     const prestigeEndEl = document.getElementById("prestigeEnd");
-    const prestigeMaxEl = document.getElementById("prestigeMax");
+    const prestigeSliderEl = document.getElementById("prestigeSlider");
     const prestigeProgressEl = document.getElementById("prestigeProgress");
 
     function formatMoney(value) {
@@ -381,55 +377,53 @@
       return selected.closest("label").querySelector(".radio-left span").textContent;
     }
 
-    function normalizePrestigeEnd(value) {
-      let normalized = parseInt(value, 10);
+    function normalizePrestigeValue(value) {
+      let normalized = Number(value);
 
-      if (isNaN(normalized)) normalized = PRESTIGE_END_MIN;
-      if (normalized < PRESTIGE_END_MIN) normalized = PRESTIGE_END_MIN;
-      if (normalized > PRESTIGE_END_MAX) normalized = PRESTIGE_END_MAX;
+      if (isNaN(normalized)) normalized = 2;
+      if (normalized < 2) normalized = 2;
+      if (normalized > 4) normalized = 4;
 
       return normalized;
     }
 
     function updatePrestigeProgress() {
-      const desired = parseInt(prestigeMaxEl.value, 10);
-      const ratio = (desired - PRESTIGE_START) / (PRESTIGE_END_MAX - PRESTIGE_START);
+      const value = Number(prestigeSliderEl.value);
+      const min = 1;
+      const max = 4;
+      const percent = ((value - min) / (max - min)) * 100;
 
-      const trackWidth = prestigeMaxEl.offsetWidth;
-      const usableWidth = trackWidth - THUMB_SIZE;
-      const thumbCenterX = (THUMB_SIZE / 2) + (ratio * usableWidth);
-
-      prestigeProgressEl.style.left = "0px";
-      prestigeProgressEl.style.width = `${thumbCenterX}px`;
+      prestigeProgressEl.style.left = "0%";
+      prestigeProgressEl.style.width = percent + "%";
     }
 
     function syncPrestigeFromSlider() {
-      const desired = normalizePrestigeEnd(prestigeMaxEl.value);
+      const normalized = normalizePrestigeValue(prestigeSliderEl.value);
 
-      prestigeStartEl.value = PRESTIGE_START;
-      prestigeEndEl.value = desired;
-      prestigeMaxEl.value = desired;
+      prestigeStartEl.value = 1;
+      prestigeSliderEl.value = normalized;
+      prestigeEndEl.value = normalized;
 
       updatePrestigeProgress();
       updateTotal();
     }
 
     function syncPrestigeFromInput() {
-      const desired = normalizePrestigeEnd(prestigeEndEl.value);
+      const normalized = normalizePrestigeValue(prestigeEndEl.value);
 
-      prestigeStartEl.value = PRESTIGE_START;
-      prestigeEndEl.value = desired;
-      prestigeMaxEl.value = desired;
+      prestigeStartEl.value = 1;
+      prestigeEndEl.value = normalized;
+      prestigeSliderEl.value = normalized;
 
       updatePrestigeProgress();
       updateTotal();
     }
 
     function updatePrestigeVisibility() {
-      if (prestigeToggle.checked) {
-        prestigeGroup.classList.remove("hidden");
+      if (prestigeToggleEl.checked) {
+        prestigeGroupEl.classList.remove("hidden");
       } else {
-        prestigeGroup.classList.add("hidden");
+        prestigeGroupEl.classList.add("hidden");
       }
 
       updateTotal();
@@ -438,9 +432,9 @@
     function updateTotal() {
       let prestigeTotal = 0;
 
-      if (prestigeToggle.checked) {
-        const desired = parseInt(prestigeEndEl.value, 10);
-        const prestigeCount = Math.max(0, desired - PRESTIGE_START);
+      if (prestigeToggleEl.checked) {
+        const desiredPrestige = Number(prestigeEndEl.value);
+        const prestigeCount = Math.max(0, desiredPrestige - 1);
 
         prestigeTotal = prestigeCount * PRESTIGE_PRICE;
         breakdownPrestigeRowEl.classList.remove("hidden");
@@ -473,18 +467,23 @@
       radio.addEventListener("change", updateTotal);
     });
 
-    prestigeToggle.addEventListener("change", updatePrestigeVisibility);
-    prestigeMaxEl.addEventListener("input", syncPrestigeFromSlider);
-    prestigeEndEl.addEventListener("input", syncPrestigeFromInput);
-    prestigeEndEl.addEventListener("change", syncPrestigeFromInput);
+    prestigeToggleEl.addEventListener("change", updatePrestigeVisibility);
 
-    window.addEventListener("load", () => {
-      syncPrestigeFromInput();
-      updatePrestigeVisibility();
-      updateTotal();
+    prestigeSliderEl.addEventListener("input", () => {
+      syncPrestigeFromSlider();
     });
 
-    window.addEventListener("resize", updatePrestigeProgress);
+    prestigeEndEl.addEventListener("input", () => {
+      syncPrestigeFromInput();
+    });
+
+    prestigeEndEl.addEventListener("change", () => {
+      syncPrestigeFromInput();
+    });
+
+    syncPrestigeFromInput();
+    updatePrestigeVisibility();
+    updateTotal();
   </script>
 
 </body>
