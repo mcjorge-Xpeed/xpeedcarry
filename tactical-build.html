@@ -350,6 +350,9 @@
     const BASE_BUILD_PRICE = 28.00;
     const HIDDEN_BASE_FEE = 0.95;
     const PRESTIGE_PRICE = 14.90;
+    const PRESTIGE_MIN = 1;
+    const PRESTIGE_MAX_LIMIT = 4;
+    const PRESTIGE_THUMB_SIZE = 18;
 
     const totalPriceEl = document.getElementById("total-price");
     const breakdownBuildEl = document.getElementById("breakdown-build");
@@ -377,16 +380,6 @@
       return selected.closest("label").querySelector(".radio-left span").textContent;
     }
 
-    function updateRangeProgress() {
-      const desired = parseInt(prestigeMax.value, 10);
-      const percent = ((desired - 1) / (4 - 1)) * 100;
-      const thumbSize = 18;
-      const correctionPx = thumbSize / 2;
-
-      prestigeProgress.style.left = "0px";
-      prestigeProgress.style.width = `calc(${percent}% - ${correctionPx}px)`;
-    }
-
     function normalizePrestigeEnd(value) {
       let normalized = parseInt(value, 10);
 
@@ -395,6 +388,18 @@
       if (normalized > 4) normalized = 4;
 
       return normalized;
+    }
+
+    function updateRangeProgress() {
+      const desired = parseInt(prestigeMax.value, 10);
+      const ratio = (desired - PRESTIGE_MIN) / (PRESTIGE_MAX_LIMIT - PRESTIGE_MIN);
+      const trackWidth = prestigeMax.offsetWidth;
+      const usableWidth = trackWidth - PRESTIGE_THUMB_SIZE;
+
+      const progressWidth = Math.max(0, ratio * usableWidth);
+
+      prestigeProgress.style.left = "0px";
+      prestigeProgress.style.width = `${progressWidth}px`;
     }
 
     function syncPrestigeFromSlider() {
@@ -477,6 +482,10 @@
       syncPrestigeFromInput();
       updatePrestigeVisibility();
       updateTotal();
+    });
+
+    window.addEventListener("resize", () => {
+      updateRangeProgress();
     });
   </script>
 
