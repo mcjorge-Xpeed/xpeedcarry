@@ -89,9 +89,30 @@
       <div class="purchase-panel">
         <h3>Customize Order</h3>
 
-        <!-- SERVICE TYPE -->
+        <!-- SERVICE MODE -->
         <div class="option-group">
           <p>Service Type</p>
+
+          <div class="service-type-options">
+            <label class="service-type-card active" data-service-type="piloted">
+              <input type="radio" name="service-type" value="piloted" checked>
+              <div class="service-type-top">
+                <span class="service-type-name">Piloted</span>
+              </div>
+            </label>
+
+            <label class="service-type-card" data-service-type="selfplay">
+              <input type="radio" name="service-type" value="selfplay">
+              <div class="service-type-top">
+                <span class="service-type-name">Self-Play</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- OPERATION TYPE -->
+        <div class="option-group">
+          <p>Operation Type</p>
           <select>
             <option>Random Operations</option>
             <option>Specific Operations</option>
@@ -123,13 +144,45 @@
           </select>
         </div>
 
-        <!-- METHOD -->
+        <!-- ORDER PRIORITY -->
         <div class="option-group">
-          <p>Completion Method</p>
-          <select>
-            <option>Self-play</option>
-            <option>Piloted</option>
-          </select>
+          <p>Order Priority</p>
+
+          <div class="priority-options">
+            <label class="priority-card active" data-priority="standard">
+              <input type="radio" name="priority-tier" value="standard" checked>
+              <div class="priority-top">
+                <span class="priority-name">Standard</span>
+                <span class="priority-price">Included</span>
+              </div>
+              <p class="priority-desc">
+                Standard queue placement and regular handling.
+              </p>
+            </label>
+
+            <label class="priority-card most-popular" data-priority="pro">
+              <input type="radio" name="priority-tier" value="pro">
+              <div class="priority-top">
+                <span class="priority-name">Pro</span>
+                <span class="priority-price">+$6.00</span>
+              </div>
+              <p class="priority-desc">
+                Priority queue placement and assignment to a professional booster for faster, smoother service.
+              </p>
+              <span class="priority-badge">Most Popular</span>
+            </label>
+
+            <label class="priority-card" data-priority="elite">
+              <input type="radio" name="priority-tier" value="elite">
+              <div class="priority-top">
+                <span class="priority-name">Elite</span>
+                <span class="priority-price">+$15.00</span>
+              </div>
+              <p class="priority-desc">
+                Maximum priority, faster turnaround, and assignment to our highest-tier boosters for the best premium experience.
+              </p>
+            </label>
+          </div>
         </div>
 
         <!-- DIFFICULTY -->
@@ -137,12 +190,12 @@
           <p>Difficulty</p>
           <select id="difficulty">
             <option value="" disabled selected>Select Threat</option>
-            <option value="2">Threat: Minimal (+$2.00)</option>
-            <option value="3">Threat: Average (+$3.00)</option>
-            <option value="4">Threat: Substantial (+$4.00)</option>
-            <option value="5">Threat: Ruthless (+$5.00)</option>
-            <option value="6">Threat: Lethal (+$6.00)</option>
-            <option value="7">Threat: Absolute (+$7.00)</option>
+            <option value="2" data-selfplay-fee="5">Threat: Minimal (+$2.00)</option>
+            <option value="3" data-selfplay-fee="5">Threat: Average (+$3.00)</option>
+            <option value="4" data-selfplay-fee="5">Threat: Substantial (+$4.00)</option>
+            <option value="5" data-selfplay-fee="7">Threat: Ruthless (+$5.00)</option>
+            <option value="6" data-selfplay-fee="7">Threat: Lethal (+$6.00)</option>
+            <option value="7" data-selfplay-fee="9">Threat: Absolute (+$7.00)</option>
           </select>
         </div>
 
@@ -152,10 +205,25 @@
           <input type="number" id="runs" value="1" min="1">
         </div>
 
+        <!-- PROMO CODE -->
+        <div class="option-group promo-group">
+          <p>Promo Code</p>
+          <div class="promo-row">
+            <input type="text" id="promo-code" placeholder="Enter code">
+            <button type="button" id="validate-promo" class="btn btn-secondary promo-btn">Validate</button>
+          </div>
+          <p id="promo-message" class="promo-message"></p>
+        </div>
+
         <!-- TOTALS -->
         <div class="total-box">
           <span>Original Price</span>
           <strong id="original-price">$0.87</strong>
+        </div>
+
+        <div class="total-box promo-discount-box hidden" id="promo-discount-box">
+          <span>Promo Discount</span>
+          <strong id="promo-discount">-$0.00</strong>
         </div>
 
         <div class="total-box">
@@ -178,11 +246,114 @@
   <script>
     const basePrice = 0.87;
 
+    const priorityPrices = {
+      standard: 0,
+      pro: 6,
+      elite: 15
+    };
+
+    const promoCodes = {
+      XPEED5: 0.05,
+      BOOSTING10: 0.10
+    };
+
+    let appliedPromoCode = "";
+    let appliedPromoDiscount = 0;
+
     const difficultySelect = document.getElementById("difficulty");
     const runsInput = document.getElementById("runs");
     const originalPriceEl = document.getElementById("original-price");
     const totalEl = document.getElementById("total-price");
     const discountInfoEl = document.getElementById("discount-info");
+
+    const promoCodeInput = document.getElementById("promo-code");
+    const validatePromoBtn = document.getElementById("validate-promo");
+    const promoMessageEl = document.getElementById("promo-message");
+    const promoDiscountBox = document.getElementById("promo-discount-box");
+    const promoDiscountEl = document.getElementById("promo-discount");
+
+    const priorityInputs = document.querySelectorAll('input[name="priority-tier"]');
+    const priorityCards = document.querySelectorAll(".priority-card");
+
+    const serviceTypeInputs = document.querySelectorAll('input[name="service-type"]');
+    const serviceTypeCards = document.querySelectorAll(".service-type-card");
+
+    function getSelectedPriority() {
+      const selected = document.querySelector('input[name="priority-tier"]:checked');
+      return selected ? selected.value : "standard";
+    }
+
+    function getSelectedServiceType() {
+      const selected = document.querySelector('input[name="service-type"]:checked');
+      return selected ? selected.value : "piloted";
+    }
+
+    function getSelfPlayFee() {
+      const serviceType = getSelectedServiceType();
+
+      if (serviceType !== "selfplay") {
+        return 0;
+      }
+
+      const selectedOption = difficultySelect.options[difficultySelect.selectedIndex];
+
+      if (!selectedOption || !selectedOption.dataset.selfplayFee) {
+        return 0;
+      }
+
+      return Number(selectedOption.dataset.selfplayFee);
+    }
+
+    function updatePriorityCards() {
+      priorityCards.forEach((card) => {
+        const input = card.querySelector('input[name="priority-tier"]');
+        card.classList.toggle("active", input.checked);
+      });
+    }
+
+    function updateServiceTypeCards() {
+      serviceTypeCards.forEach((card) => {
+        const input = card.querySelector('input[name="service-type"]');
+        card.classList.toggle("active", input.checked);
+      });
+    }
+
+    function validatePromo(showMessage = true) {
+      const code = promoCodeInput.value.trim().toUpperCase();
+
+      if (!code) {
+        appliedPromoCode = "";
+        appliedPromoDiscount = 0;
+
+        if (showMessage) {
+          promoMessageEl.textContent = "Please enter a promo code.";
+          promoMessageEl.className = "promo-message error";
+        }
+
+        updateTotal();
+        return;
+      }
+
+      if (promoCodes[code]) {
+        appliedPromoCode = code;
+        appliedPromoDiscount = promoCodes[code];
+
+        if (showMessage) {
+          promoMessageEl.textContent = `Promo code applied successfully: ${code}`;
+          promoMessageEl.className = "promo-message success";
+        }
+      } else {
+        appliedPromoCode = "";
+        appliedPromoDiscount = 0;
+
+        if (showMessage) {
+          promoMessageEl.textContent = "Invalid promo code.";
+          promoMessageEl.className = "promo-message error";
+        }
+      }
+
+      updateTotal();
+    }
 
     function updateTotal() {
       let difficulty = 0;
@@ -198,26 +369,46 @@
         runsInput.value = 1;
       }
 
+      const priorityTier = getSelectedPriority();
+      const priorityFee = priorityPrices[priorityTier] || 0;
+      const selfPlayFeePerRun = getSelfPlayFee();
+
       const pricePerRun = basePrice + difficulty;
-      const subtotal = pricePerRun * runs;
+      const runsSubtotal = pricePerRun * runs;
+      const prioritySubtotal = priorityFee;
+      const eligibleSubtotal = runsSubtotal + prioritySubtotal;
 
-      let discount = Math.floor(runs / 3) * 0.03;
-      discount = Math.min(discount, 0.12);
+      let runDiscount = Math.floor(runs / 3) * 0.03;
+      runDiscount = Math.min(runDiscount, 0.12);
 
-      const discountedTotal = subtotal * (1 - discount);
-      const savings = subtotal - discountedTotal;
+      const runDiscountAmount = eligibleSubtotal * runDiscount;
+      const promoDiscountAmount = (eligibleSubtotal - runDiscountAmount) * appliedPromoDiscount;
+      const hiddenSelfPlayTotal = selfPlayFeePerRun * runs;
 
-      originalPriceEl.textContent = `$${subtotal.toFixed(2)}`;
-      totalEl.textContent = `$${discountedTotal.toFixed(2)}`;
+      const finalTotal = eligibleSubtotal - runDiscountAmount - promoDiscountAmount + hiddenSelfPlayTotal;
+      const totalSavings = runDiscountAmount + promoDiscountAmount;
 
-      if (discount > 0) {
-        const discountPercent = (discount * 100).toFixed(0);
+      originalPriceEl.textContent = `$${eligibleSubtotal.toFixed(2)}`;
+      totalEl.textContent = `$${finalTotal.toFixed(2)}`;
 
-        if (discount === 0.12) {
-          discountInfoEl.textContent = `${discountPercent}% discount applied. You save $${savings.toFixed(2)}. Max discount reached.`;
+      if (promoDiscountAmount > 0) {
+        promoDiscountBox.classList.remove("hidden");
+        promoDiscountEl.textContent = `-$${promoDiscountAmount.toFixed(2)}`;
+      } else {
+        promoDiscountBox.classList.add("hidden");
+        promoDiscountEl.textContent = "-$0.00";
+      }
+
+      if (runDiscount > 0) {
+        const discountPercent = (runDiscount * 100).toFixed(0);
+
+        if (runDiscount === 0.12) {
+          discountInfoEl.textContent = `${discountPercent}% run discount applied. You save $${totalSavings.toFixed(2)}. Max discount reached.`;
         } else {
-          discountInfoEl.textContent = `${discountPercent}% discount applied. You save $${savings.toFixed(2)}.`;
+          discountInfoEl.textContent = `${discountPercent}% run discount applied. You save $${totalSavings.toFixed(2)}.`;
         }
+      } else if (promoDiscountAmount > 0) {
+        discountInfoEl.textContent = `${(appliedPromoDiscount * 100).toFixed(0)}% promo discount applied. You save $${promoDiscountAmount.toFixed(2)}.`;
       } else {
         discountInfoEl.textContent = "";
       }
@@ -226,6 +417,33 @@
     difficultySelect.addEventListener("change", updateTotal);
     runsInput.addEventListener("input", updateTotal);
 
+    priorityInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        updatePriorityCards();
+        updateTotal();
+      });
+    });
+
+    serviceTypeInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        updateServiceTypeCards();
+        updateTotal();
+      });
+    });
+
+    validatePromoBtn.addEventListener("click", () => {
+      validatePromo(true);
+    });
+
+    promoCodeInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        validatePromo(true);
+      }
+    });
+
+    updatePriorityCards();
+    updateServiceTypeCards();
     updateTotal();
   </script>
 
