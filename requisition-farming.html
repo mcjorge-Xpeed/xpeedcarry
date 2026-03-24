@@ -108,7 +108,7 @@
         <!-- PLATFORM -->
         <div class="option-group">
           <p>Platform</p>
-          <select>
+          <select id="platform">
             <option>PC</option>
             <option>Xbox</option>
             <option>PlayStation</option>
@@ -118,7 +118,7 @@
         <!-- CLASS -->
         <div class="option-group">
           <p>Class</p>
-          <select>
+          <select id="class-select">
             <option>Any Class</option>
             <option>Tactical</option>
             <option>Bulwark</option>
@@ -130,13 +130,57 @@
           </select>
         </div>
 
-        <!-- METHOD -->
+        <!-- COMPLETION METHOD -->
         <div class="option-group">
-          <p>Completion Method</p>
-          <select>
-            <option>Self-play</option>
-            <option>Piloted</option>
-          </select>
+          <p style="display: flex; align-items: center; gap: 8px;">
+            Completion Method
+            <span class="info-tip" data-tooltip="Piloted means one of our professional boosters logs into your account and completes the service for you." tabindex="0">?</span>
+          </p>
+
+          <div class="service-options one-col">
+            <label class="service-card active">
+              <input type="radio" name="method" value="piloted" checked>
+              <div class="service-card-top">
+                <span>Piloted</span>
+                <span class="info-tip" data-tooltip="Fastest and most convenient option. Our booster handles the full farm on your account." tabindex="0">?</span>
+              </div>
+              <small>Handled entirely by our booster</small>
+            </label>
+          </div>
+        </div>
+
+        <!-- PACKAGE -->
+        <div class="option-group">
+          <p>Service Package</p>
+
+          <div class="service-options">
+            <label class="service-card active" data-package="standard">
+              <input type="radio" name="package" value="standard" checked>
+              <div class="service-card-top">
+                <span>Standard</span>
+                <span class="info-tip" data-tooltip="Base piloted service with the standard completion priority." tabindex="0">?</span>
+              </div>
+              <small>Base price</small>
+            </label>
+
+            <label class="service-card" data-package="pro">
+              <input type="radio" name="package" value="pro">
+              <div class="service-card-top">
+                <span>Pro</span>
+                <span class="info-tip" data-tooltip="Higher priority handling with a faster turnaround than Standard." tabindex="0">?</span>
+              </div>
+              <small>+15%</small>
+            </label>
+
+            <label class="service-card" data-package="elite">
+              <input type="radio" name="package" value="elite">
+              <div class="service-card-top">
+                <span>Elite</span>
+                <span class="info-tip" data-tooltip="Highest priority queue for the fastest handling available." tabindex="0">?</span>
+              </div>
+              <small>+30%</small>
+            </label>
+          </div>
         </div>
 
         <!-- REQUISITION RANGE -->
@@ -163,15 +207,38 @@
           </div>
         </div>
 
-        <!-- TOTALS -->
+        <!-- SELECTED -->
         <div class="total-box">
           <span>Selected Points</span>
           <strong id="selected-points">100</strong>
         </div>
 
+        <!-- PROMO -->
+        <div class="option-group">
+          <p>Promo Code</p>
+          <div class="promo-row">
+            <input type="text" id="promo-code" placeholder="Enter promo code">
+            <button type="button" class="btn btn-secondary" id="apply-promo">Apply</button>
+          </div>
+          <p id="promo-message" style="margin-top: 8px; font-size: 13px; color: #b8b8b8;">
+            Enter your promo code if you have one.
+          </p>
+        </div>
+
+        <!-- TOTALS -->
         <div class="total-box">
           <span>Original Price</span>
-          <strong id="base-price">$3.95</strong>
+          <strong id="original-price">$3.95</strong>
+        </div>
+
+        <div class="total-box">
+          <span>Package Fee</span>
+          <strong id="package-fee">$0.00</strong>
+        </div>
+
+        <div class="total-box">
+          <span>Promo Discount</span>
+          <strong id="promo-discount">-$0.00</strong>
         </div>
 
         <div class="total-box">
@@ -192,13 +259,20 @@
 
   </main>
 
-  <!-- SCRIPT -->
   <script>
     const rangeInput = document.getElementById("requisition-range");
     const selectedPointsEl = document.getElementById("selected-points");
-    const basePriceEl = document.getElementById("base-price");
+    const originalPriceEl = document.getElementById("original-price");
+    const packageFeeEl = document.getElementById("package-fee");
+    const promoDiscountEl = document.getElementById("promo-discount");
     const totalPriceEl = document.getElementById("total-price");
     const priceInfoEl = document.getElementById("price-info");
+    const promoCodeInput = document.getElementById("promo-code");
+    const applyPromoBtn = document.getElementById("apply-promo");
+    const promoMessageEl = document.getElementById("promo-message");
+
+    const packageInputs = document.querySelectorAll('input[name="package"]');
+    const serviceCards = document.querySelectorAll(".service-card");
 
     const minPoints = 100;
     const maxPoints = 1000;
@@ -206,17 +280,47 @@
     const minTotal = 3.95;
     const maxTotal = 29.95;
 
+    const packageMultipliers = {
+      standard: 0,
+      pro: 0.15,
+      elite: 0.30
+    };
+
+    const promoCodes = {
+      XP5: 0.05,
+      XP10: 0.10,
+      REQ15: 0.15
+    };
+
+    let activePromo = null;
+
     function getBasePrice(points) {
       return (points / 100) * minTotal;
     }
 
-    function getDiscountedTotal(points) {
+    function getDiscountedTierPrice(points) {
       const progress = (points - minPoints) / (maxPoints - minPoints);
       return minTotal + ((maxTotal - minTotal) * progress);
     }
 
-    function updatePricing(points) {
-      let safePoints = parseInt(points, 10);
+    function getSelectedPackage() {
+      const checked = document.querySelector('input[name="package"]:checked');
+      return checked ? checked.value : "standard";
+    }
+
+    function updateActiveCards() {
+      serviceCards.forEach(card => {
+        const input = card.querySelector('input[type="radio"]');
+        if (input && input.checked) {
+          card.classList.add("active");
+        } else {
+          card.classList.remove("active");
+        }
+      });
+    }
+
+    function updatePricing() {
+      let safePoints = parseInt(rangeInput.value, 10);
 
       if (isNaN(safePoints) || safePoints < minPoints) {
         safePoints = minPoints;
@@ -228,27 +332,74 @@
 
       const displayPoints = safePoints === 1000 ? 999 : safePoints;
       const basePrice = getBasePrice(safePoints);
-      const total = getDiscountedTotal(safePoints);
-      const savings = basePrice - total;
+      const discountedTierPrice = getDiscountedTierPrice(safePoints);
+
+      const selectedPackage = getSelectedPackage();
+      const packageRate = packageMultipliers[selectedPackage] || 0;
+
+      const packageFee = discountedTierPrice * packageRate;
+      const subtotal = discountedTierPrice + packageFee;
+
+      const promoRate = activePromo ? promoCodes[activePromo] || 0 : 0;
+      const promoDiscount = subtotal * promoRate;
+      const finalTotal = subtotal - promoDiscount;
+
+      const savings = basePrice - discountedTierPrice;
 
       selectedPointsEl.textContent = displayPoints;
-      basePriceEl.textContent = `$${basePrice.toFixed(2)}`;
-      totalPriceEl.textContent = `$${total.toFixed(2)}`;
+      originalPriceEl.textContent = `$${subtotal.toFixed(2)}`;
+      packageFeeEl.textContent = `$${packageFee.toFixed(2)}`;
+      promoDiscountEl.textContent = `-$${promoDiscount.toFixed(2)}`;
+      totalPriceEl.textContent = `$${finalTotal.toFixed(2)}`;
+
+      let packageLabel = "Standard";
+      if (selectedPackage === "pro") packageLabel = "Pro";
+      if (selectedPackage === "elite") packageLabel = "Elite";
 
       if (safePoints === 1000) {
-        priceInfoEl.textContent = `Max tier selected. This covers up to 999 Requisition Points in-game. You save $${savings.toFixed(2)} compared to the base price. Extra Armory Data rewards may vary.`;
+        priceInfoEl.textContent = `Max tier selected with ${packageLabel} Piloted service. This covers up to 999 Requisition Points in-game. You save $${Math.max(savings, 0).toFixed(2)} compared to the base price before package upgrades. Extra Armory Data rewards may vary.`;
       } else if (savings > 0.01) {
-        priceInfoEl.textContent = `Progressive discount applied. You save $${savings.toFixed(2)} compared to the base price. Extra Armory Data rewards may vary.`;
+        priceInfoEl.textContent = `${packageLabel} Piloted service selected. Progressive discount applied. You save $${savings.toFixed(2)} compared to the base price before package upgrades. Extra Armory Data rewards may vary.`;
       } else {
-        priceInfoEl.textContent = `Base rate applied. Extra Armory Data rewards may vary.`;
+        priceInfoEl.textContent = `${packageLabel} Piloted service selected. Base rate applied. Extra Armory Data rewards may vary.`;
       }
     }
 
-    rangeInput.addEventListener("input", function () {
-      updatePricing(this.value);
+    applyPromoBtn.addEventListener("click", function () {
+      const code = promoCodeInput.value.trim().toUpperCase();
+
+      if (!code) {
+        activePromo = null;
+        promoMessageEl.textContent = "Enter a promo code if you have one.";
+        promoMessageEl.style.color = "#b8b8b8";
+        updatePricing();
+        return;
+      }
+
+      if (promoCodes[code]) {
+        activePromo = code;
+        promoMessageEl.textContent = `Promo code ${code} applied successfully.`;
+        promoMessageEl.style.color = "#d4af37";
+      } else {
+        activePromo = null;
+        promoMessageEl.textContent = "Invalid promo code.";
+        promoMessageEl.style.color = "#ff8a8a";
+      }
+
+      updatePricing();
     });
 
-    updatePricing(100);
+    rangeInput.addEventListener("input", updatePricing);
+
+    packageInputs.forEach(input => {
+      input.addEventListener("change", function () {
+        updateActiveCards();
+        updatePricing();
+      });
+    });
+
+    updateActiveCards();
+    updatePricing();
   </script>
 
 </body>
