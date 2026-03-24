@@ -10,12 +10,10 @@
 
 <body id="top">
 
-  <!-- NAVBAR -->
   <header class="navbar">
     <a href="index.html" class="logo">XpeedCarry</a>
   </header>
 
-  <!-- HERO -->
   <section class="service-hero">
     <div class="hero-content">
       <h1>Warhammer 40K Space Marine 2 Operations</h1>
@@ -34,12 +32,9 @@
     </div>
   </section>
 
-  <!-- MAIN -->
   <main class="product-layout">
 
-    <!-- LEFT -->
     <section class="product-left">
-
       <div class="product-card">
         <img src="images/operations.png" alt="Operations" class="product-image">
 
@@ -80,37 +75,40 @@
           <li>Get 3% disc. every 3 runs (12% max disc.)</li>
         </ul>
       </div>
-
     </section>
 
-    <!-- RIGHT -->
     <aside class="product-right">
-
       <div class="purchase-panel">
         <h3>Customize Order</h3>
 
-        <!-- SERVICE MODE -->
         <div class="option-group">
           <p>Service Type</p>
 
-          <div class="service-type-options">
-            <label class="service-type-card active" data-service-type="piloted">
+          <div class="choice-options two-col">
+            <label class="choice-card active" data-choice-group="service-type">
               <input type="radio" name="service-type" value="piloted" checked>
-              <div class="service-type-top">
-                <span class="service-type-name">Piloted</span>
+              <div class="choice-main">
+                <span class="choice-name">Piloted</span>
+                <span class="info-icon" tabindex="0">
+                  ?
+                  <span class="info-tooltip">Standard piloted service handled directly by our team.</span>
+                </span>
               </div>
             </label>
 
-            <label class="service-type-card" data-service-type="selfplay">
+            <label class="choice-card" data-choice-group="service-type">
               <input type="radio" name="service-type" value="selfplay">
-              <div class="service-type-top">
-                <span class="service-type-name">Self-Play</span>
+              <div class="choice-main">
+                <span class="choice-name">Self-Play</span>
+                <span class="info-icon" tabindex="0">
+                  ?
+                  <span class="info-tooltip">Play alongside a booster. Includes extra coordination and hidden operational cost.</span>
+                </span>
               </div>
             </label>
           </div>
         </div>
 
-        <!-- OPERATION TYPE -->
         <div class="option-group">
           <p>Operation Type</p>
           <select>
@@ -119,7 +117,6 @@
           </select>
         </div>
 
-        <!-- PLATFORM -->
         <div class="option-group">
           <p>Platform</p>
           <select>
@@ -129,7 +126,6 @@
           </select>
         </div>
 
-        <!-- CLASS -->
         <div class="option-group">
           <p>Class</p>
           <select>
@@ -144,48 +140,49 @@
           </select>
         </div>
 
-        <!-- ORDER PRIORITY -->
         <div class="option-group">
           <p>Order Priority</p>
 
-          <div class="priority-options">
-            <label class="priority-card active" data-priority="standard">
+          <div class="choice-options priority-stack">
+            <label class="choice-card active" data-choice-group="priority-tier">
               <input type="radio" name="priority-tier" value="standard" checked>
-              <div class="priority-top">
-                <span class="priority-name">Standard</span>
-                <span class="priority-price">Included</span>
+              <div class="choice-main">
+                <span class="choice-name">Standard</span>
+                <span class="choice-price included-text">Included</span>
+                <span class="info-icon" tabindex="0">
+                  ?
+                  <span class="info-tooltip">Standard queue placement and regular handling.</span>
+                </span>
               </div>
-              <p class="priority-desc">
-                Standard queue placement and regular handling.
-              </p>
             </label>
 
-            <label class="priority-card most-popular" data-priority="pro">
+            <label class="choice-card most-popular active-popular" data-choice-group="priority-tier">
               <input type="radio" name="priority-tier" value="pro">
-              <div class="priority-top">
-                <span class="priority-name">Pro</span>
-                <span class="priority-price">+$6.00</span>
+              <div class="choice-main">
+                <span class="choice-name">Pro</span>
+                <span class="choice-price">+$6.00</span>
+                <span class="info-icon" tabindex="0">
+                  ?
+                  <span class="info-tooltip">Priority queue placement and assignment to a professional booster for faster, smoother service.</span>
+                </span>
               </div>
-              <p class="priority-desc">
-                Priority queue placement and assignment to a professional booster for faster, smoother service.
-              </p>
               <span class="priority-badge">Most Popular</span>
             </label>
 
-            <label class="priority-card" data-priority="elite">
+            <label class="choice-card" data-choice-group="priority-tier">
               <input type="radio" name="priority-tier" value="elite">
-              <div class="priority-top">
-                <span class="priority-name">Elite</span>
-                <span class="priority-price">+$15.00</span>
+              <div class="choice-main">
+                <span class="choice-name">Elite</span>
+                <span class="choice-price">+$15.00</span>
+                <span class="info-icon" tabindex="0">
+                  ?
+                  <span class="info-tooltip">Maximum priority, faster turnaround, and assignment to our highest-tier boosters for the best premium experience.</span>
+                </span>
               </div>
-              <p class="priority-desc">
-                Maximum priority, faster turnaround, and assignment to our highest-tier boosters for the best premium experience.
-              </p>
             </label>
           </div>
         </div>
 
-        <!-- DIFFICULTY -->
         <div class="option-group">
           <p>Difficulty</p>
           <select id="difficulty">
@@ -199,13 +196,15 @@
           </select>
         </div>
 
-        <!-- RUNS -->
         <div class="option-group">
           <p>Runs</p>
-          <input type="number" id="runs" value="1" min="1">
+          <div class="runs-control">
+            <button type="button" id="runs-minus" class="runs-btn">-</button>
+            <input type="number" id="runs" value="1" min="1">
+            <button type="button" id="runs-plus" class="runs-btn">+</button>
+          </div>
         </div>
 
-        <!-- PROMO CODE -->
         <div class="option-group promo-group">
           <p>Promo Code</p>
           <div class="promo-row">
@@ -215,7 +214,6 @@
           <p id="promo-message" class="promo-message"></p>
         </div>
 
-        <!-- TOTALS -->
         <div class="total-box">
           <span>Original Price</span>
           <strong id="original-price">$0.87</strong>
@@ -227,22 +225,19 @@
         </div>
 
         <div class="total-box">
-          <span>Discounted Price</span>
+          <span>Total</span>
           <strong id="total-price">$0.87</strong>
         </div>
 
-        <p id="discount-info" style="margin-top: 10px; font-size: 14px; color: #d4af37;"></p>
+        <p id="discount-info" class="discount-info"></p>
 
-        <!-- BUTTONS -->
         <a href="#" class="btn btn-primary full">Buy Now</a>
         <a href="#" class="btn btn-secondary full">Chat before order</a>
       </div>
-
     </aside>
 
   </main>
 
-  <!-- SCRIPT -->
   <script>
     const basePrice = 0.87;
 
@@ -257,11 +252,13 @@
       BOOSTING10: 0.10
     };
 
-    let appliedPromoCode = "";
     let appliedPromoDiscount = 0;
 
     const difficultySelect = document.getElementById("difficulty");
     const runsInput = document.getElementById("runs");
+    const runsMinusBtn = document.getElementById("runs-minus");
+    const runsPlusBtn = document.getElementById("runs-plus");
+
     const originalPriceEl = document.getElementById("original-price");
     const totalEl = document.getElementById("total-price");
     const discountInfoEl = document.getElementById("discount-info");
@@ -272,11 +269,18 @@
     const promoDiscountBox = document.getElementById("promo-discount-box");
     const promoDiscountEl = document.getElementById("promo-discount");
 
+    const allChoiceCards = document.querySelectorAll(".choice-card");
     const priorityInputs = document.querySelectorAll('input[name="priority-tier"]');
-    const priorityCards = document.querySelectorAll(".priority-card");
-
     const serviceTypeInputs = document.querySelectorAll('input[name="service-type"]');
-    const serviceTypeCards = document.querySelectorAll(".service-type-card");
+
+    function updateChoiceCards(groupName) {
+      const cards = document.querySelectorAll(`.choice-card[data-choice-group="${groupName}"]`);
+
+      cards.forEach((card) => {
+        const input = card.querySelector(`input[name="${groupName}"]`);
+        card.classList.toggle("active", input.checked);
+      });
+    }
 
     function getSelectedPriority() {
       const selected = document.querySelector('input[name="priority-tier"]:checked');
@@ -288,10 +292,8 @@
       return selected ? selected.value : "piloted";
     }
 
-    function getSelfPlayFee() {
-      const serviceType = getSelectedServiceType();
-
-      if (serviceType !== "selfplay") {
+    function getSelfPlayFeePerRun() {
+      if (getSelectedServiceType() !== "selfplay") {
         return 0;
       }
 
@@ -304,25 +306,10 @@
       return Number(selectedOption.dataset.selfplayFee);
     }
 
-    function updatePriorityCards() {
-      priorityCards.forEach((card) => {
-        const input = card.querySelector('input[name="priority-tier"]');
-        card.classList.toggle("active", input.checked);
-      });
-    }
-
-    function updateServiceTypeCards() {
-      serviceTypeCards.forEach((card) => {
-        const input = card.querySelector('input[name="service-type"]');
-        card.classList.toggle("active", input.checked);
-      });
-    }
-
     function validatePromo(showMessage = true) {
       const code = promoCodeInput.value.trim().toUpperCase();
 
       if (!code) {
-        appliedPromoCode = "";
         appliedPromoDiscount = 0;
 
         if (showMessage) {
@@ -335,7 +322,6 @@
       }
 
       if (promoCodes[code]) {
-        appliedPromoCode = code;
         appliedPromoDiscount = promoCodes[code];
 
         if (showMessage) {
@@ -343,7 +329,6 @@
           promoMessageEl.className = "promo-message success";
         }
       } else {
-        appliedPromoCode = "";
         appliedPromoDiscount = 0;
 
         if (showMessage) {
@@ -355,6 +340,17 @@
       updateTotal();
     }
 
+    function sanitizeRuns() {
+      let runs = parseInt(runsInput.value, 10);
+
+      if (isNaN(runs) || runs < 1) {
+        runs = 1;
+      }
+
+      runsInput.value = runs;
+      return runs;
+    }
+
     function updateTotal() {
       let difficulty = 0;
 
@@ -362,33 +358,27 @@
         difficulty = Number(difficultySelect.value);
       }
 
-      let runs = parseInt(runsInput.value, 10);
-
-      if (isNaN(runs) || runs < 1) {
-        runs = 1;
-        runsInput.value = 1;
-      }
-
+      const runs = sanitizeRuns();
       const priorityTier = getSelectedPriority();
       const priorityFee = priorityPrices[priorityTier] || 0;
-      const selfPlayFeePerRun = getSelfPlayFee();
+      const selfPlayFeePerRun = getSelfPlayFeePerRun();
 
       const pricePerRun = basePrice + difficulty;
       const runsSubtotal = pricePerRun * runs;
-      const prioritySubtotal = priorityFee;
-      const eligibleSubtotal = runsSubtotal + prioritySubtotal;
+      const visibleSubtotal = runsSubtotal + priorityFee;
 
       let runDiscount = Math.floor(runs / 3) * 0.03;
       runDiscount = Math.min(runDiscount, 0.12);
 
-      const runDiscountAmount = eligibleSubtotal * runDiscount;
-      const promoDiscountAmount = (eligibleSubtotal - runDiscountAmount) * appliedPromoDiscount;
-      const hiddenSelfPlayTotal = selfPlayFeePerRun * runs;
+      const runDiscountAmount = visibleSubtotal * runDiscount;
+      const promoDiscountAmount = (visibleSubtotal - runDiscountAmount) * appliedPromoDiscount;
 
-      const finalTotal = eligibleSubtotal - runDiscountAmount - promoDiscountAmount + hiddenSelfPlayTotal;
+      const hiddenSelfPlayTotal = selfPlayFeePerRun * runs;
+      const finalTotal = visibleSubtotal - runDiscountAmount - promoDiscountAmount + hiddenSelfPlayTotal;
+
       const totalSavings = runDiscountAmount + promoDiscountAmount;
 
-      originalPriceEl.textContent = `$${eligibleSubtotal.toFixed(2)}`;
+      originalPriceEl.textContent = `$${visibleSubtotal.toFixed(2)}`;
       totalEl.textContent = `$${finalTotal.toFixed(2)}`;
 
       if (promoDiscountAmount > 0) {
@@ -399,13 +389,17 @@
         promoDiscountEl.textContent = "-$0.00";
       }
 
-      if (runDiscount > 0) {
-        const discountPercent = (runDiscount * 100).toFixed(0);
-
+      if (runDiscount > 0 && promoDiscountAmount > 0) {
         if (runDiscount === 0.12) {
-          discountInfoEl.textContent = `${discountPercent}% run discount applied. You save $${totalSavings.toFixed(2)}. Max discount reached.`;
+          discountInfoEl.textContent = `${(runDiscount * 100).toFixed(0)}% run discount and ${(appliedPromoDiscount * 100).toFixed(0)}% promo discount applied. You save $${totalSavings.toFixed(2)}. Max discount reached.`;
         } else {
-          discountInfoEl.textContent = `${discountPercent}% run discount applied. You save $${totalSavings.toFixed(2)}.`;
+          discountInfoEl.textContent = `${(runDiscount * 100).toFixed(0)}% run discount and ${(appliedPromoDiscount * 100).toFixed(0)}% promo discount applied. You save $${totalSavings.toFixed(2)}.`;
+        }
+      } else if (runDiscount > 0) {
+        if (runDiscount === 0.12) {
+          discountInfoEl.textContent = `${(runDiscount * 100).toFixed(0)}% run discount applied. You save $${totalSavings.toFixed(2)}. Max discount reached.`;
+        } else {
+          discountInfoEl.textContent = `${(runDiscount * 100).toFixed(0)}% run discount applied. You save $${totalSavings.toFixed(2)}.`;
         }
       } else if (promoDiscountAmount > 0) {
         discountInfoEl.textContent = `${(appliedPromoDiscount * 100).toFixed(0)}% promo discount applied. You save $${promoDiscountAmount.toFixed(2)}.`;
@@ -417,16 +411,28 @@
     difficultySelect.addEventListener("change", updateTotal);
     runsInput.addEventListener("input", updateTotal);
 
+    runsMinusBtn.addEventListener("click", () => {
+      const currentRuns = sanitizeRuns();
+      runsInput.value = Math.max(1, currentRuns - 1);
+      updateTotal();
+    });
+
+    runsPlusBtn.addEventListener("click", () => {
+      const currentRuns = sanitizeRuns();
+      runsInput.value = currentRuns + 1;
+      updateTotal();
+    });
+
     priorityInputs.forEach((input) => {
       input.addEventListener("change", () => {
-        updatePriorityCards();
+        updateChoiceCards("priority-tier");
         updateTotal();
       });
     });
 
     serviceTypeInputs.forEach((input) => {
       input.addEventListener("change", () => {
-        updateServiceTypeCards();
+        updateChoiceCards("service-type");
         updateTotal();
       });
     });
@@ -442,8 +448,8 @@
       }
     });
 
-    updatePriorityCards();
-    updateServiceTypeCards();
+    updateChoiceCards("priority-tier");
+    updateChoiceCards("service-type");
     updateTotal();
   </script>
 
