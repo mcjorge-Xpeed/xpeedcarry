@@ -142,14 +142,14 @@
               <input type="radio" name="method" value="piloted" checked>
               <div class="service-card-top">
                 <span>Piloted</span>
-                <span class="info-tip" data-tooltip="Fastest and most convenient option. Our booster handles the full farm on your account." tabindex="0">?</span>
+                <span class="info-tip" data-tooltip="Fastest and most convenient option. Our booster handles the full farm directly on your account." tabindex="0">?</span>
               </div>
               <small>Handled entirely by our booster</small>
             </label>
           </div>
         </div>
 
-        <!-- PACKAGE -->
+        <!-- SERVICE PACKAGE -->
         <div class="option-group">
           <p>Service Package</p>
 
@@ -158,7 +158,7 @@
               <input type="radio" name="package" value="standard" checked>
               <div class="service-card-top">
                 <span>Standard</span>
-                <span class="info-tip" data-tooltip="Base piloted service with the standard completion priority." tabindex="0">?</span>
+                <span class="info-tip" data-tooltip="Base piloted service with standard queue priority and normal turnaround." tabindex="0">?</span>
               </div>
               <small>Base price</small>
             </label>
@@ -167,7 +167,7 @@
               <input type="radio" name="package" value="pro">
               <div class="service-card-top">
                 <span>Pro</span>
-                <span class="info-tip" data-tooltip="Higher priority handling with a faster turnaround than Standard." tabindex="0">?</span>
+                <span class="info-tip" data-tooltip="Higher priority handling with faster turnaround than Standard." tabindex="0">?</span>
               </div>
               <small>+15%</small>
             </label>
@@ -176,7 +176,7 @@
               <input type="radio" name="package" value="elite">
               <div class="service-card-top">
                 <span>Elite</span>
-                <span class="info-tip" data-tooltip="Highest priority queue for the fastest handling available." tabindex="0">?</span>
+                <span class="info-tip" data-tooltip="Highest priority queue for the fastest available turnaround." tabindex="0">?</span>
               </div>
               <small>+30%</small>
             </label>
@@ -232,8 +232,8 @@
         </div>
 
         <div class="total-box">
-          <span>Package Fee</span>
-          <strong id="package-fee">$0.00</strong>
+          <span>Discount</span>
+          <strong id="discount-amount">-$0.00</strong>
         </div>
 
         <div class="total-box">
@@ -263,7 +263,7 @@
     const rangeInput = document.getElementById("requisition-range");
     const selectedPointsEl = document.getElementById("selected-points");
     const originalPriceEl = document.getElementById("original-price");
-    const packageFeeEl = document.getElementById("package-fee");
+    const discountAmountEl = document.getElementById("discount-amount");
     const promoDiscountEl = document.getElementById("promo-discount");
     const totalPriceEl = document.getElementById("total-price");
     const priceInfoEl = document.getElementById("price-info");
@@ -277,8 +277,8 @@
     const minPoints = 100;
     const maxPoints = 1000;
 
-    const minTotal = 3.95;
-    const maxTotal = 29.95;
+    const minPrice = 3.95;
+    const maxPrice = 29.95;
 
     const packageMultipliers = {
       standard: 0,
@@ -295,12 +295,12 @@
     let activePromo = null;
 
     function getBasePrice(points) {
-      return (points / 100) * minTotal;
+      return (points / 100) * minPrice;
     }
 
-    function getDiscountedTierPrice(points) {
+    function getTierPrice(points) {
       const progress = (points - minPoints) / (maxPoints - minPoints);
-      return minTotal + ((maxTotal - minTotal) * progress);
+      return minPrice + ((maxPrice - minPrice) * progress);
     }
 
     function getSelectedPackage() {
@@ -311,6 +311,7 @@
     function updateActiveCards() {
       serviceCards.forEach(card => {
         const input = card.querySelector('input[type="radio"]');
+
         if (input && input.checked) {
           card.classList.add("active");
         } else {
@@ -331,35 +332,34 @@
       }
 
       const displayPoints = safePoints === 1000 ? 999 : safePoints;
+
       const basePrice = getBasePrice(safePoints);
-      const discountedTierPrice = getDiscountedTierPrice(safePoints);
+      const tierPrice = getTierPrice(safePoints);
 
       const selectedPackage = getSelectedPackage();
       const packageRate = packageMultipliers[selectedPackage] || 0;
 
-      const packageFee = discountedTierPrice * packageRate;
-      const subtotal = discountedTierPrice + packageFee;
+      const subtotal = tierPrice * (1 + packageRate);
+      const tierDiscount = Math.max(basePrice - tierPrice, 0);
 
-      const promoRate = activePromo ? promoCodes[activePromo] || 0 : 0;
+      const promoRate = activePromo ? (promoCodes[activePromo] || 0) : 0;
       const promoDiscount = subtotal * promoRate;
       const finalTotal = subtotal - promoDiscount;
-
-      const savings = basePrice - discountedTierPrice;
-
-      selectedPointsEl.textContent = displayPoints;
-      originalPriceEl.textContent = `$${subtotal.toFixed(2)}`;
-      packageFeeEl.textContent = `$${packageFee.toFixed(2)}`;
-      promoDiscountEl.textContent = `-$${promoDiscount.toFixed(2)}`;
-      totalPriceEl.textContent = `$${finalTotal.toFixed(2)}`;
 
       let packageLabel = "Standard";
       if (selectedPackage === "pro") packageLabel = "Pro";
       if (selectedPackage === "elite") packageLabel = "Elite";
 
+      selectedPointsEl.textContent = displayPoints;
+      originalPriceEl.textContent = `$${subtotal.toFixed(2)}`;
+      discountAmountEl.textContent = `-$${tierDiscount.toFixed(2)}`;
+      promoDiscountEl.textContent = `-$${promoDiscount.toFixed(2)}`;
+      totalPriceEl.textContent = `$${finalTotal.toFixed(2)}`;
+
       if (safePoints === 1000) {
-        priceInfoEl.textContent = `Max tier selected with ${packageLabel} Piloted service. This covers up to 999 Requisition Points in-game. You save $${Math.max(savings, 0).toFixed(2)} compared to the base price before package upgrades. Extra Armory Data rewards may vary.`;
-      } else if (savings > 0.01) {
-        priceInfoEl.textContent = `${packageLabel} Piloted service selected. Progressive discount applied. You save $${savings.toFixed(2)} compared to the base price before package upgrades. Extra Armory Data rewards may vary.`;
+        priceInfoEl.textContent = `${packageLabel} Piloted service selected. Max tier reached for up to 999 Requisition Points in-game. You save $${tierDiscount.toFixed(2)} before package upgrades. Extra Armory Data rewards may vary.`;
+      } else if (tierDiscount > 0.01) {
+        priceInfoEl.textContent = `${packageLabel} Piloted service selected. Progressive discount applied. You save $${tierDiscount.toFixed(2)} before package upgrades. Extra Armory Data rewards may vary.`;
       } else {
         priceInfoEl.textContent = `${packageLabel} Piloted service selected. Base rate applied. Extra Armory Data rewards may vary.`;
       }
@@ -370,7 +370,7 @@
 
       if (!code) {
         activePromo = null;
-        promoMessageEl.textContent = "Enter a promo code if you have one.";
+        promoMessageEl.textContent = "Enter your promo code if you have one.";
         promoMessageEl.style.color = "#b8b8b8";
         updatePricing();
         return;
