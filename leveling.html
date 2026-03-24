@@ -69,7 +69,7 @@
 
           <p>
             You can choose our custom leveling option to customize the service to your needs and budget
-            or a full 1-25 leveling option if you need the max level of one or several classes.
+            or a full 1 to 25 leveling option if you need the max level of one or several classes.
           </p>
 
           <p>
@@ -111,6 +111,49 @@
                 </span>
               </div>
             </label>
+          </div>
+
+          <div class="option-group">
+            <p>Completion Mode</p>
+
+            <div class="choice-options priority-stack">
+              <label class="choice-card active" data-choice-group="completion-mode">
+                <input type="radio" name="completionMode" value="standard" checked />
+                <div class="choice-main">
+                  <span class="choice-main-left">
+                    <span class="choice-name">Standard</span>
+                  </span>
+                  <span class="choice-main-right">
+                    <span class="choice-price included-text">Included</span>
+                  </span>
+                </div>
+              </label>
+
+              <label class="choice-card most-popular" data-choice-group="completion-mode">
+                <input type="radio" name="completionMode" value="pro" />
+                <div class="choice-main">
+                  <span class="choice-main-left">
+                    <span class="choice-name">Pro</span>
+                  </span>
+                  <span class="choice-main-right">
+                    <span class="choice-price">+$4.99</span>
+                  </span>
+                </div>
+                <span class="priority-badge">Most Popular</span>
+              </label>
+
+              <label class="choice-card" data-choice-group="completion-mode">
+                <input type="radio" name="completionMode" value="elite" />
+                <div class="choice-main">
+                  <span class="choice-main-left">
+                    <span class="choice-name">Elite</span>
+                  </span>
+                  <span class="choice-main-right">
+                    <span class="choice-price">+$8.99</span>
+                  </span>
+                </div>
+              </label>
+            </div>
           </div>
 
           <div class="option-group">
@@ -286,46 +329,28 @@
             </label>
           </div>
 
-          <div class="total-box">
-            <span>Total</span>
-            <strong id="totalPrice">$12.60</strong>
+          <div class="option-group promo-group">
+            <p>Promo Code</p>
+            <div class="promo-row">
+              <input type="text" id="promo-code" placeholder="Enter code" />
+              <button type="button" id="validate-promo" class="btn btn-secondary promo-btn">Validate</button>
+            </div>
+            <p id="promo-message" class="promo-message"></p>
           </div>
 
-          <div class="price-breakdown" id="priceBreakdown">
-            <div class="breakdown-row">
-              <span>Main Service</span>
-              <span id="breakdownMain">$12.60</span>
-            </div>
+          <div class="total-box">
+            <span>Original Price</span>
+            <strong id="original-price">$0.95</strong>
+          </div>
 
-            <div class="breakdown-row hidden" id="breakdownOriginalRow">
-              <span>Original Price</span>
-              <span id="breakdownOriginal">$0.00</span>
-            </div>
+          <div class="total-box promo-discount-box hidden" id="promo-discount-box">
+            <span>Promo Discount</span>
+            <strong id="promo-discount">-$0.00</strong>
+          </div>
 
-            <div class="breakdown-row hidden" id="breakdownDiscountRow">
-              <span>Bulk Discount</span>
-              <span id="breakdownDiscount">-$0.00</span>
-            </div>
-
-            <div class="breakdown-row">
-              <span>Classes</span>
-              <span id="breakdownClasses">1 selected</span>
-            </div>
-
-            <div class="breakdown-row hidden" id="breakdownPrestigeRow">
-              <span>Prestige Add-On</span>
-              <span id="breakdownPrestige">$0.00</span>
-            </div>
-
-            <div class="breakdown-row hidden" id="breakdownTrialsRow">
-              <span>Trials</span>
-              <span id="breakdownTrials">$0.00</span>
-            </div>
-
-            <div class="breakdown-row hidden" id="bestValueRow">
-              <span>Attention</span>
-              <span id="bestValueText">Full Leveling is the best value</span>
-            </div>
+          <div class="total-box">
+            <span>Total</span>
+            <strong id="totalPrice">$0.95</strong>
           </div>
 
           <a href="#" class="btn btn-primary full">Buy Now</a>
@@ -342,10 +367,23 @@
     const PRESTIGE_PRICE = 14.90;
     const TRIALS_PRICE = 2.99;
 
+    const COMPLETION_PRICES = {
+      standard: 0,
+      pro: 4.99,
+      elite: 8.99
+    };
+
+    const promoCodes = {
+      XPEED5: 0.05,
+      BOOSTING10: 0.10
+    };
+
     const MIN_LEVEL = 1;
     const MAX_LEVEL = 25;
     const MAX_LEVEL_GAIN = MAX_LEVEL - MIN_LEVEL;
     const CUSTOM_CAP_TOTAL = 19.99;
+
+    let appliedPromoDiscount = 0;
 
     const levelingToggle = document.getElementById("levelingToggle");
 
@@ -365,30 +403,80 @@
 
     const classOptions = document.querySelectorAll(".classOption");
     const trialsOption = document.getElementById("trialsOption");
-    const totalPrice = document.getElementById("totalPrice");
     const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
+    const completionInputs = document.querySelectorAll('input[name="completionMode"]');
 
     const levelRangeGroup = document.getElementById("levelRangeGroup");
     const serviceTypeGroup = document.getElementById("serviceTypeGroup");
 
-    const breakdownMain = document.getElementById("breakdownMain");
-    const breakdownOriginal = document.getElementById("breakdownOriginal");
-    const breakdownDiscount = document.getElementById("breakdownDiscount");
-    const breakdownClasses = document.getElementById("breakdownClasses");
-    const breakdownPrestige = document.getElementById("breakdownPrestige");
-    const breakdownTrials = document.getElementById("breakdownTrials");
+    const totalPrice = document.getElementById("totalPrice");
+    const originalPriceEl = document.getElementById("original-price");
+    const promoDiscountBox = document.getElementById("promo-discount-box");
+    const promoDiscountEl = document.getElementById("promo-discount");
 
-    const breakdownOriginalRow = document.getElementById("breakdownOriginalRow");
-    const breakdownDiscountRow = document.getElementById("breakdownDiscountRow");
-    const breakdownPrestigeRow = document.getElementById("breakdownPrestigeRow");
-    const breakdownTrialsRow = document.getElementById("breakdownTrialsRow");
-    const bestValueRow = document.getElementById("bestValueRow");
-    const bestValueText = document.getElementById("bestValueText");
+    const promoCodeInput = document.getElementById("promo-code");
+    const validatePromoBtn = document.getElementById("validate-promo");
+    const promoMessageEl = document.getElementById("promo-message");
 
     const maxDiscountRate = 1 - (CUSTOM_CAP_TOTAL / (MAX_LEVEL_GAIN * BASE_LEVEL_PRICE));
 
     function formatMoney(value) {
       return "$" + value.toFixed(2);
+    }
+
+    function updateChoiceCards(groupName) {
+      const cards = document.querySelectorAll(`.choice-card[data-choice-group="${groupName}"]`);
+
+      cards.forEach((card) => {
+        const input = card.querySelector(`input[name="${inputNameFromGroup(groupName)}"]`);
+        if (input) {
+          card.classList.toggle("active", input.checked);
+        }
+      });
+    }
+
+    function inputNameFromGroup(groupName) {
+      if (groupName === "completion-mode") return "completionMode";
+      return groupName;
+    }
+
+    function getSelectedCompletionMode() {
+      const selected = document.querySelector('input[name="completionMode"]:checked');
+      return selected ? selected.value : "standard";
+    }
+
+    function validatePromo(showMessage = true) {
+      const code = promoCodeInput.value.trim().toUpperCase();
+
+      if (!code) {
+        appliedPromoDiscount = 0;
+
+        if (showMessage) {
+          promoMessageEl.textContent = "Please enter a promo code.";
+          promoMessageEl.className = "promo-message error";
+        }
+
+        updateTotal();
+        return;
+      }
+
+      if (promoCodes[code]) {
+        appliedPromoDiscount = promoCodes[code];
+
+        if (showMessage) {
+          promoMessageEl.textContent = `Promo code applied successfully: ${code}`;
+          promoMessageEl.className = "promo-message success";
+        }
+      } else {
+        appliedPromoDiscount = 0;
+
+        if (showMessage) {
+          promoMessageEl.textContent = "Invalid promo code.";
+          promoMessageEl.className = "promo-message error";
+        }
+      }
+
+      updateTotal();
     }
 
     function updateRangeProgress(minEl, maxEl, progressEl, absoluteMin, absoluteMax) {
@@ -611,10 +699,11 @@
       const levelingEnabled = levelingToggle.checked;
       const selected = getSelectedServiceType();
       const selectedClasses = getSelectedClassCount();
+      const completionMode = getSelectedCompletionMode();
+      const completionFee = COMPLETION_PRICES[completionMode] || 0;
 
       let mainTotal = 0;
       let originalMainTotal = 0;
-      let discountMainTotal = 0;
       let prestigeTotal = 0;
       let trialsTotal = 0;
 
@@ -626,13 +715,11 @@
 
         mainTotal = customData.totalDiscounted;
         originalMainTotal = customData.totalOriginal;
-        discountMainTotal = customData.totalDiscount;
       }
 
       if (levelingEnabled && selected === "full") {
         mainTotal = FULL_BASE_PRICE + (CLASS_PRICE * selectedClasses);
         originalMainTotal = mainTotal;
-        discountMainTotal = 0;
       }
 
       if (prestigeToggle.checked) {
@@ -647,73 +734,19 @@
         trialsTotal = TRIALS_PRICE * selectedClasses;
       }
 
-      const grandTotal = mainTotal + prestigeTotal + trialsTotal;
+      const visibleSubtotal = mainTotal + prestigeTotal + trialsTotal + completionFee;
+      const promoDiscountAmount = visibleSubtotal * appliedPromoDiscount;
+      const finalTotal = visibleSubtotal - promoDiscountAmount;
 
-      totalPrice.textContent = formatMoney(grandTotal);
-      breakdownMain.textContent = formatMoney(mainTotal);
-      breakdownClasses.textContent = selectedClasses + " selected";
+      originalPriceEl.textContent = formatMoney(visibleSubtotal);
+      totalPrice.textContent = formatMoney(finalTotal);
 
-      if (levelingEnabled && selected === "custom" && discountMainTotal > 0.009) {
-        breakdownOriginalRow.classList.remove("hidden");
-        breakdownDiscountRow.classList.remove("hidden");
-        breakdownOriginal.textContent = formatMoney(originalMainTotal);
-        breakdownDiscount.textContent = "-" + formatMoney(discountMainTotal);
+      if (promoDiscountAmount > 0) {
+        promoDiscountBox.classList.remove("hidden");
+        promoDiscountEl.textContent = "-" + formatMoney(promoDiscountAmount);
       } else {
-        breakdownOriginalRow.classList.add("hidden");
-        breakdownDiscountRow.classList.add("hidden");
-        breakdownOriginal.textContent = formatMoney(0);
-        breakdownDiscount.textContent = "-" + formatMoney(0);
-      }
-
-      if (prestigeTotal > 0) {
-        breakdownPrestigeRow.classList.remove("hidden");
-        breakdownPrestige.textContent = formatMoney(prestigeTotal);
-      } else {
-        breakdownPrestigeRow.classList.add("hidden");
-        breakdownPrestige.textContent = formatMoney(0);
-      }
-
-      if (trialsTotal > 0) {
-        breakdownTrialsRow.classList.remove("hidden");
-        breakdownTrials.textContent = formatMoney(trialsTotal);
-      } else {
-        breakdownTrialsRow.classList.add("hidden");
-        breakdownTrials.textContent = formatMoney(0);
-      }
-
-      if (!levelingEnabled && prestigeTotal > 0) {
-        bestValueRow.classList.remove("hidden");
-        bestValueText.textContent = "Prestige-only order selected";
-        return;
-      }
-
-      if (!levelingEnabled && prestigeTotal === 0 && trialsTotal > 0) {
-        bestValueRow.classList.add("hidden");
-        bestValueText.textContent = "Full Leveling is the best value";
-        return;
-      }
-
-      if (!levelingEnabled) {
-        bestValueRow.classList.add("hidden");
-        bestValueText.textContent = "Full Leveling is the best value";
-        return;
-      }
-
-      if (selected === "custom") {
-        const current = parseInt(currentLevel.value, 10);
-        const desired = parseInt(desiredLevel.value, 10);
-        const levels = Math.max(0, desired - current);
-
-        if (levels >= 18) {
-          bestValueRow.classList.remove("hidden");
-          bestValueText.textContent = "Best value: Full Leveling starts at $0.95 + $14.00 per class";
-        } else {
-          bestValueRow.classList.add("hidden");
-          bestValueText.textContent = "Full Leveling is the best value";
-        }
-      } else {
-        bestValueRow.classList.remove("hidden");
-        bestValueText.textContent = "You are already on the best value package";
+        promoDiscountBox.classList.add("hidden");
+        promoDiscountEl.textContent = "-" + formatMoney(0);
       }
     }
 
@@ -733,6 +766,13 @@
       radio.addEventListener("change", updateTotal);
     });
 
+    completionInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        updateChoiceCards("completion-mode");
+        updateTotal();
+      });
+    });
+
     classOptions.forEach((option) => {
       option.addEventListener("change", updateTotal);
     });
@@ -741,9 +781,21 @@
     prestigeToggle.addEventListener("change", updatePrestigeVisibility);
     trialsOption.addEventListener("change", updateTotal);
 
+    validatePromoBtn.addEventListener("click", () => {
+      validatePromo(true);
+    });
+
+    promoCodeInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        validatePromo(true);
+      }
+    });
+
     syncLevelSlidersFromInputs();
     syncPrestigeSlidersFromInputs();
     updatePrestigeVisibility();
+    updateChoiceCards("completion-mode");
     updateTotal();
   </script>
 </body>
