@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body id="top">
+<body id="top" class="operations-page">
 
   <header class="navbar">
     <a href="index.html" class="logo">XpeedCarry</a>
@@ -88,10 +88,14 @@
             <label class="choice-card active" data-choice-group="service-type">
               <input type="radio" name="service-type" value="piloted" checked>
               <div class="choice-main">
-                <span class="choice-name">Piloted</span>
-                <span class="info-icon" tabindex="0">
-                  ?
-                  <span class="info-tooltip">Standard piloted service handled directly by our team.</span>
+                <span class="choice-main-left">
+                  <span class="choice-name">Piloted</span>
+                </span>
+                <span class="choice-main-right">
+                  <span class="info-icon" tabindex="0">
+                    ?
+                    <span class="info-tooltip">Standard piloted service handled directly by our team.</span>
+                  </span>
                 </span>
               </div>
             </label>
@@ -99,10 +103,14 @@
             <label class="choice-card" data-choice-group="service-type">
               <input type="radio" name="service-type" value="selfplay">
               <div class="choice-main">
-                <span class="choice-name">Self-Play</span>
-                <span class="info-icon" tabindex="0">
-                  ?
-                  <span class="info-tooltip">Play alongside a booster. Includes extra coordination and hidden operational cost.</span>
+                <span class="choice-main-left">
+                  <span class="choice-name">Self-Play</span>
+                </span>
+                <span class="choice-main-right">
+                  <span class="info-icon" tabindex="0">
+                    ?
+                    <span class="info-tooltip">Play alongside a booster. Includes extra coordination and hidden operational cost.</span>
+                  </span>
                 </span>
               </div>
             </label>
@@ -147,23 +155,31 @@
             <label class="choice-card active" data-choice-group="priority-tier">
               <input type="radio" name="priority-tier" value="standard" checked>
               <div class="choice-main">
-                <span class="choice-name">Standard</span>
-                <span class="choice-price included-text">Included</span>
-                <span class="info-icon" tabindex="0">
-                  ?
-                  <span class="info-tooltip">Standard queue placement and regular handling.</span>
+                <span class="choice-main-left">
+                  <span class="choice-name">Standard</span>
+                </span>
+                <span class="choice-main-right">
+                  <span class="choice-price included-text">Included</span>
+                  <span class="info-icon" tabindex="0">
+                    ?
+                    <span class="info-tooltip">Standard queue placement and regular handling.</span>
+                  </span>
                 </span>
               </div>
             </label>
 
-            <label class="choice-card most-popular active-popular" data-choice-group="priority-tier">
+            <label class="choice-card most-popular" data-choice-group="priority-tier">
               <input type="radio" name="priority-tier" value="pro">
               <div class="choice-main">
-                <span class="choice-name">Pro</span>
-                <span class="choice-price">+$6.00</span>
-                <span class="info-icon" tabindex="0">
-                  ?
-                  <span class="info-tooltip">Priority queue placement and assignment to a professional booster for faster, smoother service.</span>
+                <span class="choice-main-left">
+                  <span class="choice-name">Pro</span>
+                </span>
+                <span class="choice-main-right">
+                  <span class="choice-price">+$3.99</span>
+                  <span class="info-icon" tabindex="0">
+                    ?
+                    <span class="info-tooltip">Priority queue placement and assignment to a professional booster for faster, smoother service.</span>
+                  </span>
                 </span>
               </div>
               <span class="priority-badge">Most Popular</span>
@@ -172,11 +188,15 @@
             <label class="choice-card" data-choice-group="priority-tier">
               <input type="radio" name="priority-tier" value="elite">
               <div class="choice-main">
-                <span class="choice-name">Elite</span>
-                <span class="choice-price">+$15.00</span>
-                <span class="info-icon" tabindex="0">
-                  ?
-                  <span class="info-tooltip">Maximum priority, faster turnaround, and assignment to our highest-tier boosters for the best premium experience.</span>
+                <span class="choice-main-left">
+                  <span class="choice-name">Elite</span>
+                </span>
+                <span class="choice-main-right">
+                  <span class="choice-price">+$8.99</span>
+                  <span class="info-icon" tabindex="0">
+                    ?
+                    <span class="info-tooltip">Maximum priority, faster turnaround, and assignment to our highest-tier boosters for the best premium experience.</span>
+                  </span>
                 </span>
               </div>
             </label>
@@ -243,8 +263,8 @@
 
     const priorityPrices = {
       standard: 0,
-      pro: 6,
-      elite: 15
+      pro: 3.99,
+      elite: 8.99
     };
 
     const promoCodes = {
@@ -269,7 +289,6 @@
     const promoDiscountBox = document.getElementById("promo-discount-box");
     const promoDiscountEl = document.getElementById("promo-discount");
 
-    const allChoiceCards = document.querySelectorAll(".choice-card");
     const priorityInputs = document.querySelectorAll('input[name="priority-tier"]');
     const serviceTypeInputs = document.querySelectorAll('input[name="service-type"]');
 
@@ -372,10 +391,9 @@
 
       const runDiscountAmount = visibleSubtotal * runDiscount;
       const promoDiscountAmount = (visibleSubtotal - runDiscountAmount) * appliedPromoDiscount;
-
       const hiddenSelfPlayTotal = selfPlayFeePerRun * runs;
-      const finalTotal = visibleSubtotal - runDiscountAmount - promoDiscountAmount + hiddenSelfPlayTotal;
 
+      const finalTotal = visibleSubtotal - runDiscountAmount - promoDiscountAmount + hiddenSelfPlayTotal;
       const totalSavings = runDiscountAmount + promoDiscountAmount;
 
       originalPriceEl.textContent = `$${visibleSubtotal.toFixed(2)}`;
