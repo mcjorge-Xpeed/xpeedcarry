@@ -1254,10 +1254,12 @@ a {
 
 #buy-now-btn {
   position: relative;
-  overflow: hidden;
-  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 12px;
   z-index: 0;
+  overflow: visible;
   transition:
     opacity 0.25s ease,
     transform 0.25s ease,
@@ -1268,8 +1270,8 @@ a {
 
 #buy-now-btn:not(.btn-disabled) {
   box-shadow:
-    0 0 14px rgba(212, 175, 55, 0.30),
-    0 0 28px rgba(212, 175, 55, 0.16);
+    0 0 12px rgba(212, 175, 55, 0.30),
+    0 0 26px rgba(212, 175, 55, 0.18);
 }
 
 #buy-now-btn:not(.btn-disabled):hover {
@@ -1279,48 +1281,60 @@ a {
 #buy-now-btn::before {
   content: "";
   position: absolute;
-  width: 220%;
-  height: 220%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(0deg);
-  transform-origin: center center;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
   background: conic-gradient(
     from 0deg,
-    transparent 0deg,
-    transparent 300deg,
-    rgba(255, 230, 120, 0.95) 325deg,
-    rgba(255, 245, 190, 1) 338deg,
-    rgba(255, 255, 255, 1) 345deg,
-    rgba(212, 175, 55, 0.95) 352deg,
-    transparent 360deg
+    rgba(212, 175, 55, 0.00) 0deg,
+    rgba(212, 175, 55, 0.00) 250deg,
+    rgba(255, 220, 90, 0.85) 285deg,
+    rgba(255, 245, 180, 1.00) 315deg,
+    rgba(255, 255, 255, 1.00) 335deg,
+    rgba(255, 230, 120, 0.95) 350deg,
+    rgba(212, 175, 55, 0.15) 360deg
   );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   opacity: 0;
   pointer-events: none;
-  z-index: -2;
+  z-index: -1;
+  transform: rotate(0deg);
+  transform-origin: center;
 }
 
 #buy-now-btn:not(.btn-disabled)::before {
   opacity: 1;
-  animation: buyBorderOrbit 1.8s linear infinite;
+  animation: xpcBorderSpin 1.7s linear infinite;
 }
 
 #buy-now-btn::after {
   content: "";
   position: absolute;
-  inset: 2px;
-  border-radius: 10px;
-  background: inherit;
-  z-index: -1;
+  inset: -3px;
+  border-radius: inherit;
   pointer-events: none;
+  opacity: 0;
+  z-index: -2;
+  box-shadow:
+    0 0 10px rgba(255, 220, 90, 0.45),
+    0 0 18px rgba(212, 175, 55, 0.30),
+    0 0 32px rgba(212, 175, 55, 0.18);
 }
 
-@keyframes buyBorderOrbit {
+#buy-now-btn:not(.btn-disabled)::after {
+  opacity: 1;
+}
+
+@keyframes xpcBorderSpin {
   0% {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
 
   100% {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: rotate(360deg);
   }
 }
