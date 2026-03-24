@@ -266,7 +266,20 @@
 
         <p id="discount-info" class="discount-info"></p>
 
-        <a href="#" class="btn btn-primary full">Buy Now</a>
+        <div class="checkout-agreements">
+          <label class="agreement-item">
+            <input type="checkbox" id="terms-checkbox">
+            <span>
+              I agree to the
+              <a href="terms.html" target="_blank" rel="noopener noreferrer">XpeedCarry Terms</a>,
+              <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>,
+              <a href="refund.html" target="_blank" rel="noopener noreferrer">Refund Policy</a>, and, for Piloted orders, the
+              <a href="account-handling.html" target="_blank" rel="noopener noreferrer">Account Handling Rules</a>.
+            </span>
+          </label>
+        </div>
+
+        <a href="#" class="btn btn-primary full btn-disabled" id="buy-now-btn" aria-disabled="true">Buy Now</a>
         <a href="#" class="btn btn-secondary full">Chat before order</a>
       </div>
     </aside>
@@ -307,6 +320,9 @@
     const priorityInputs = document.querySelectorAll('input[name="priority-tier"]');
     const serviceTypeInputs = document.querySelectorAll('input[name="service-type"]');
 
+    const termsCheckbox = document.getElementById("terms-checkbox");
+    const buyNowBtn = document.getElementById("buy-now-btn");
+
     function updateChoiceCards(groupName) {
       const cards = document.querySelectorAll(`.choice-card[data-choice-group="${groupName}"]`);
 
@@ -333,6 +349,16 @@
 
       const rawSelfPlayFee = visibleSubtotal * 0.12;
       return Math.min(29.99, Math.max(1.99, rawSelfPlayFee));
+    }
+
+    function updateBuyButtonState() {
+      if (termsCheckbox.checked) {
+        buyNowBtn.classList.remove("btn-disabled");
+        buyNowBtn.removeAttribute("aria-disabled");
+      } else {
+        buyNowBtn.classList.add("btn-disabled");
+        buyNowBtn.setAttribute("aria-disabled", "true");
+      }
     }
 
     function validatePromo(showMessage = true) {
@@ -464,6 +490,14 @@
       });
     });
 
+    termsCheckbox.addEventListener("change", updateBuyButtonState);
+
+    buyNowBtn.addEventListener("click", (event) => {
+      if (buyNowBtn.classList.contains("btn-disabled")) {
+        event.preventDefault();
+      }
+    });
+
     validatePromoBtn.addEventListener("click", () => {
       validatePromo(true);
     });
@@ -477,6 +511,7 @@
 
     updateChoiceCards("priority-tier");
     updateChoiceCards("service-type");
+    updateBuyButtonState();
     updateTotal();
   </script>
 
