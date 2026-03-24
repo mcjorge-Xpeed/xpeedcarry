@@ -108,6 +108,10 @@
                 </span>
                 <span class="choice-main-right">
                   <span class="choice-price included-text">Only Option</span>
+                  <span class="info-icon" tabindex="0">
+                    ?
+                    <span class="info-tooltip">This service is available only as piloted service.</span>
+                  </span>
                 </span>
               </div>
             </label>
@@ -125,6 +129,10 @@
                   </span>
                   <span class="choice-main-right">
                     <span class="choice-price included-text">Included</span>
+                    <span class="info-icon" tabindex="0">
+                      ?
+                      <span class="info-tooltip">Standard queue placement and regular handling.</span>
+                    </span>
                   </span>
                 </div>
               </label>
@@ -137,6 +145,10 @@
                   </span>
                   <span class="choice-main-right">
                     <span class="choice-price">+$4.99</span>
+                    <span class="info-icon" tabindex="0">
+                      ?
+                      <span class="info-tooltip">Priority queue placement and assignment to a professional booster for faster, smoother service.</span>
+                    </span>
                   </span>
                 </div>
                 <span class="priority-badge">Most Popular</span>
@@ -150,6 +162,10 @@
                   </span>
                   <span class="choice-main-right">
                     <span class="choice-price">+$8.99</span>
+                    <span class="info-icon" tabindex="0">
+                      ?
+                      <span class="info-tooltip">Maximum priority, faster turnaround, and assignment to our highest-tier boosters for the best premium experience.</span>
+                    </span>
                   </span>
                 </div>
               </label>
@@ -703,7 +719,6 @@
       const completionFee = COMPLETION_PRICES[completionMode] || 0;
 
       let mainTotal = 0;
-      let originalMainTotal = 0;
       let prestigeTotal = 0;
       let trialsTotal = 0;
 
@@ -712,14 +727,11 @@
         const desired = parseInt(desiredLevel.value, 10);
 
         const customData = getCustomLevelingData(current, desired, selectedClasses);
-
         mainTotal = customData.totalDiscounted;
-        originalMainTotal = customData.totalOriginal;
       }
 
       if (levelingEnabled && selected === "full") {
         mainTotal = FULL_BASE_PRICE + (CLASS_PRICE * selectedClasses);
-        originalMainTotal = mainTotal;
       }
 
       if (prestigeToggle.checked) {
