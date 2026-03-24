@@ -72,11 +72,11 @@
           Choose your preferred stratagem package, select the difficulty tier, and let
           our boosters complete the required content for you.
         </p>
-        
+
         <p>
           With this Stratagems boosting service, you will get:
         </p>
-        
+
         <ul>
           <li>Daily and Weekly Stratagem options available</li>
           <li>Normal and Hard mission packages supported</li>
@@ -108,7 +108,7 @@
         <!-- PLATFORM -->
         <div class="option-group">
           <p>Platform</p>
-          <select>
+          <select id="platform">
             <option>PC</option>
             <option>Xbox</option>
             <option>PlayStation</option>
@@ -147,52 +147,113 @@
           <div id="difficulty-options"></div>
         </div>
 
-        <!-- COMPLETION METHOD -->
+        <!-- SERVICE TYPE -->
         <div class="option-group">
-          <p>Completion Method</p>
+          <p>Service Type</p>
 
-          <label class="radio-option">
-            <div class="radio-left">
+          <div class="service-options">
+            <label class="choice-card active">
               <input type="radio" name="completionMethod" value="piloted" checked>
-              <span>Piloted</span>
-            </div>
-          </label>
+              <div class="choice-main">
+                <div class="choice-main-left">
+                  <span>
+                    Piloted
+                    <span class="info-tip" data-tooltip="Piloted means our booster logs into your account and completes the service for you." tabindex="0">?</span>
+                  </span>
+                </div>
+                <div class="choice-main-right">+$0.00</div>
+              </div>
+            </label>
 
-          <label class="radio-option">
-            <div class="radio-left">
+            <label class="choice-card">
               <input type="radio" name="completionMethod" value="selfplay">
-              <span>Self-play</span>
-            </div>
-          </label>
+              <div class="choice-main">
+                <div class="choice-main-left">
+                  <span>Self-play</span>
+                </div>
+                <div class="choice-main-right">+$0.95</div>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <!-- TOTAL -->
+        <!-- COMPLETION MODE -->
+        <div class="option-group" id="completion-mode-group">
+          <p>Completion Mode</p>
+
+          <div class="service-options one-col">
+            <label class="choice-card active">
+              <input type="radio" name="completionMode" value="standard" checked>
+              <div class="choice-main">
+                <div class="choice-main-left">
+                  <span>
+                    Standard
+                    <span class="info-tip" data-tooltip="Standard completion with regular queue priority and default turnaround speed." tabindex="0">?</span>
+                  </span>
+                </div>
+                <div class="choice-main-right">+$0.00</div>
+              </div>
+            </label>
+
+            <label class="choice-card">
+              <input type="radio" name="completionMode" value="pro">
+              <div class="choice-main">
+                <div class="choice-main-left">
+                  <span>
+                    Pro
+                    <span class="info-tip" data-tooltip="Pro completion gives your order higher queue priority and faster handling." tabindex="0">?</span>
+                  </span>
+                </div>
+                <div class="choice-main-right">+15%</div>
+              </div>
+            </label>
+
+            <label class="choice-card">
+              <input type="radio" name="completionMode" value="elite">
+              <div class="choice-main">
+                <div class="choice-main-left">
+                  <span>
+                    Elite
+                    <span class="info-tip" data-tooltip="Elite gives the highest queue priority and the fastest available completion speed." tabindex="0">?</span>
+                  </span>
+                </div>
+                <div class="choice-main-right">+30%</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- PROMO -->
+        <div class="option-group">
+          <p>Promo Code</p>
+          <div class="promo-group">
+            <input type="text" id="promo-code" placeholder="Enter promo code">
+            <button type="button" class="btn btn-secondary" id="apply-promo">Apply</button>
+          </div>
+          <small id="promo-message" style="display:block; margin-top:8px; color:#b8b8b8;">
+            Enter your promo code if you have one.
+          </small>
+        </div>
+
+        <!-- TOTALS -->
+        <div class="total-box">
+          <span>Original Price</span>
+          <strong id="original-price">$9.95</strong>
+        </div>
+
+        <div class="total-box">
+          <span>Discount</span>
+          <strong id="discount-amount">-$0.00</strong>
+        </div>
+
+        <div class="total-box">
+          <span>Promo Discount</span>
+          <strong id="promo-discount">-$0.00</strong>
+        </div>
+
         <div class="total-box">
           <span>Total Price</span>
           <strong id="total-price">$9.95</strong>
-        </div>
-
-        <!-- BREAKDOWN -->
-        <div class="price-breakdown" id="priceBreakdown">
-          <div class="breakdown-row">
-            <span>Base</span>
-            <span id="breakdown-base">$0.95</span>
-          </div>
-
-          <div class="breakdown-row">
-            <span>Stratagem Package</span>
-            <span id="breakdown-package">Daily Stratagems</span>
-          </div>
-
-          <div class="breakdown-row">
-            <span>Difficulty</span>
-            <span id="breakdown-difficulty">$9.00</span>
-          </div>
-
-          <div class="breakdown-row">
-            <span>Completion Method</span>
-            <span id="breakdown-method">$0.00</span>
-          </div>
         </div>
 
         <a href="#" class="btn btn-primary full">Buy Now</a>
@@ -206,6 +267,7 @@
   <!-- SCRIPT -->
   <script>
     const BASE_PRICE = 0.95;
+    const SELFPPLAY_FEE = 0.95;
 
     const difficultyMap = {
       daily: [
@@ -223,12 +285,29 @@
       ]
     };
 
+    const completionModeMultipliers = {
+      standard: 0,
+      pro: 0.15,
+      elite: 0.30
+    };
+
+    const promoCodes = {
+      XP5: 0.05,
+      XP10: 0.10,
+      HD15: 0.15
+    };
+
     const difficultyContainer = document.getElementById("difficulty-options");
     const totalPriceEl = document.getElementById("total-price");
-    const breakdownBaseEl = document.getElementById("breakdown-base");
-    const breakdownPackageEl = document.getElementById("breakdown-package");
-    const breakdownDifficultyEl = document.getElementById("breakdown-difficulty");
-    const breakdownMethodEl = document.getElementById("breakdown-method");
+    const originalPriceEl = document.getElementById("original-price");
+    const discountAmountEl = document.getElementById("discount-amount");
+    const promoDiscountEl = document.getElementById("promo-discount");
+    const promoCodeInput = document.getElementById("promo-code");
+    const applyPromoBtn = document.getElementById("apply-promo");
+    const promoMessageEl = document.getElementById("promo-message");
+    const completionModeGroup = document.getElementById("completion-mode-group");
+
+    let activePromo = null;
 
     function formatMoney(value) {
       return "$" + value.toFixed(2);
@@ -238,15 +317,20 @@
       return document.querySelector('input[name="stratagemType"]:checked').value;
     }
 
-    function getSelectedMethodPrice() {
-      const selectedMethod = document.querySelector('input[name="completionMethod"]:checked').value;
+    function getSelectedMethod() {
+      return document.querySelector('input[name="completionMethod"]:checked').value;
+    }
 
-      if (selectedMethod === "piloted") {
-        return 0;
-      }
+    function getSelectedMode() {
+      const checked = document.querySelector('input[name="completionMode"]:checked');
+      return checked ? checked.value : "standard";
+    }
+
+    function getSelectedMethodPrice() {
+      const selectedMethod = getSelectedMethod();
 
       if (selectedMethod === "selfplay") {
-        return 0;
+        return SELFPPLAY_FEE;
       }
 
       return 0;
@@ -286,28 +370,57 @@
       return options.find((item) => item.value === selectedDifficulty);
     }
 
-    function getPackageLabel(type) {
-      if (type === "daily") return "Daily Stratagems";
-      if (type === "weekly") return "Weekly Stratagems";
-      return "All Daily + All Weekly";
+    function updateChoiceCards() {
+      document.querySelectorAll(".choice-card").forEach((card) => {
+        const input = card.querySelector('input[type="radio"]');
+        if (input && input.checked) {
+          card.classList.add("active");
+        } else {
+          card.classList.remove("active");
+        }
+      });
+    }
+
+    function updateCompletionModeVisibility() {
+      const selectedMethod = getSelectedMethod();
+
+      if (selectedMethod === "selfplay") {
+        completionModeGroup.style.display = "none";
+      } else {
+        completionModeGroup.style.display = "";
+      }
     }
 
     function updateTotal() {
-      const selectedType = getSelectedStratagemType();
       const selectedDifficulty = getSelectedDifficultyData();
       const methodPrice = getSelectedMethodPrice();
+      const selectedMethod = getSelectedMethod();
+      const selectedMode = getSelectedMode();
 
-      const total = BASE_PRICE + selectedDifficulty.price + methodPrice;
+      const baseSubtotal = BASE_PRICE + selectedDifficulty.price + methodPrice;
 
-      totalPriceEl.textContent = formatMoney(total);
-      breakdownBaseEl.textContent = formatMoney(BASE_PRICE);
-      breakdownPackageEl.textContent = getPackageLabel(selectedType);
-      breakdownDifficultyEl.textContent = formatMoney(selectedDifficulty.price);
-      breakdownMethodEl.textContent = formatMoney(methodPrice);
+      let originalPrice = baseSubtotal;
+      if (selectedMethod === "piloted") {
+        originalPrice = baseSubtotal * (1 + (completionModeMultipliers[selectedMode] || 0));
+      }
+
+      const discount = 0;
+      const promoRate = activePromo ? (promoCodes[activePromo] || 0) : 0;
+      const promoDiscount = originalPrice * promoRate;
+      const finalTotal = originalPrice - promoDiscount;
+
+      originalPriceEl.textContent = formatMoney(originalPrice);
+      discountAmountEl.textContent = "-" + formatMoney(discount);
+      promoDiscountEl.textContent = "-" + formatMoney(promoDiscount);
+      totalPriceEl.textContent = formatMoney(finalTotal);
+
+      updateChoiceCards();
+      updateCompletionModeVisibility();
     }
 
     const stratagemRadios = document.querySelectorAll('input[name="stratagemType"]');
     const methodRadios = document.querySelectorAll('input[name="completionMethod"]');
+    const modeRadios = document.querySelectorAll('input[name="completionMode"]');
 
     stratagemRadios.forEach((radio) => {
       radio.addEventListener("change", function () {
@@ -318,6 +431,34 @@
 
     methodRadios.forEach((radio) => {
       radio.addEventListener("change", updateTotal);
+    });
+
+    modeRadios.forEach((radio) => {
+      radio.addEventListener("change", updateTotal);
+    });
+
+    applyPromoBtn.addEventListener("click", function () {
+      const code = promoCodeInput.value.trim().toUpperCase();
+
+      if (!code) {
+        activePromo = null;
+        promoMessageEl.textContent = "Enter your promo code if you have one.";
+        promoMessageEl.style.color = "#b8b8b8";
+        updateTotal();
+        return;
+      }
+
+      if (promoCodes[code]) {
+        activePromo = code;
+        promoMessageEl.textContent = `Promo code ${code} applied successfully.`;
+        promoMessageEl.style.color = "#d4af37";
+      } else {
+        activePromo = null;
+        promoMessageEl.textContent = "Invalid promo code.";
+        promoMessageEl.style.color = "#ff8a8a";
+      }
+
+      updateTotal();
     });
 
     renderDifficultyOptions("daily");
