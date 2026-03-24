@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Warhammer 40K Space Marine 2 Stratagems | XpeedCarry</title>
+  <title>Helldivers 2 Stratagems | XpeedCarry</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -18,10 +18,10 @@
   <!-- HERO -->
   <section class="service-hero">
     <div class="hero-content">
-      <h1>Warhammer 40K Space Marine 2 Stratagems Unlock</h1>
+      <h1>Helldivers 2 Stratagems Unlock</h1>
 
       <p>
-        Buy Warhammer 40K Space Marine 2 Stratagems Unlock service to unlock Daily and Weekly Stratagems
+        Buy Helldivers 2 Stratagems Unlock service to unlock Daily and Weekly Stratagems
         faster with a safe and efficient service. Choose the mission package you want
         and let our boosters handle the grind.
       </p>
@@ -67,7 +67,7 @@
         <h2>Description</h2>
 
         <p>
-          Our Warhammer 40K Space Marine 2 Stratagems Unlock service is designed for players who want
+          Our Helldivers 2 Stratagems Unlock service is designed for players who want
           to unlock essential mission rewards without wasting time repeating content.
           Choose your preferred stratagem package, select the difficulty tier, and let
           our boosters complete the required content for you.
@@ -156,12 +156,14 @@
               <input type="radio" name="completionMethod" value="piloted" checked>
               <div class="choice-main">
                 <div class="choice-main-left">
-                  <span>
-                    Piloted
-                    <span class="info-tip" data-tooltip="Piloted means our booster logs into your account and completes the service for you." tabindex="0">?</span>
+                  <span>Piloted</span>
+                </div>
+                <div class="choice-main-right">
+                  +$0.00
+                  <span class="info-icon">?
+                    <span class="info-tooltip">Our booster logs into your account and completes the service for you.</span>
                   </span>
                 </div>
-                <div class="choice-main-right">+$0.00</div>
               </div>
             </label>
 
@@ -171,7 +173,9 @@
                 <div class="choice-main-left">
                   <span>Self-play</span>
                 </div>
-                <div class="choice-main-right">+$0.95</div>
+                <div class="choice-main-right">
+                  +$0.00
+                </div>
               </div>
             </label>
           </div>
@@ -186,12 +190,14 @@
               <input type="radio" name="completionMode" value="standard" checked>
               <div class="choice-main">
                 <div class="choice-main-left">
-                  <span>
-                    Standard
-                    <span class="info-tip" data-tooltip="Standard completion with regular queue priority and default turnaround speed." tabindex="0">?</span>
+                  <span>Standard</span>
+                </div>
+                <div class="choice-main-right">
+                  +$0.00
+                  <span class="info-icon">?
+                    <span class="info-tooltip">Standard completion with regular queue priority and default turnaround speed.</span>
                   </span>
                 </div>
-                <div class="choice-main-right">+$0.00</div>
               </div>
             </label>
 
@@ -199,12 +205,14 @@
               <input type="radio" name="completionMode" value="pro">
               <div class="choice-main">
                 <div class="choice-main-left">
-                  <span>
-                    Pro
-                    <span class="info-tip" data-tooltip="Pro completion gives your order higher queue priority and faster handling." tabindex="0">?</span>
+                  <span>Pro</span>
+                </div>
+                <div class="choice-main-right">
+                  +$4.99
+                  <span class="info-icon">?
+                    <span class="info-tooltip">Faster handling with higher queue priority than Standard.</span>
                   </span>
                 </div>
-                <div class="choice-main-right">+15%</div>
               </div>
             </label>
 
@@ -212,12 +220,14 @@
               <input type="radio" name="completionMode" value="elite">
               <div class="choice-main">
                 <div class="choice-main-left">
-                  <span>
-                    Elite
-                    <span class="info-tip" data-tooltip="Elite gives the highest queue priority and the fastest available completion speed." tabindex="0">?</span>
+                  <span>Elite</span>
+                </div>
+                <div class="choice-main-right">
+                  +$8.99
+                  <span class="info-icon">?
+                    <span class="info-tooltip">Highest queue priority and fastest available completion speed.</span>
                   </span>
                 </div>
-                <div class="choice-main-right">+30%</div>
               </div>
             </label>
           </div>
@@ -246,7 +256,7 @@
           <strong id="discount-amount">-$0.00</strong>
         </div>
 
-        <div class="total-box">
+        <div class="total-box" id="promo-discount-box" style="display: none;">
           <span>Promo Discount</span>
           <strong id="promo-discount">-$0.00</strong>
         </div>
@@ -267,7 +277,7 @@
   <!-- SCRIPT -->
   <script>
     const BASE_PRICE = 0.95;
-    const SELFPPLAY_FEE = 0.95;
+    const SELFPLAY_HIDDEN_FEE = 0.95;
 
     const difficultyMap = {
       daily: [
@@ -285,10 +295,10 @@
       ]
     };
 
-    const completionModeMultipliers = {
+    const completionPrices = {
       standard: 0,
-      pro: 0.15,
-      elite: 0.30
+      pro: 4.99,
+      elite: 8.99
     };
 
     const promoCodes = {
@@ -302,6 +312,7 @@
     const originalPriceEl = document.getElementById("original-price");
     const discountAmountEl = document.getElementById("discount-amount");
     const promoDiscountEl = document.getElementById("promo-discount");
+    const promoDiscountBox = document.getElementById("promo-discount-box");
     const promoCodeInput = document.getElementById("promo-code");
     const applyPromoBtn = document.getElementById("apply-promo");
     const promoMessageEl = document.getElementById("promo-message");
@@ -326,16 +337,6 @@
       return checked ? checked.value : "standard";
     }
 
-    function getSelectedMethodPrice() {
-      const selectedMethod = getSelectedMethod();
-
-      if (selectedMethod === "selfplay") {
-        return SELFPPLAY_FEE;
-      }
-
-      return 0;
-    }
-
     function renderDifficultyOptions(type) {
       const options = difficultyMap[type];
       difficultyContainer.innerHTML = "";
@@ -356,7 +357,6 @@
       });
 
       const difficultyRadios = document.querySelectorAll('input[name="difficultyOption"]');
-
       difficultyRadios.forEach((radio) => {
         radio.addEventListener("change", updateTotal);
       });
@@ -366,7 +366,6 @@
       const selectedType = getSelectedStratagemType();
       const selectedDifficulty = document.querySelector('input[name="difficultyOption"]:checked').value;
       const options = difficultyMap[selectedType];
-
       return options.find((item) => item.value === selectedDifficulty);
     }
 
@@ -393,26 +392,37 @@
 
     function updateTotal() {
       const selectedDifficulty = getSelectedDifficultyData();
-      const methodPrice = getSelectedMethodPrice();
       const selectedMethod = getSelectedMethod();
       const selectedMode = getSelectedMode();
 
-      const baseSubtotal = BASE_PRICE + selectedDifficulty.price + methodPrice;
+      let originalPrice = BASE_PRICE + selectedDifficulty.price;
 
-      let originalPrice = baseSubtotal;
       if (selectedMethod === "piloted") {
-        originalPrice = baseSubtotal * (1 + (completionModeMultipliers[selectedMode] || 0));
+        originalPrice += completionPrices[selectedMode] || 0;
+      }
+
+      let finalBeforePromo = originalPrice;
+
+      if (selectedMethod === "selfplay") {
+        finalBeforePromo += SELFPLAY_HIDDEN_FEE;
       }
 
       const discount = 0;
       const promoRate = activePromo ? (promoCodes[activePromo] || 0) : 0;
-      const promoDiscount = originalPrice * promoRate;
-      const finalTotal = originalPrice - promoDiscount;
+      const promoDiscount = finalBeforePromo * promoRate;
+      const finalTotal = finalBeforePromo - promoDiscount;
 
       originalPriceEl.textContent = formatMoney(originalPrice);
       discountAmountEl.textContent = "-" + formatMoney(discount);
-      promoDiscountEl.textContent = "-" + formatMoney(promoDiscount);
       totalPriceEl.textContent = formatMoney(finalTotal);
+
+      if (promoDiscount > 0) {
+        promoDiscountBox.style.display = "";
+        promoDiscountEl.textContent = "-" + formatMoney(promoDiscount);
+      } else {
+        promoDiscountBox.style.display = "none";
+        promoDiscountEl.textContent = "-" + formatMoney(0);
+      }
 
       updateChoiceCards();
       updateCompletionModeVisibility();
