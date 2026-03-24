@@ -77,7 +77,7 @@
           <li>Enhanced weapon stats and perks</li>
           <li>Fast and safe service</li>
           <li>Primary, Secondary, and Melee weapons supported</li>
-          <li>All Weapons package available for $369.00 (new weapons included.)</li>
+          <li>All Weapons package available with dynamic discount based on Completion Mode.</li>
           <li>EARN EXTRA REQUISITION POINTS AND ARMORY DATA WHILE LEVELING YOUR WEAPONS, ALL ADDITIONAL REWARDS ARE YOURS TO KEEP. (rewards may vary)</li>
         </ul>
 
@@ -187,7 +187,7 @@
           <p>Weapon Package</p>
           <select id="weapon-package">
             <option value="specific">Specific Weapons</option>
-            <option value="all">All Weapons (30% OFF)</option>
+            <option value="all">All Weapons</option>
           </select>
         </div>
 
@@ -483,7 +483,6 @@
   <script>
     const basePrice = 0.95;
     const weaponPrice = 18.95;
-    const allWeaponsPrice = 369.00;
     const totalWeapons = 28;
 
     const completionPrices = {
@@ -561,6 +560,12 @@
       if (count < 24) return 24;
       if (count < 28) return 28;
       return null;
+    }
+
+    function getAllWeaponsDiscountRate(completionMode) {
+      if (completionMode === "elite") return 0.20;
+      if (completionMode === "pro") return 0.25;
+      return 0.30;
     }
 
     function updateWeaponVisibility() {
@@ -653,14 +658,18 @@
       }
 
       if (selectedPackage === "all") {
-        const bundleSubtotal = allWeaponsPrice + completionFee;
+        const originalBundlePrice = basePrice + (totalWeapons * weaponPrice);
+        const bundleDiscountRate = getAllWeaponsDiscountRate(completionMode);
+        const bundleDiscountAmount = (totalWeapons * weaponPrice) * bundleDiscountRate;
+        const bundleSubtotal = originalBundlePrice - bundleDiscountAmount + completionFee;
+
         promoDiscountAmount = bundleSubtotal * appliedPromoDiscount;
         visibleSubtotal = bundleSubtotal;
         finalTotal = bundleSubtotal - promoDiscountAmount;
 
         originalPriceEl.textContent = `$${visibleSubtotal.toFixed(2)}`;
         totalEl.textContent = `$${finalTotal.toFixed(2)}`;
-        discountInfoEl.textContent = "All weapons bundle price applied.";
+        discountInfoEl.textContent = `All weapons bundle price applied with ${Math.round(bundleDiscountRate * 100)}% OFF for ${completionMode.charAt(0).toUpperCase() + completionMode.slice(1)} mode.`;
       }
 
       if (promoDiscountAmount > 0) {
