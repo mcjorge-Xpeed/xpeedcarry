@@ -1253,13 +1253,6 @@ a {
 }
 
 #buy-now-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  overflow: hidden;
-  z-index: 0;
   transition:
     opacity 0.25s ease,
     transform 0.25s ease,
@@ -1270,46 +1263,14 @@ a {
 #buy-now-btn:not(.btn-disabled) {
   box-shadow:
     0 0 10px rgba(212, 175, 55, 0.35),
-    0 0 22px rgba(212, 175, 55, 0.16);
+    0 0 18px rgba(212, 175, 55, 0.22),
+    0 0 30px rgba(212, 175, 55, 0.12);
 }
 
 #buy-now-btn:not(.btn-disabled):hover {
-  transform: translateY(-2px) scale(1.01);
-}
-
-#buy-now-btn::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 2px;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg 320deg,
-    rgba(255, 240, 170, 0.95) 338deg,
-    rgba(255, 255, 255, 1) 348deg,
-    rgba(255, 220, 90, 0.95) 356deg,
-    transparent 360deg
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  pointer-events: none;
-}
-
-#buy-now-btn:not(.btn-disabled)::before {
-  opacity: 1;
-  animation: buyBorderSpin 2s linear infinite;
-}
-
-@keyframes buyBorderSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 14px rgba(212, 175, 55, 0.48),
+    0 0 24px rgba(212, 175, 55, 0.30),
+    0 0 40px rgba(212, 175, 55, 0.18);
 }
