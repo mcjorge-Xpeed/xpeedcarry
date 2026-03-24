@@ -1003,3 +1003,243 @@ a {
     border-radius: 16px;
   }
 }
+ .choice-options {
+  display: grid;
+  gap: 12px;
+}
+
+.choice-options.two-col {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.priority-stack {
+  grid-template-columns: 1fr;
+}
+
+.choice-card {
+  position: relative;
+  display: block;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.choice-card:hover {
+  border-color: rgba(212, 175, 55, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.choice-card.active {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.25);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.choice-card input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choice-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 22px;
+}
+
+.choice-main-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.choice-main-left::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #d4af37;
+  background: transparent;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.choice-card.active .choice-main-left::before {
+  background: radial-gradient(circle, #d4af37 0 45%, transparent 46% 100%);
+}
+
+.choice-main-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.choice-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.choice-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #d4af37;
+  white-space: nowrap;
+}
+
+.included-text {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.priority-badge {
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 26px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #d4af37;
+  color: #111;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.info-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  flex-shrink: 0;
+}
+
+.info-tooltip {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translateY(-50%);
+  width: 220px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(15, 15, 22, 0.98);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  line-height: 1.45;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.18s ease, visibility 0.18s ease;
+  z-index: 50;
+}
+
+.info-icon:hover .info-tooltip,
+.info-icon:focus .info-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.promo-group {
+  margin-top: 2px;
+}
+
+.promo-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.promo-row input {
+  flex: 1;
+}
+
+.promo-btn {
+  min-width: 110px;
+}
+
+.promo-message {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.promo-message.success {
+  color: #7cfc98;
+}
+
+.promo-message.error {
+  color: #ff8a8a;
+}
+
+.discount-info {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #d4af37;
+}
+
+.runs-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.runs-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 10px;
+  background: rgba(212, 175, 55, 0.08);
+  color: #d4af37;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.runs-btn:hover {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.14);
+}
+
+#runs {
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .choice-options.two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .promo-row {
+    flex-direction: column;
+  }
+
+  .promo-btn {
+    width: 100%;
+  }
+
+  .info-tooltip {
+    left: auto;
+    right: 0;
+    top: calc(100% + 10px);
+    transform: none;
+    width: 210px;
+  }
+}
