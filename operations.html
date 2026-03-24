@@ -72,7 +72,22 @@
           <li>Character and Weapon XP</li>
           <li>Fast and safe runs</li>
           <li>Any difficulty supported</li>
-          <li>Get 3% disc. every 3 runs (12% max disc.)</li>
+          <li>Get 2% disc. every 2 runs (10% max disc.)</li>
+        </ul>
+      </div>
+
+      <div class="product-description requirements-box">
+        <h2>Requirements</h2>
+
+        <p>
+          There are the following requirements you should meet before using our Space Marine 2
+          Operations carry:
+        </p>
+
+        <ul>
+          <li>Active Warhammer 40k Space Marine 2 account;</li>
+          <li>Rain of Terror campaign mission completed;</li>
+          <li>Other campaign missions for specific operations completed (check the operation options description).</li>
         </ul>
       </div>
     </section>
@@ -175,7 +190,7 @@
                   <span class="choice-name">Pro</span>
                 </span>
                 <span class="choice-main-right">
-                  <span class="choice-price">+$2.99</span>
+                  <span class="choice-price">+$4.99</span>
                   <span class="info-icon" tabindex="0">
                     ?
                     <span class="info-tooltip">Priority queue placement and assignment to a professional booster for faster, smoother service.</span>
@@ -192,7 +207,7 @@
                   <span class="choice-name">Elite</span>
                 </span>
                 <span class="choice-main-right">
-                  <span class="choice-price">+$5.99</span>
+                  <span class="choice-price">+$8.99</span>
                   <span class="info-icon" tabindex="0">
                     ?
                     <span class="info-tooltip">Maximum priority, faster turnaround, and assignment to our highest-tier boosters for the best premium experience.</span>
@@ -263,8 +278,8 @@
 
     const priorityPrices = {
       standard: 0,
-      pro: 2.99,
-      elite: 5.99
+      pro: 4.99,
+      elite: 8.99
     };
 
     const promoCodes = {
@@ -380,8 +395,8 @@
       const runsSubtotal = pricePerRun * runs;
       const visibleSubtotal = runsSubtotal + priorityFee;
 
-      let runDiscount = Math.floor(runs / 3) * 0.03;
-      runDiscount = Math.min(runDiscount, 0.12);
+      let runDiscount = Math.floor(runs / 2) * 0.02;
+      runDiscount = Math.min(runDiscount, 0.10);
 
       const runDiscountAmount = visibleSubtotal * runDiscount;
       const promoDiscountAmount = (visibleSubtotal - runDiscountAmount) * appliedPromoDiscount;
@@ -402,13 +417,13 @@
       }
 
       if (runDiscount > 0 && promoDiscountAmount > 0) {
-        if (runDiscount === 0.12) {
+        if (runDiscount === 0.10) {
           discountInfoEl.textContent = `${(runDiscount * 100).toFixed(0)}% run discount and ${(appliedPromoDiscount * 100).toFixed(0)}% promo discount applied. You save $${totalSavings.toFixed(2)}. Max discount reached.`;
         } else {
           discountInfoEl.textContent = `${(runDiscount * 100).toFixed(0)}% run discount and ${(appliedPromoDiscount * 100).toFixed(0)}% promo discount applied. You save $${totalSavings.toFixed(2)}.`;
         }
       } else if (runDiscount > 0) {
-        if (runDiscount === 0.12) {
+        if (runDiscount === 0.10) {
           discountInfoEl.textContent = `${(runDiscount * 100).toFixed(0)}% run discount applied. You save $${totalSavings.toFixed(2)}. Max discount reached.`;
         } else {
           discountInfoEl.textContent = `${(runDiscount * 100).toFixed(0)}% run discount applied. You save $${totalSavings.toFixed(2)}.`;
