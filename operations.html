@@ -19,10 +19,15 @@
       <h1>Warhammer 40K Space Marine 2 Operations</h1>
 
       <p>
-        Buy Warhammer 40K Space Marine 2 Operations Boost to complete any available
-        operation you want as many times as you want, regardless of the difficulty.
-        You can choose our random or specific operations option. It's up to you.
+        Configure your Space Marine 2 Operations order with clear difficulty pricing,
+        flexible run counts, and direct support before checkout.
       </p>
+
+      <div class="hero-trust-row">
+        <span>Operations-focused order flow</span>
+        <span>Clear difficulty-based pricing</span>
+        <span>Support available before checkout</span>
+      </div>
 
       <div class="hero-buttons">
         <a href="index.html" class="btn btn-secondary">Back to Home</a>
@@ -39,49 +44,48 @@
         <img src="images/operations.png" alt="Operations" class="product-image">
 
         <div class="product-highlights">
-          <span>Any Difficulty</span>
-          <span>Fast Delivery</span>
-          <span>Safe Service</span>
-          <span>24/7 Support</span>
+          <span>Flexible Difficulty Scaling</span>
+          <span>Support-Led Orders</span>
+          <span>Transparent Pricing</span>
+          <span>Schedule-Friendly Delivery</span>
         </div>
 
         <div class="product-times">
           <div>
             <strong>1-2h</strong>
-            <p>Start Time</p>
+            <p>Estimated Start Window</p>
           </div>
 
           <div>
             <strong>Flexible</strong>
-            <p>Completion</p>
+            <p>Run Completion Pace</p>
           </div>
         </div>
       </div>
 
       <div class="product-description">
-        <h2>Description</h2>
+        <h2>Mission Brief</h2>
 
         <p>
-          Our Space Marine 2 Operations boosting service allows you to complete any
-          operation quickly and efficiently. Choose your difficulty and let our
-          professional players handle the grind.
+          This service is built for players who want repeated Operations clears with a
+          cleaner order flow, visible pricing, and support available before the run begins.
         </p>
 
         <ul>
-          <li>Requisition Tokens and Armory Data</li>
-          <li>Character and Weapon XP</li>
-          <li>Fast and safe runs</li>
-          <li>Any difficulty supported</li>
-          <li>Get 2% disc. every 2 runs (10% max disc.)</li>
+          <li>Requisition Tokens and Armory Data included</li>
+          <li>Character and weapon progression preserved</li>
+          <li>Supports random or specific Operations</li>
+          <li>Works across all available threat tiers</li>
+          <li>Volume discount applied automatically every 2 runs</li>
         </ul>
       </div>
 
       <div class="product-description requirements-box">
-        <h2>Requirements</h2>
+        <h2>Access Requirements</h2>
 
         <p>
-          There are the following requirements you should meet before using our Space Marine 2
-          Operations carry:
+          Before placing this order, make sure the following account and mission requirements
+          are already completed:
         </p>
 
         <ul>
@@ -90,11 +94,24 @@
           <li>Other campaign missions for specific operations completed (check the operation options description).</li>
         </ul>
       </div>
+
+      <div class="product-description xpc-flow-box">
+        <h2>How This Order Works</h2>
+
+        <ol class="xpc-flow-list">
+          <li>Set your preferred service details and run count.</li>
+          <li>Review the final total and contact support if needed.</li>
+          <li>Complete checkout and move into scheduling.</li>
+        </ol>
+      </div>
     </section>
 
     <aside class="product-right">
       <div class="purchase-panel">
-        <h3>Customize Order</h3>
+        <h3>Configure Service</h3>
+        <p class="panel-intro">Set your order details, review the final total, and continue when ready.</p>
+
+        <div class="panel-section-label">Order Setup</div>
 
         <div class="option-group">
           <p>Service Type</p>
@@ -133,7 +150,7 @@
         </div>
 
         <div class="option-group">
-          <p>Operation Type</p>
+          <p>Operation Mode</p>
           <select>
             <option>Random Operations</option>
             <option>Specific Operations</option>
@@ -150,7 +167,7 @@
         </div>
 
         <div class="option-group">
-          <p>Class</p>
+          <p>Class Focus</p>
           <select>
             <option>Any Class</option>
             <option>Tactical</option>
@@ -163,8 +180,10 @@
           </select>
         </div>
 
+        <div class="panel-section-label">Delivery Options</div>
+
         <div class="option-group">
-          <p>Order Priority</p>
+          <p>Delivery Tier</p>
 
           <div class="choice-options priority-stack">
             <label class="choice-card active" data-choice-group="priority-tier">
@@ -197,7 +216,7 @@
                   </span>
                 </span>
               </div>
-              <span class="priority-badge">Most Popular</span>
+              <span class="priority-badge">Recommended</span>
             </label>
 
             <label class="choice-card" data-choice-group="priority-tier">
@@ -219,7 +238,7 @@
         </div>
 
         <div class="option-group">
-          <p>Difficulty</p>
+          <p>Threat Level</p>
           <select id="difficulty">
             <option value="" disabled selected>Select Threat</option>
             <option value="2">Threat: Minimal (+$2.00)</option>
@@ -232,7 +251,7 @@
         </div>
 
         <div class="option-group">
-          <p>Runs</p>
+          <p>Run Count</p>
           <div class="runs-control">
             <button type="button" id="runs-minus" class="runs-btn">-</button>
             <input type="number" id="runs" value="1" min="1">
@@ -240,27 +259,29 @@
           </div>
         </div>
 
+        <div class="panel-section-label">Checkout Summary</div>
+
         <div class="option-group promo-group">
           <p>Promo Code</p>
           <div class="promo-row">
             <input type="text" id="promo-code" placeholder="Enter code">
-            <button type="button" id="validate-promo" class="btn btn-secondary promo-btn">Validate</button>
+            <button type="button" id="validate-promo" class="btn btn-secondary promo-btn">Apply</button>
           </div>
           <p id="promo-message" class="promo-message"></p>
         </div>
 
         <div class="total-box">
-          <span>Original Price</span>
+          <span>Service Subtotal</span>
           <strong id="original-price">$0.95</strong>
         </div>
 
         <div class="total-box promo-discount-box hidden" id="promo-discount-box">
-          <span>Promo Discount</span>
+          <span>Applied Savings</span>
           <strong id="promo-discount">-$0.00</strong>
         </div>
 
         <div class="total-box">
-          <span>Total</span>
+          <span>Checkout Total</span>
           <strong id="total-price">$0.95</strong>
         </div>
 
@@ -280,7 +301,7 @@
         </div>
 
         <a href="#" class="btn btn-primary full btn-disabled" id="buy-now-btn" aria-disabled="true">Buy Now</a>
-        <a href="#" class="btn btn-secondary full">Chat before order</a>
+        <a href="#" class="btn btn-secondary full">Talk to Support First</a>
       </div>
     </aside>
 
