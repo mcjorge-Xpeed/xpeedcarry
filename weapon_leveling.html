@@ -45,15 +45,15 @@
 
         <div class="product-highlights">
           <span>Any Weapon</span>
+          <span>Piloted Only</span>
           <span>Fast Service</span>
-          <span>Safe Boost</span>
           <span>24/7 Support</span>
         </div>
 
         <div class="product-times">
           <div>
-            <strong>$0.95</strong>
-            <p>Starting Price</p>
+            <strong>1-2h</strong>
+            <p>Start Time</p>
           </div>
 
           <div>
@@ -78,7 +78,7 @@
           <li>Fast and safe service</li>
           <li>Primary, Secondary, and Melee weapons supported</li>
           <li>All Weapons package available for $369.00 (new weapons included.)</li>
-          <li>EARN EXTRA REQUISITION POINTS AND ARMORY DATA WHILE LEVELING YOUR WEAPONS, ALL ADDITIONAL REWARDS ARE YOURS TO KEEP. (rewards may vary) </li>
+          <li>EARN EXTRA REQUISITION POINTS AND ARMORY DATA WHILE LEVELING YOUR WEAPONS, ALL ADDITIONAL REWARDS ARE YOURS TO KEEP. (rewards may vary)</li>
         </ul>
 
         <h2>Requirements</h2>
@@ -105,6 +105,83 @@
       <div class="purchase-panel">
         <h3>Customize Order</h3>
 
+        <!-- SERVICE TYPE -->
+        <div class="option-group">
+          <p>Service Type</p>
+
+          <label class="choice-card active locked-choice">
+            <input type="radio" name="serviceMode" checked>
+            <div class="choice-main">
+              <span class="choice-main-left">
+                <span class="choice-name">Piloted</span>
+              </span>
+              <span class="choice-main-right">
+                <span class="choice-price included-text">Only Option</span>
+                <span class="info-icon" tabindex="0">
+                  ?
+                  <span class="info-tooltip">This service is available only as piloted service.</span>
+                </span>
+              </span>
+            </div>
+          </label>
+        </div>
+
+        <!-- COMPLETION MODE -->
+        <div class="option-group">
+          <p>Completion Mode</p>
+
+          <div class="choice-options priority-stack">
+            <label class="choice-card active" data-choice-group="completion-mode">
+              <input type="radio" name="completionMode" value="standard" checked>
+              <div class="choice-main">
+                <span class="choice-main-left">
+                  <span class="choice-name">Standard</span>
+                </span>
+                <span class="choice-main-right">
+                  <span class="choice-price included-text">Included</span>
+                  <span class="info-icon" tabindex="0">
+                    ?
+                    <span class="info-tooltip">Standard queue placement and regular handling.</span>
+                  </span>
+                </span>
+              </div>
+            </label>
+
+            <label class="choice-card most-popular" data-choice-group="completion-mode">
+              <input type="radio" name="completionMode" value="pro">
+              <div class="choice-main">
+                <span class="choice-main-left">
+                  <span class="choice-name">Pro</span>
+                </span>
+                <span class="choice-main-right">
+                  <span class="choice-price">+$4.99</span>
+                  <span class="info-icon" tabindex="0">
+                    ?
+                    <span class="info-tooltip">Priority queue placement and assignment to a professional booster for faster, smoother service.</span>
+                  </span>
+                </span>
+              </div>
+              <span class="priority-badge">Most Popular</span>
+            </label>
+
+            <label class="choice-card" data-choice-group="completion-mode">
+              <input type="radio" name="completionMode" value="elite">
+              <div class="choice-main">
+                <span class="choice-main-left">
+                  <span class="choice-name">Elite</span>
+                </span>
+                <span class="choice-main-right">
+                  <span class="choice-price">+$8.99</span>
+                  <span class="info-icon" tabindex="0">
+                    ?
+                    <span class="info-tooltip">Maximum priority, faster turnaround, and assignment to our highest-tier boosters for the best premium experience.</span>
+                  </span>
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+
         <!-- PACKAGE -->
         <div class="option-group">
           <p>Weapon Package</p>
@@ -121,15 +198,6 @@
             <option>PC</option>
             <option>Xbox</option>
             <option>PlayStation</option>
-          </select>
-        </div>
-
-        <!-- METHOD -->
-        <div class="option-group">
-          <p>Completion Method</p>
-          <select id="completion-method">
-            <option>Self-play</option>
-            <option>Piloted</option>
           </select>
         </div>
 
@@ -372,14 +440,29 @@
           </label>
         </div>
 
+        <!-- PROMO -->
+        <div class="option-group promo-group">
+          <p>Promo Code</p>
+          <div class="promo-row">
+            <input type="text" id="promo-code" placeholder="Enter code">
+            <button type="button" id="validate-promo" class="btn btn-secondary promo-btn">Validate</button>
+          </div>
+          <p id="promo-message" class="promo-message"></p>
+        </div>
+
         <!-- TOTALS -->
         <div class="total-box">
           <span>Original Price</span>
           <strong id="original-price">$0.95</strong>
         </div>
 
+        <div class="total-box promo-discount-box hidden" id="promo-discount-box">
+          <span>Promo Discount</span>
+          <strong id="promo-discount">-$0.00</strong>
+        </div>
+
         <div class="total-box">
-          <span>Discounted Price</span>
+          <span>Total</span>
           <strong id="total-price">$0.95</strong>
         </div>
 
@@ -403,12 +486,48 @@
     const allWeaponsPrice = 369.00;
     const totalWeapons = 28;
 
+    const completionPrices = {
+      standard: 0,
+      pro: 4.99,
+      elite: 8.99
+    };
+
+    const promoCodes = {
+      XPEED5: 0.05,
+      BOOSTING10: 0.10
+    };
+
+    let appliedPromoDiscount = 0;
+
     const packageSelect = document.getElementById("weapon-package");
     const originalPriceEl = document.getElementById("original-price");
     const totalEl = document.getElementById("total-price");
     const discountInfoEl = document.getElementById("discount-info");
     const weaponCheckboxes = document.querySelectorAll(".weapon-option");
     const weaponGroups = document.querySelectorAll(".weapon-group");
+    const completionInputs = document.querySelectorAll('input[name="completionMode"]');
+
+    const promoCodeInput = document.getElementById("promo-code");
+    const validatePromoBtn = document.getElementById("validate-promo");
+    const promoMessageEl = document.getElementById("promo-message");
+    const promoDiscountBox = document.getElementById("promo-discount-box");
+    const promoDiscountEl = document.getElementById("promo-discount");
+
+    function updateChoiceCards(groupName) {
+      const cards = document.querySelectorAll(`.choice-card[data-choice-group="${groupName}"]`);
+
+      cards.forEach((card) => {
+        const input = card.querySelector('input[name="completionMode"]');
+        if (input) {
+          card.classList.toggle("active", input.checked);
+        }
+      });
+    }
+
+    function getSelectedCompletionMode() {
+      const selected = document.querySelector('input[name="completionMode"]:checked');
+      return selected ? selected.value : "standard";
+    }
 
     function getSelectedWeaponCount() {
       let count = 0;
@@ -460,19 +579,63 @@
       }
     }
 
+    function validatePromo(showMessage = true) {
+      const code = promoCodeInput.value.trim().toUpperCase();
+
+      if (!code) {
+        appliedPromoDiscount = 0;
+
+        if (showMessage) {
+          promoMessageEl.textContent = "Please enter a promo code.";
+          promoMessageEl.className = "promo-message error";
+        }
+
+        updateTotal();
+        return;
+      }
+
+      if (promoCodes[code]) {
+        appliedPromoDiscount = promoCodes[code];
+
+        if (showMessage) {
+          promoMessageEl.textContent = `Promo code applied successfully: ${code}`;
+          promoMessageEl.className = "promo-message success";
+        }
+      } else {
+        appliedPromoDiscount = 0;
+
+        if (showMessage) {
+          promoMessageEl.textContent = "Invalid promo code.";
+          promoMessageEl.className = "promo-message error";
+        }
+      }
+
+      updateTotal();
+    }
+
     function updateTotal() {
       const selectedPackage = packageSelect.value;
       const selectedWeapons = getSelectedWeaponCount();
+      const completionMode = getSelectedCompletionMode();
+      const completionFee = completionPrices[completionMode] || 0;
+
+      let visibleSubtotal = 0;
+      let finalTotal = 0;
+      let promoDiscountAmount = 0;
 
       if (selectedPackage === "specific") {
         const weaponsTotal = selectedWeapons * weaponPrice;
-        const subtotal = basePrice + weaponsTotal;
+        const subtotal = basePrice + weaponsTotal + completionFee;
         const discountRate = getDiscountRate(selectedWeapons);
         const discountAmount = weaponsTotal * discountRate;
-        const discountedTotal = subtotal - discountAmount;
+        const discountedSubtotal = subtotal - discountAmount;
 
-        originalPriceEl.textContent = `$${subtotal.toFixed(2)}`;
-        totalEl.textContent = `$${discountedTotal.toFixed(2)}`;
+        promoDiscountAmount = discountedSubtotal * appliedPromoDiscount;
+        visibleSubtotal = discountedSubtotal;
+        finalTotal = discountedSubtotal - promoDiscountAmount;
+
+        originalPriceEl.textContent = `$${visibleSubtotal.toFixed(2)}`;
+        totalEl.textContent = `$${finalTotal.toFixed(2)}`;
 
         if (selectedWeapons === 0) {
           discountInfoEl.textContent = "Select one or more weapons.";
@@ -490,10 +653,22 @@
       }
 
       if (selectedPackage === "all") {
-        const originalBundlePrice = basePrice + (totalWeapons * weaponPrice);
-        originalPriceEl.textContent = `$${originalBundlePrice.toFixed(2)}`;
-        totalEl.textContent = `$${allWeaponsPrice.toFixed(2)}`;
+        const bundleSubtotal = allWeaponsPrice + completionFee;
+        promoDiscountAmount = bundleSubtotal * appliedPromoDiscount;
+        visibleSubtotal = bundleSubtotal;
+        finalTotal = bundleSubtotal - promoDiscountAmount;
+
+        originalPriceEl.textContent = `$${visibleSubtotal.toFixed(2)}`;
+        totalEl.textContent = `$${finalTotal.toFixed(2)}`;
         discountInfoEl.textContent = "All weapons bundle price applied.";
+      }
+
+      if (promoDiscountAmount > 0) {
+        promoDiscountBox.classList.remove("hidden");
+        promoDiscountEl.textContent = `-$${promoDiscountAmount.toFixed(2)}`;
+      } else {
+        promoDiscountBox.classList.add("hidden");
+        promoDiscountEl.textContent = "-$0.00";
       }
     }
 
@@ -506,7 +681,26 @@
       checkbox.addEventListener("change", updateTotal);
     });
 
+    completionInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        updateChoiceCards("completion-mode");
+        updateTotal();
+      });
+    });
+
+    validatePromoBtn.addEventListener("click", () => {
+      validatePromo(true);
+    });
+
+    promoCodeInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        validatePromo(true);
+      }
+    });
+
     updateWeaponVisibility();
+    updateChoiceCards("completion-mode");
     updateTotal();
   </script>
 
