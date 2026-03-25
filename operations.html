@@ -277,7 +277,7 @@
 
         <div class="total-box promo-discount-box hidden" id="promo-discount-box">
           <span>Applied Savings</span>
-          <strong id="promo-discount">-$0.00</strong>
+          <strong id="promo-discount">$0.00</strong>
         </div>
 
         <div class="total-box">
@@ -368,8 +368,8 @@
         return 0;
       }
 
-      const rawSelfPlayFee = visibleSubtotal * 0.12;
-      return Math.min(29.99, Math.max(1.99, rawSelfPlayFee));
+      const rawSelfPlayFee = visibleSubtotal * 0.15;
+      return Math.max(2.49, rawSelfPlayFee);
     }
 
     function updateBuyButtonState() {
@@ -440,16 +440,17 @@
 
       const pricePerRun = basePrice + difficulty;
       const runsSubtotal = pricePerRun * runs;
-      const visibleSubtotal = runsSubtotal + priorityFee;
+
+      const preSelfPlaySubtotal = runsSubtotal + priorityFee;
+      const selfPlayFee = getSelfPlayFee(preSelfPlaySubtotal);
+      const visibleSubtotal = preSelfPlaySubtotal + selfPlayFee;
 
       let runDiscount = Math.floor(runs / 2) * 0.02;
       runDiscount = Math.min(runDiscount, 0.10);
 
       const runDiscountAmount = visibleSubtotal * runDiscount;
       const promoDiscountAmount = (visibleSubtotal - runDiscountAmount) * appliedPromoDiscount;
-      const hiddenSelfPlayTotal = getSelfPlayFee(visibleSubtotal);
-
-      const finalTotal = visibleSubtotal - runDiscountAmount - promoDiscountAmount + hiddenSelfPlayTotal;
+      const finalTotal = visibleSubtotal - runDiscountAmount - promoDiscountAmount;
       const totalSavings = runDiscountAmount + promoDiscountAmount;
 
       originalPriceEl.textContent = `$${visibleSubtotal.toFixed(2)}`;
@@ -460,7 +461,7 @@
         promoDiscountEl.textContent = `-$${promoDiscountAmount.toFixed(2)}`;
       } else {
         promoDiscountBox.classList.add("hidden");
-        promoDiscountEl.textContent = "-$0.00";
+        promoDiscountEl.textContent = `$0.00`;
       }
 
       if (runDiscount > 0 && promoDiscountAmount > 0) {
