@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Chat from "@/components/Chat";
 
-export default function SupportPage() {
+function SupportChat() {
   const searchParams = useSearchParams();
   const prefill = searchParams.get("message") ?? undefined;
 
@@ -62,5 +62,13 @@ export default function SupportPage() {
         <Chat conversationId={conversationId} currentUserId={userId} initialMessage={prefill} />
       )}
     </div>
+  );
+}
+
+export default function SupportPage() {
+  return (
+    <Suspense fallback={null}>
+      <SupportChat />
+    </Suspense>
   );
 }

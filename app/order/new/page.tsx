@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -10,7 +10,7 @@ type Game = {
   slug: string;
 };
 
-export default function NewOrderPage() {
+function NewOrderForm() {
   const searchParams = useSearchParams();
   const gameSlug = searchParams.get("game") || "";
 
@@ -142,5 +142,13 @@ export default function NewOrderPage() {
         </button>
       </form>
     </div>
+  );
+}
+
+export default function NewOrderPage() {
+  return (
+    <Suspense fallback={null}>
+      <NewOrderForm />
+    </Suspense>
   );
 }
