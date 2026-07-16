@@ -52,7 +52,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
           <Image src="/logo.svg" alt="XpeedCarry" width={34} height={34} />
-          Xpeed<span className="text-accent">carry</span>
+          <span>Xpeed<span className="text-accent">carry</span></span>
         </Link>
         <div className="flex gap-6 items-center text-sm">
           <div
