@@ -51,8 +51,8 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 backdrop-blur bg-[#07070d]/85 border-b border-white/[0.06]">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
-          <Image src="/logo.png" alt="XpeedCarry" width={36} height={36} className="rounded" />
-          Xpeed<span className="text-accent">Carry</span>
+          <Image src="/logo.svg" alt="XpeedCarry" width={34} height={34} />
+          Xpeed<span className="text-accent2">Carry</span>
         </Link>
         <div className="flex gap-6 items-center text-sm">
           <div
