@@ -23,7 +23,6 @@ export default function AdminUsersPage() {
     const { data } = await supabase
       .from("profiles")
       .select("*")
-      .in("role", ["client", "pro"])
       .order("created_at", { ascending: false });
     setProfiles(data ?? []);
     setLoading(false);
@@ -35,6 +34,11 @@ export default function AdminUsersPage() {
 
   async function toggleSuspend(id: string, currentlyActive: boolean) {
     await supabase.from("profiles").update({ active: !currentlyActive }).eq("id", id);
+    load();
+  }
+
+  async function changeRole(id: string, newRole: string) {
+    await supabase.from("profiles").update({ role: newRole }).eq("id", id);
     load();
   }
 
@@ -52,7 +56,7 @@ export default function AdminUsersPage() {
     <div className="max-w-4xl mx-auto px-6 py-10">
       <h1 className="text-2xl font-bold mb-2">Users</h1>
       <p className="text-gray-400 text-sm mb-8">
-        Suspend a client or pro who breaks the rules — they lose all access to the site until you reactivate them.
+        Change a user's role, or suspend a client/pro who breaks the rules — suspended accounts lose all access to the site until you reactivate them.
       </p>
 
       <div className="card overflow-x-auto">
@@ -69,7 +73,17 @@ export default function AdminUsersPage() {
             {profiles.map((p) => (
               <tr key={p.id} className="border-b border-white/5">
                 <td className="p-3">{p.full_name ?? "-"}</td>
-                <td className="p-3 capitalize">{p.role}</td>
+                <td className="p-3">
+                  <select
+                    value={p.role}
+                    onChange={(e) => changeRole(p.id, e.target.value)}
+                    className="input py-1 px-2 text-sm w-auto capitalize"
+                  >
+                    <option value="client">Client</option>
+                    <option value="pro">Pro</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
                 <td className="p-3">
                   {p.active ? (
                     <span className="text-accent2">Active</span>
