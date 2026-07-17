@@ -71,7 +71,17 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-white font-semibold text-lg mb-2">8. Limitation of liability</h2>
+          <h2 className="text-white font-semibold text-lg mb-2">8. Conduct and account suspension</h2>
+          <p>
+            Everyone using XpeedCarry — clients and pros alike — is expected to follow our{" "}
+            <a href="/guidelines" className="text-accent hover:underline">Community Guidelines</a>, including
+            treating support, pros, and clients with respect at all times. Accounts that violate this may be
+            suspended, losing access to the entire platform, at our discretion.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-white font-semibold text-lg mb-2">9. Limitation of liability</h2>
           <p>
             To the maximum extent permitted by law, XpeedCarry's liability for any claim arising from an
             order is limited to the amount paid for that order. We are not liable for indirect, incidental,
@@ -81,7 +91,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-white font-semibold text-lg mb-2">9. Contact</h2>
+          <h2 className="text-white font-semibold text-lg mb-2">10. Contact</h2>
           <p>Questions about these terms? Reach us through our <a href="/support" className="text-accent hover:underline">support chat</a>.</p>
         </section>
       </div>

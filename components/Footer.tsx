@@ -11,6 +11,7 @@ export default function Footer() {
         <Link href="/terms" className="hover:text-white transition">Terms</Link>
         <Link href="/privacy" className="hover:text-white transition">Privacy</Link>
         <Link href="/refund" className="hover:text-white transition">Refund Policy</Link>
+        <Link href="/guidelines" className="hover:text-white transition">Community Guidelines</Link>
       </div>
       <p className="text-xs text-[#6f6f80] max-w-2xl mx-auto mt-4">
         XpeedCarry is an independent service provider and is not endorsed by, directly affiliated with,
