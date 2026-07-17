@@ -46,7 +46,10 @@ create table games (
 );
 
 -- ---------- SECUENCIA PARA NÚMERO DE ORDEN ----------
-create sequence order_number_seq start 1000;
+-- Formato ORD<YY>-<consecutivo>, ej. ORD26-1001. El año se calcula solo
+-- de la fecha al momento de crear la orden; el consecutivo nunca se
+-- reinicia (decisión 2026-07-17: más simple que resetear cada 1° de enero).
+create sequence order_number_seq start 1001;
 
 -- ---------- ÓRDENES ----------
 create type order_status as enum (
@@ -62,7 +65,7 @@ create type order_status as enum (
 
 create table orders (
   id uuid primary key default uuid_generate_v4(),
-  order_number text unique not null default ('ORD-' || nextval('order_number_seq')::text),
+  order_number text unique not null default ('ORD' || to_char(now(), 'YY') || '-' || nextval('order_number_seq')::text),
   client_id uuid not null references profiles(id),
   pro_id uuid references profiles(id),
   game_id uuid references games(id),
