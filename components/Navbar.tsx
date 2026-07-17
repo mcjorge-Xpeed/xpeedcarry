@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
+import NewOrderNotifier from "@/components/NewOrderNotifier";
 
 type Game = { id: string; name: string; slug: string; image_url: string };
 
@@ -48,6 +49,7 @@ export default function Navbar() {
   }
 
   return (
+    <>
     <nav className="sticky top-0 z-50 backdrop-blur bg-[#07070d]/85 border-b border-white/[0.06]">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
@@ -135,5 +137,7 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+    {role === "admin" && <NewOrderNotifier />}
+    </>
   );
 }

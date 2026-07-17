@@ -6,6 +6,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { buildPaymentRequestMessage } from "@/lib/paymentMessage";
 import Chat from "@/components/Chat";
+import PricingGuideSidebar from "@/components/PricingGuideSidebar";
 
 // Stripe's standard US online-card rate. If your account is set up under a
 // different country or takes a lot of international cards, check your real
@@ -163,7 +164,9 @@ export default function AdminOrderDetail() {
   const overrideAvailable = hoursSinceDelivered >= 12;
 
   return (
-    <div className="max-w-xl mx-auto mt-10 px-4">
+    <div className="max-w-5xl mx-auto mt-10 px-4">
+      <div className="grid lg:grid-cols-[1fr_300px] gap-6 items-start">
+      <div>
       <div className="card p-6 space-y-4">
         <div>
           <p className="text-sm text-gray-400">{order.order_number}</p>
@@ -320,6 +323,9 @@ export default function AdminOrderDetail() {
           <Chat conversationId={conversationId} currentUserId={adminId} />
         </div>
       )}
+      </div>
+      <PricingGuideSidebar />
+      </div>
     </div>
   );
 }
