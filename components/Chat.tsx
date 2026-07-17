@@ -65,12 +65,20 @@ export default function Chat({
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState("");
+  const [convMeta, setConvMeta] = useState<{ client_id: string; pro_id: string | null } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const sentInitialFor = useRef<string | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
     async function load() {
+      const { data: conv } = await supabase
+        .from("conversations")
+        .select("client_id, pro_id")
+        .eq("id", conversationId)
+        .single();
+      setConvMeta(conv);
+
       const { data } = await supabase
         .from("messages")
         .select("*")
@@ -134,12 +142,31 @@ export default function Chat({
             );
           }
 
+          const senderRole = isOwn
+            ? null
+            : m.sender_id === convMeta?.pro_id
+            ? "Pro"
+            : m.sender_id === convMeta?.client_id
+            ? "Client"
+            : "Support";
+
           return (
-            <div key={m.id} className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
+            <div key={m.id} className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}>
+              {senderRole && (
+                <p
+                  className={`text-[10px] font-bold uppercase tracking-wide mb-0.5 px-1 ${
+                    senderRole === "Pro" ? "text-accent2" : senderRole === "Support" ? "text-accent" : "text-gray-500"
+                  }`}
+                >
+                  {senderRole}
+                </p>
+              )}
               <div
                 className={`max-w-[75%] px-3 py-2 text-sm shadow-sm ${
                   isOwn
                     ? "bg-gradient-to-br from-accent2 to-accent text-[#0a0a0f] font-medium rounded-2xl rounded-br-sm"
+                    : senderRole === "Pro"
+                    ? "bg-[#0a2b30] border border-accent2/30 text-gray-100 rounded-2xl rounded-bl-sm"
                     : "bg-[#1c1c22] text-gray-100 rounded-2xl rounded-bl-sm"
                 }`}
               >
