@@ -102,7 +102,7 @@ export default function Navbar() {
               {open && (
                 <div className="absolute right-0 mt-2 w-48 card p-2 text-sm shadow-xl">
                   <p className="px-3 py-2 text-gray-400 text-xs">Signed in</p>
-                  <Link href="/order/new" className="block px-3 py-2 rounded hover:bg-white/5">
+                  <Link href="/order" className="block px-3 py-2 rounded hover:bg-white/5">
                     My Orders
                   </Link>
                   {role === "pro" && (
