@@ -2,18 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { redirectToCheckout } from "@/lib/checkout";
 import Chat from "@/components/Chat";
+import TermsGateModal from "@/components/TermsGateModal";
 
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [userId, setUserId] = useState<string | null>(null);
   const [order, setOrder] = useState<any>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [payLoading, setPayLoading] = useState(false);
-  const [agreed, setAgreed] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const supabase = createClient();
 
@@ -51,12 +50,6 @@ export default function OrderDetailPage() {
     setConfirming(false);
   }
 
-  async function handlePay() {
-    setPayLoading(true);
-    await redirectToCheckout(order.id);
-    setPayLoading(false);
-  }
-
   if (!order) return <p className="text-center mt-20">Loading order...</p>;
 
   const statusLabels: Record<string, string> = {
@@ -72,7 +65,6 @@ export default function OrderDetailPage() {
 
   const awaitingQuote = order.status === "pending_payment" && !order.price_confirmed;
   const readyToPay = order.status === "pending_payment" && order.price_confirmed;
-  const isPiloted = order.description?.startsWith("Service mode: Piloted");
 
   return (
     <div className="max-w-2xl mx-auto mt-10 px-4">
@@ -91,27 +83,8 @@ export default function OrderDetailPage() {
 
         {readyToPay && (
           <div className="mt-4">
-            <label className="flex items-start gap-3 text-xs text-gray-400 mb-3">
-              <input
-                type="checkbox"
-                checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
-                className="accent-[#8b5cf6] mt-0.5"
-              />
-              <span>
-                I agree to the <Link href="/terms" target="_blank" className="text-accent hover:underline">Terms</Link>,{" "}
-                <Link href="/privacy" target="_blank" className="text-accent hover:underline">Privacy Policy</Link>,{" "}
-                <Link href="/refund" target="_blank" className="text-accent hover:underline">Refund Policy</Link>
-                {isPiloted && (
-                  <>
-                    , and the <Link href="/account-handling" target="_blank" className="text-accent hover:underline">Account Handling Rules</Link>
-                  </>
-                )}
-                .
-              </span>
-            </label>
-            <button className="btn-primary w-full" onClick={handlePay} disabled={payLoading || !agreed}>
-              {payLoading ? "Redirecting..." : `Pay $${order.price} Now`}
+            <button className="btn-primary w-full" onClick={() => setShowTerms(true)}>
+              {`Pay $${order.price} Now`}
             </button>
           </div>
         )}
@@ -146,6 +119,14 @@ export default function OrderDetailPage() {
         <p className="text-gray-400 text-sm">
           The chat activates as soon as payment is confirmed and a pro is assigned.
         </p>
+      )}
+
+      {showTerms && (
+        <TermsGateModal
+          price={order.price}
+          onClose={() => setShowTerms(false)}
+          onConfirm={() => redirectToCheckout(order.id)}
+        />
       )}
     </div>
   );

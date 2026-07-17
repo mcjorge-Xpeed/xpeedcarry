@@ -71,6 +71,7 @@ export default function Navbar() {
                     <Link
                       key={g.id}
                       href={`/order/new?game=${g.slug}`}
+                      onClick={() => setGamesOpen(false)}
                       className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition"
                     >
                       <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0">

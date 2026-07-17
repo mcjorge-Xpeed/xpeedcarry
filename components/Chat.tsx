@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { parsePaymentRequestMessage } from "@/lib/paymentMessage";
 import { redirectToCheckout } from "@/lib/checkout";
+import TermsGateModal from "@/components/TermsGateModal";
 
 type Message = {
   id: string;
@@ -27,7 +28,7 @@ function PaymentRequestBubble({
   currentUserId: string;
 }) {
   const payload = parsePaymentRequestMessage(content)!;
-  const [loading, setLoading] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const isClient = currentUserId === payload.clientId;
 
   return (
@@ -36,19 +37,18 @@ function PaymentRequestBubble({
       <p className="text-sm text-gray-300">{payload.orderNumber} — {payload.title}</p>
       <p className="text-2xl font-bold text-accent2 mt-1 mb-3">${payload.price.toFixed(2)}</p>
       {isClient ? (
-        <button
-          className="btn-primary w-full text-sm"
-          disabled={loading}
-          onClick={async () => {
-            setLoading(true);
-            await redirectToCheckout(payload.orderId);
-            setLoading(false);
-          }}
-        >
-          {loading ? "Redirecting..." : `Pay $${payload.price.toFixed(2)} Now`}
+        <button className="btn-primary w-full text-sm" onClick={() => setShowTerms(true)}>
+          {`Pay $${payload.price.toFixed(2)} Now`}
         </button>
       ) : (
         <p className="text-xs text-gray-500">Waiting for the client to pay.</p>
+      )}
+      {showTerms && (
+        <TermsGateModal
+          price={payload.price}
+          onClose={() => setShowTerms(false)}
+          onConfirm={() => redirectToCheckout(payload.orderId)}
+        />
       )}
     </div>
   );
