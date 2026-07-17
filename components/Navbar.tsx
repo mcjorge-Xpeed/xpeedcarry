@@ -104,21 +104,21 @@ export default function Navbar() {
               {open && (
                 <div className="absolute right-0 mt-2 w-48 card p-2 text-sm shadow-xl">
                   <p className="px-3 py-2 text-gray-400 text-xs">Signed in</p>
-                  <Link href="/order" className="block px-3 py-2 rounded hover:bg-white/5">
+                  <Link href="/order" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
                     My Orders
                   </Link>
                   {role === "pro" && (
-                    <Link href="/pro" className="block px-3 py-2 rounded hover:bg-white/5">
+                    <Link href="/pro" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
                       Pro Dashboard
                     </Link>
                   )}
                   {role === "admin" && (
-                    <Link href="/admin" className="block px-3 py-2 rounded hover:bg-white/5">
+                    <Link href="/admin" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
                       Admin Panel
                     </Link>
                   )}
                   <button
-                    onClick={handleSignOut}
+                    onClick={() => { setOpen(false); handleSignOut(); }}
                     className="w-full text-left px-3 py-2 rounded hover:bg-white/5 text-red-400"
                   >
                     Sign out
