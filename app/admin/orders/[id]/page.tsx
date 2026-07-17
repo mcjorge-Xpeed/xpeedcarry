@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { buildPaymentRequestMessage } from "@/lib/paymentMessage";
@@ -19,6 +19,8 @@ function stripeFee(amount: number) {
 
 export default function AdminOrderDetail() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const [deleting, setDeleting] = useState(false);
   const [order, setOrder] = useState<any>(null);
   const [client, setClient] = useState<any>(null);
   const [pro, setPro] = useState<any>(null);
@@ -123,6 +125,27 @@ export default function AdminOrderDetail() {
       await supabase.from("conversations").update({ closed: true }).eq("id", conversationId);
     }
     load();
+  }
+
+  async function deleteOrder() {
+    const paidStatuses = ["paid", "assigned", "in_progress", "delivered", "completed", "pro_paid"];
+    const warning = paidStatuses.includes(order.status)
+      ? `This order was PAID (status: ${order.status}). Deleting it removes it and its chat from XpeedCarry permanently, but does NOT refund or affect the Stripe charge. Are you sure?`
+      : "Delete this order and its chat permanently? This can't be undone.";
+    if (!confirm(warning)) return;
+
+    setDeleting(true);
+    const res = await fetch("/api/admin/delete-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderId: id }),
+    });
+    if (res.ok) {
+      router.push("/admin");
+    } else {
+      setDeleting(false);
+      alert("Couldn't delete the order — try again.");
+    }
   }
 
   const enteredPrice = Number(finalPrice) || 0;
@@ -281,6 +304,13 @@ export default function AdminOrderDetail() {
               </button>
             )}
           </div>
+        </div>
+
+        <div className="border-t border-white/10 pt-4">
+          <p className="text-xs uppercase tracking-widest text-red-400 font-bold mb-2">Danger Zone</p>
+          <button className="btn-secondary text-sm text-red-400" onClick={deleteOrder} disabled={deleting}>
+            {deleting ? "Deleting..." : "Delete Order Permanently"}
+          </button>
         </div>
       </div>
 

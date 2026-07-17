@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { format } from "date-fns";
+import AdminOrdersTable from "@/components/AdminOrdersTable";
 
 export const revalidate = 0;
 
@@ -130,38 +131,7 @@ export default async function AdminPage() {
       )}
 
       <h2 className="text-xl font-semibold mb-4">Orders</h2>
-      <div className="card overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="text-left text-gray-400 border-b border-white/10">
-            <tr>
-              <th className="p-3">Order #</th>
-              <th className="p-3">Client</th>
-              <th className="p-3">Pro</th>
-              <th className="p-3">Price</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Pro payout due</th>
-              <th className="p-3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders?.map((o: any) => (
-              <tr key={o.id} className="border-b border-white/5">
-                <td className="p-3">{o.order_number}</td>
-                <td className="p-3">{o.client?.full_name ?? "-"}</td>
-                <td className="p-3">{o.pro?.full_name ?? "Unassigned"}</td>
-                <td className="p-3">{o.price_confirmed ? `$${o.price}` : "Pending quote"}</td>
-                <td className="p-3">{o.status}</td>
-                <td className="p-3">{o.pro_payout_due_at ? format(new Date(o.pro_payout_due_at), "MM/dd/yyyy") : "-"}</td>
-                <td className="p-3">
-                  <Link href={`/admin/orders/${o.id}`} className="text-accent2 hover:underline">
-                    View
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <AdminOrdersTable orders={orders ?? []} />
     </div>
   );
 }
