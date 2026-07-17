@@ -229,18 +229,24 @@ export default function AdminOrderDetail() {
           </div>
         )}
 
-        <div>
-          <label className="text-sm text-gray-400">Assign pro</label>
-          <div className="flex gap-2 mt-1">
-            <select className="input" value={selectedPro} onChange={(e) => setSelectedPro(e.target.value)}>
-              <option value="">Select a pro</option>
-              {pros.map((p) => (
-                <option key={p.id} value={p.id}>{p.full_name}</option>
-              ))}
-            </select>
-            <button className="btn-primary" onClick={assignPro}>Assign</button>
+        {order.status === "pending_payment" ? (
+          <p className="text-xs text-gray-500 border-t border-white/10 pt-4">
+            You can assign a pro once the client has paid.
+          </p>
+        ) : (
+          <div>
+            <label className="text-sm text-gray-400">Assign pro</label>
+            <div className="flex gap-2 mt-1">
+              <select className="input" value={selectedPro} onChange={(e) => setSelectedPro(e.target.value)}>
+                <option value="">Select a pro</option>
+                {pros.map((p) => (
+                  <option key={p.id} value={p.id}>{p.full_name}</option>
+                ))}
+              </select>
+              <button className="btn-primary" onClick={assignPro}>Assign</button>
+            </div>
           </div>
-        </div>
+        )}
 
         {(order.status === "assigned" || order.status === "in_progress") && (
           <p className="text-sm text-gray-500">

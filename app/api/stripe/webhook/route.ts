@@ -29,14 +29,25 @@ export async function POST(req: Request) {
         })
         .eq("id", orderId);
 
-      // Crea automáticamente la conversación de la orden (cliente <-> pro, se asigna pro después)
-      const { data: order } = await supabase.from("orders").select("client_id").eq("id", orderId).single();
-      if (order) {
-        await supabase.from("conversations").insert({
-          type: "order",
-          order_id: orderId,
-          client_id: order.client_id,
-        });
+      // La conversación de la orden ya se crea cuando el cliente arma el pedido
+      // (antes de pagar, para poder negociar el precio) — solo la creamos acá
+      // como respaldo, por si por algún motivo no existiera todavía.
+      const { data: existingConv } = await supabase
+        .from("conversations")
+        .select("id")
+        .eq("order_id", orderId)
+        .eq("type", "order")
+        .maybeSingle();
+
+      if (!existingConv) {
+        const { data: order } = await supabase.from("orders").select("client_id").eq("id", orderId).single();
+        if (order) {
+          await supabase.from("conversations").insert({
+            type: "order",
+            order_id: orderId,
+            client_id: order.client_id,
+          });
+        }
       }
     }
   }
