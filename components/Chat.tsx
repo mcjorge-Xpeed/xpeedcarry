@@ -22,21 +22,50 @@ function PaymentRequestBubble({
   content,
   isOwn,
   currentUserId,
+  isPro,
 }: {
   content: string;
   isOwn: boolean;
   currentUserId: string;
+  isPro: boolean;
 }) {
   const payload = parsePaymentRequestMessage(content)!;
   const [showTerms, setShowTerms] = useState(false);
+  const [paid, setPaid] = useState<boolean | null>(null);
   const isClient = currentUserId === payload.clientId;
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase
+      .from("orders")
+      .select("status")
+      .eq("id", payload.orderId)
+      .single()
+      .then(({ data }) => setPaid(!!data && data.status !== "pending_payment"));
+  }, [payload.orderId]);
+
+  // The pro never gets to see how much the order was charged — only
+  // whether it's been paid, so they know they're clear to start.
+  if (isPro) {
+    return (
+      <div className={`max-w-[85%] rounded-2xl border border-accent/30 bg-gradient-to-br from-[#1a1030] to-[#121018] p-4 ${isOwn ? "ml-auto" : ""}`}>
+        <p className="text-xs uppercase tracking-widest text-accent font-bold mb-1">Payment</p>
+        <p className="text-sm text-gray-300">{payload.orderNumber} — {payload.title}</p>
+        <p className="text-sm font-semibold mt-2">
+          {paid === null ? "Checking..." : paid ? "✅ Client has paid" : "⏳ Waiting for payment"}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className={`max-w-[85%] rounded-2xl border border-accent/30 bg-gradient-to-br from-[#1a1030] to-[#121018] p-4 ${isOwn ? "ml-auto" : ""}`}>
       <p className="text-xs uppercase tracking-widest text-accent font-bold mb-1">Payment Request</p>
       <p className="text-sm text-gray-300">{payload.orderNumber} — {payload.title}</p>
       <p className="text-2xl font-bold text-accent2 mt-1 mb-3">${payload.price.toFixed(2)}</p>
-      {isClient ? (
+      {paid ? (
+        <p className="text-sm font-semibold text-accent2">✅ Paid</p>
+      ) : isClient ? (
         <button className="btn-primary w-full text-sm" onClick={() => setShowTerms(true)}>
           {`Pay $${payload.price.toFixed(2)} Now`}
         </button>
@@ -137,7 +166,12 @@ export default function Chat({
           if (isPaymentRequest) {
             return (
               <div key={m.id} className="flex flex-col">
-                <PaymentRequestBubble content={m.content} isOwn={isOwn} currentUserId={currentUserId} />
+                <PaymentRequestBubble
+                  content={m.content}
+                  isOwn={isOwn}
+                  currentUserId={currentUserId}
+                  isPro={currentUserId === convMeta?.pro_id}
+                />
               </div>
             );
           }

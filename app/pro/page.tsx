@@ -28,7 +28,7 @@ export default function ProDashboard() {
 
       const { data } = await supabase
         .from("orders")
-        .select("id, order_number, title, status, pro_earnings, created_at, client:client_id(full_name)")
+        .select("id, order_number, title, status, pro_accepted, pro_earnings, created_at, client:client_id(full_name)")
         .eq("pro_id", user.id)
         .order("created_at", { ascending: false });
       setOrders(data ?? []);
@@ -46,13 +46,19 @@ export default function ProDashboard() {
     );
   }
 
-  const statusLabels: Record<string, string> = {
-    assigned: "New offer — respond",
-    in_progress: "In progress",
-    delivered: "Delivered — waiting for client",
-    completed: "Completed — awaiting payout",
-    pro_paid: "Paid out",
-  };
+  function statusLabel(o: any) {
+    if (o.status === "pending_payment") {
+      return o.pro_accepted ? "Accepted — waiting for payment" : "New offer — respond";
+    }
+    const labels: Record<string, string> = {
+      paid: "Paid — starting soon",
+      in_progress: "In progress",
+      delivered: "Delivered — waiting for client",
+      completed: "Completed — awaiting payout",
+      pro_paid: "Paid out",
+    };
+    return labels[o.status] ?? o.status;
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
@@ -78,7 +84,7 @@ export default function ProDashboard() {
               </div>
               <div className="text-right">
                 <p className="font-bold text-accent2">${Number(o.pro_earnings ?? 0).toFixed(2)}</p>
-                <p className="text-xs text-gray-400">{statusLabels[o.status] ?? o.status}</p>
+                <p className="text-xs text-gray-400">{statusLabel(o)}</p>
               </div>
             </Link>
           ))}

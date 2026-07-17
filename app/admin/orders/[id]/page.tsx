@@ -92,13 +92,14 @@ export default function AdminOrderDetail() {
   }
 
   async function assignPro() {
+    // Deliberately doesn't touch conversations.pro_id (and doesn't touch
+    // order status) — the pro can accept/decline right away, but only gets
+    // chat access and can only start once the client has actually paid
+    // (that link is made server-side in the Stripe webhook).
     await supabase
       .from("orders")
-      .update({ pro_id: selectedPro, status: "assigned" })
+      .update({ pro_id: selectedPro, pro_accepted: false })
       .eq("id", id);
-
-    // link the pro to the order's conversation so they can chat
-    await supabase.from("conversations").update({ pro_id: selectedPro }).eq("order_id", id).eq("type", "order");
 
     load();
   }
@@ -229,12 +230,8 @@ export default function AdminOrderDetail() {
           </div>
         )}
 
-        {order.status === "pending_payment" ? (
-          <p className="text-xs text-gray-500 border-t border-white/10 pt-4">
-            You can assign a pro once the client has paid.
-          </p>
-        ) : (
-          <div>
+        {order.price_confirmed && (
+          <div className="border-t border-white/10 pt-4">
             <label className="text-sm text-gray-400">Assign pro</label>
             <div className="flex gap-2 mt-1">
               <select className="input" value={selectedPro} onChange={(e) => setSelectedPro(e.target.value)}>
@@ -245,10 +242,19 @@ export default function AdminOrderDetail() {
               </select>
               <button className="btn-primary" onClick={assignPro}>Assign</button>
             </div>
+            {order.pro_id && (
+              <p className="text-xs text-gray-400 mt-2">
+                {order.pro_accepted
+                  ? order.status === "pending_payment"
+                    ? `${pro?.full_name ?? "Pro"} accepted — they can start as soon as the client pays.`
+                    : `${pro?.full_name ?? "Pro"} accepted and can already see the chat.`
+                  : `Offered to ${pro?.full_name ?? "pro"} — waiting for them to accept or decline.`}
+              </p>
+            )}
           </div>
         )}
 
-        {(order.status === "assigned" || order.status === "in_progress") && (
+        {order.status === "in_progress" && (
           <p className="text-sm text-gray-500">
             Waiting for the pro to deliver — they'll upload proof and mark it delivered from their dashboard.
           </p>

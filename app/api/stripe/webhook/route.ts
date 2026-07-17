@@ -20,11 +20,23 @@ export async function POST(req: Request) {
 
     if (orderId) {
       const supabase = createAdminClient();
+
+      const { data: order } = await supabase
+        .from("orders")
+        .select("client_id, pro_id, pro_accepted")
+        .eq("id", orderId)
+        .single();
+
+      // Si el pro ya había aceptado la oferta antes de que se pagara, arranca
+      // directo a "in_progress" — la promesa del negocio es que el cliente
+      // paga sabiendo que el pro ya está listo, sin esperar más pasos.
+      const readyProId = order?.pro_id && order?.pro_accepted ? order.pro_id : null;
+
       // Esto dispara el trigger de la BD que fija paid_at y pro_payout_due_at (+7 días)
       await supabase
         .from("orders")
         .update({
-          status: "paid",
+          status: readyProId ? "in_progress" : "paid",
           stripe_payment_intent: session.payment_intent as string,
         })
         .eq("id", orderId);
@@ -39,15 +51,16 @@ export async function POST(req: Request) {
         .eq("type", "order")
         .maybeSingle();
 
-      if (!existingConv) {
-        const { data: order } = await supabase.from("orders").select("client_id").eq("id", orderId).single();
-        if (order) {
-          await supabase.from("conversations").insert({
-            type: "order",
-            order_id: orderId,
-            client_id: order.client_id,
-          });
-        }
+      if (!existingConv && order) {
+        await supabase.from("conversations").insert({
+          type: "order",
+          order_id: orderId,
+          client_id: order.client_id,
+          pro_id: readyProId,
+        });
+      } else if (existingConv && readyProId) {
+        // Solo ahora, con el pago confirmado, el pro gana acceso al chat.
+        await supabase.from("conversations").update({ pro_id: readyProId }).eq("id", existingConv.id);
       }
     }
   }

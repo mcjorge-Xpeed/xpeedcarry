@@ -26,7 +26,7 @@ export default function ProOrderDetail() {
 
     const { data: orderData } = await supabase
       .from("orders")
-      .select("id, order_number, title, description, status, pro_earnings, delivered_at, evidence_url, pro_payout_due_at, pro_paid_at")
+      .select("id, order_number, title, description, status, pro_accepted, pro_earnings, delivered_at, evidence_url, pro_payout_due_at, pro_paid_at")
       .eq("id", id)
       .single();
     setOrder(orderData);
@@ -46,7 +46,14 @@ export default function ProOrderDetail() {
 
   async function acceptOrder() {
     setUpdating(true);
-    await supabase.from("orders").update({ status: "in_progress" }).eq("id", id);
+    const updates: Record<string, any> = { pro_accepted: true };
+    // If the client already paid by the time we accept, we can start right
+    // away — otherwise we wait for the webhook to flip us to in_progress
+    // once payment comes through.
+    if (order.status !== "pending_payment") {
+      updates.status = "in_progress";
+    }
+    await supabase.from("orders").update(updates).eq("id", id);
     setUpdating(false);
     load();
   }
@@ -54,7 +61,7 @@ export default function ProOrderDetail() {
   async function declineOrder() {
     if (!confirm("Decline this order? It'll go back to unassigned so support can offer it to someone else.")) return;
     setUpdating(true);
-    await supabase.from("orders").update({ status: "paid", pro_id: null }).eq("id", id);
+    await supabase.from("orders").update({ pro_id: null, pro_accepted: false }).eq("id", id);
     if (conversationId) {
       await supabase.from("conversations").update({ pro_id: null }).eq("id", conversationId);
     }
@@ -90,12 +97,15 @@ export default function ProOrderDetail() {
   if (!order || !userId) return <p className="text-center mt-20">Loading...</p>;
 
   const statusLabels: Record<string, string> = {
-    assigned: "New offer — respond below",
+    pending_payment: order.pro_accepted ? "Accepted — waiting for client to pay" : "New offer — respond below",
+    paid: "Paid — starting soon",
     in_progress: "In progress",
     delivered: "Delivered — waiting for client to confirm",
     completed: "Completed — awaiting payout",
     pro_paid: "Paid out",
   };
+
+  const canWork = order.pro_accepted && order.status !== "pending_payment";
 
   return (
     <div className="max-w-2xl mx-auto mt-10 px-4">
@@ -105,7 +115,7 @@ export default function ProOrderDetail() {
         <p className="text-gray-400 text-sm mt-2 whitespace-pre-line">{order.description}</p>
         <p className="mt-3 font-bold">Your payout: ${Number(order.pro_earnings ?? 0).toFixed(2)} — {statusLabels[order.status] ?? order.status}</p>
 
-        {order.status === "assigned" && (
+        {!order.pro_accepted && (
           <div className="mt-4 border border-yellow-500/30 rounded-lg p-4">
             <p className="text-sm text-yellow-400 font-semibold mb-1">New order offer</p>
             <p className="text-xs text-gray-400 mb-3">
@@ -113,12 +123,21 @@ export default function ProOrderDetail() {
             </p>
             <div className="flex gap-2">
               <button className="btn-primary flex-1" onClick={acceptOrder} disabled={updating}>
-                {updating ? "..." : "Accept & Start"}
+                {updating ? "..." : "Accept"}
               </button>
               <button className="btn-secondary flex-1 text-red-400" onClick={declineOrder} disabled={updating}>
                 Decline
               </button>
             </div>
+          </div>
+        )}
+
+        {order.pro_accepted && order.status === "pending_payment" && (
+          <div className="mt-4 border border-white/10 rounded-lg p-4">
+            <p className="text-sm text-gray-300">✅ You accepted this order.</p>
+            <p className="text-xs text-gray-500 mt-1">
+              Waiting for the client to pay — you'll be able to start and chat with them as soon as that happens.
+            </p>
           </div>
         )}
 
@@ -166,11 +185,15 @@ export default function ProOrderDetail() {
         )}
       </div>
 
-      <h2 className="font-semibold mb-2">Chat with client</h2>
-      {conversationId ? (
-        <Chat conversationId={conversationId} currentUserId={userId} />
-      ) : (
-        <p className="text-gray-400 text-sm">No chat available for this order yet.</p>
+      {canWork && (
+        <>
+          <h2 className="font-semibold mb-2">Chat with client</h2>
+          {conversationId ? (
+            <Chat conversationId={conversationId} currentUserId={userId} />
+          ) : (
+            <p className="text-gray-400 text-sm">No chat available for this order yet.</p>
+          )}
+        </>
       )}
     </div>
   );
