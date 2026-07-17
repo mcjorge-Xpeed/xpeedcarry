@@ -135,27 +135,29 @@ export default function Navbar() {
                 {email[0].toUpperCase()}
               </button>
               {open && (
-                <div className="absolute right-0 mt-2 w-48 card p-2 text-sm shadow-xl">
-                  <p className="px-3 py-2 text-gray-400 text-xs truncate">{email}</p>
-                  <Link href="/order" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
-                    My Orders
-                  </Link>
-                  {role === "pro" && (
-                    <Link href="/pro" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
-                      Pro Dashboard
+                <div className="absolute right-0 top-full pt-2 w-48">
+                  <div className="card p-2 text-sm shadow-xl">
+                    <p className="px-3 py-2 text-gray-400 text-xs truncate">{email}</p>
+                    <Link href="/order" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
+                      My Orders
                     </Link>
-                  )}
-                  {role === "admin" && (
-                    <Link href="/admin" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
-                      Admin Panel
-                    </Link>
-                  )}
-                  <button
-                    onClick={() => { setOpen(false); handleSignOut(); }}
-                    className="w-full text-left px-3 py-2 rounded hover:bg-white/5 text-red-400"
-                  >
-                    Sign out
-                  </button>
+                    {role === "pro" && (
+                      <Link href="/pro" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
+                        Pro Dashboard
+                      </Link>
+                    )}
+                    {role === "admin" && (
+                      <Link href="/admin" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
+                        Admin Panel
+                      </Link>
+                    )}
+                    <button
+                      onClick={() => { setOpen(false); handleSignOut(); }}
+                      className="w-full text-left px-3 py-2 rounded hover:bg-white/5 text-red-400"
+                    >
+                      Sign out
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

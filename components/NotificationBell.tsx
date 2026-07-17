@@ -84,22 +84,24 @@ export default function NotificationBell({ userId }: { userId: string }) {
         )}
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-80 card p-2 text-sm shadow-xl max-h-96 overflow-y-auto">
-          {notifications.length === 0 ? (
-            <p className="px-3 py-4 text-gray-400 text-xs text-center">No notifications yet.</p>
-          ) : (
-            notifications.map((n) => (
-              <Link
-                key={n.id}
-                href={linkFor(n)}
-                onClick={() => setOpen(false)}
-                className="block px-3 py-2 rounded hover:bg-white/5"
-              >
-                <p className="font-semibold text-xs text-accent">{n.title}</p>
-                <p className="text-xs text-gray-400 truncate">{n.body}</p>
-              </Link>
-            ))
-          )}
+        <div className="absolute right-0 top-full pt-2 w-80">
+          <div className="card p-2 text-sm shadow-xl max-h-96 overflow-y-auto">
+            {notifications.length === 0 ? (
+              <p className="px-3 py-4 text-gray-400 text-xs text-center">No notifications yet.</p>
+            ) : (
+              notifications.map((n) => (
+                <Link
+                  key={n.id}
+                  href={linkFor(n)}
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded hover:bg-white/5"
+                >
+                  <p className="font-semibold text-xs text-accent">{n.title}</p>
+                  <p className="text-xs text-gray-400 truncate">{n.body}</p>
+                </Link>
+              ))
+            )}
+          </div>
         </div>
       )}
     </div>
