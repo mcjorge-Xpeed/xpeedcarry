@@ -7,7 +7,7 @@ import { format } from "date-fns";
 type OrderRow = {
   id: string;
   order_number: string;
-  price: number;
+  pro_earnings: number;
   pro_payout_due_at: string;
   pro_id: string;
 };
@@ -16,6 +16,9 @@ export default function PayrollPage() {
   const [groups, setGroups] = useState<Record<string, { proName: string; orders: OrderRow[] }>>({});
   const [loading, setLoading] = useState(true);
   const [payingPro, setPayingPro] = useState<string | null>(null);
+  const [feeEditingPro, setFeeEditingPro] = useState<string | null>(null);
+  const [feeInput, setFeeInput] = useState("0");
+  const [search, setSearch] = useState("");
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const supabase = createClient();
 
@@ -33,7 +36,7 @@ export default function PayrollPage() {
 
     const { data: orders } = await supabase
       .from("orders")
-      .select("id, order_number, price, pro_payout_due_at, pro_id, pro:pro_id(full_name)")
+      .select("id, order_number, pro_earnings, pro_payout_due_at, pro_id, pro:pro_id(full_name)")
       .eq("status", "completed")
       .order("pro_payout_due_at", { ascending: true });
 
@@ -52,14 +55,20 @@ export default function PayrollPage() {
     load();
   }, []);
 
-  async function payPro(proId: string, orderIds: string[]) {
+  async function confirmPayPro(proId: string, orderIds: string[]) {
     setPayingPro(proId);
-    const { data: { user } } = await supabase.auth.getUser();
-    await supabase
-      .from("orders")
-      .update({ status: "pro_paid", pro_paid_at: new Date().toISOString(), pro_paid_by: user?.id })
-      .in("id", orderIds);
+    const res = await fetch("/api/admin/pay-pro", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderIds, transferFee: Number(feeInput) || 0 }),
+    });
     setPayingPro(null);
+    setFeeEditingPro(null);
+    setFeeInput("0");
+    if (!res.ok) {
+      alert("Couldn't mark this payout as paid — try again.");
+      return;
+    }
     load();
   }
 
@@ -73,16 +82,26 @@ export default function PayrollPage() {
     );
   }
 
-  const proEntries = Object.entries(groups);
+  const proEntries = Object.entries(groups).filter(([, group]) =>
+    group.proName.toLowerCase().includes(search.trim().toLowerCase())
+  );
   const today = new Date();
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       <h1 className="text-2xl font-bold mb-2">Payroll</h1>
-      <p className="text-gray-400 text-sm mb-8">
+      <p className="text-gray-400 text-sm mb-6">
         Pros are paid twice a month — the 14th and the 28th. Completed orders are grouped by pro so you
-        can pay one lump sum per pro instead of order-by-order.
+        can pay one lump sum per pro instead of order-by-order. Amounts shown are the pro's cut only
+        (never the client's total), and each pro gets an email once you mark them as paid.
       </p>
+
+      <input
+        className="input max-w-xs mb-6"
+        placeholder="Search by pro name..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
       {proEntries.length === 0 && (
         <p className="text-gray-500">No completed orders waiting to be paid out right now.</p>
@@ -90,9 +109,12 @@ export default function PayrollPage() {
 
       <div className="flex flex-col gap-5">
         {proEntries.map(([proId, group]) => {
-          const total = group.orders.reduce((sum, o) => sum + Number(o.price), 0);
+          const gross = group.orders.reduce((sum, o) => sum + Number(o.pro_earnings ?? 0), 0);
           const dueDate = group.orders[0]?.pro_payout_due_at ? new Date(group.orders[0].pro_payout_due_at) : null;
           const ready = dueDate ? dueDate <= today : false;
+          const isEditingFee = feeEditingPro === proId;
+          const fee = Math.max(0, Number(feeInput) || 0);
+          const net = Math.round((gross - fee) * 100) / 100;
 
           return (
             <div key={proId} className="card p-5">
@@ -109,7 +131,7 @@ export default function PayrollPage() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-accent2">${total.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-accent2">${gross.toFixed(2)}</p>
                   <p className="text-xs text-gray-400">{group.orders.length} order(s)</p>
                 </div>
               </div>
@@ -118,22 +140,57 @@ export default function PayrollPage() {
                 {group.orders.map((o) => (
                   <li key={o.id} className="flex justify-between">
                     <span>{o.order_number}</span>
-                    <span>${Number(o.price).toFixed(2)}</span>
+                    <span>${Number(o.pro_earnings ?? 0).toFixed(2)}</span>
                   </li>
                 ))}
               </ul>
 
-              <button
-                className="btn-primary text-sm"
-                disabled={proId === "unassigned" || payingPro === proId}
-                onClick={() => payPro(proId, group.orders.map((o) => o.id))}
-              >
-                {payingPro === proId
-                  ? "Marking as paid..."
-                  : proId === "unassigned"
-                  ? "Assign a pro first"
-                  : `Mark all ${group.orders.length} as paid ($${total.toFixed(2)})`}
-              </button>
+              {isEditingFee ? (
+                <div className="border border-white/10 rounded-lg p-3 space-y-2">
+                  <label className="text-xs text-gray-400 block">
+                    Transfer fee for sending this to their personal bank (Revolut, wire, etc.) — optional
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">$</span>
+                    <input
+                      type="number"
+                      min={0}
+                      step="0.01"
+                      className="input w-28"
+                      value={feeInput}
+                      onChange={(e) => setFeeInput(e.target.value)}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    Gross: ${gross.toFixed(2)} · Fee: -${fee.toFixed(2)} ·{" "}
+                    <span className="text-accent2 font-semibold">Net to send: ${net.toFixed(2)}</span>
+                  </p>
+                  <div className="flex gap-2 pt-1">
+                    <button
+                      className="btn-secondary text-sm"
+                      onClick={() => { setFeeEditingPro(null); setFeeInput("0"); }}
+                      disabled={payingPro === proId}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="btn-primary text-sm"
+                      onClick={() => confirmPayPro(proId, group.orders.map((o) => o.id))}
+                      disabled={payingPro === proId}
+                    >
+                      {payingPro === proId ? "Marking as paid..." : `Confirm — sent $${net.toFixed(2)}`}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  className="btn-primary text-sm"
+                  disabled={proId === "unassigned"}
+                  onClick={() => { setFeeEditingPro(proId); setFeeInput("0"); }}
+                >
+                  {proId === "unassigned" ? "Assign a pro first" : `Mark ${group.orders.length} as paid...`}
+                </button>
+              )}
             </div>
           );
         })}
