@@ -28,7 +28,7 @@ export default function ProDashboard() {
 
       const { data } = await supabase
         .from("orders")
-        .select("*, client:client_id(full_name)")
+        .select("id, order_number, title, status, pro_earnings, created_at, client:client_id(full_name)")
         .eq("pro_id", user.id)
         .order("created_at", { ascending: false });
       setOrders(data ?? []);
@@ -47,7 +47,7 @@ export default function ProDashboard() {
   }
 
   const statusLabels: Record<string, string> = {
-    assigned: "Assigned — not started",
+    assigned: "New offer — respond",
     in_progress: "In progress",
     delivered: "Delivered — waiting for client",
     completed: "Completed — awaiting payout",
@@ -77,7 +77,7 @@ export default function ProDashboard() {
                 <p className="text-xs text-gray-500 mt-1">Client: {o.client?.full_name ?? "-"}</p>
               </div>
               <div className="text-right">
-                <p className="font-bold text-accent2">${o.price}</p>
+                <p className="font-bold text-accent2">${Number(o.pro_earnings ?? 0).toFixed(2)}</p>
                 <p className="text-xs text-gray-400">{statusLabels[o.status] ?? o.status}</p>
               </div>
             </Link>

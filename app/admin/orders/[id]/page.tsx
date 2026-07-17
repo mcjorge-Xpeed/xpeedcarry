@@ -28,6 +28,7 @@ export default function AdminOrderDetail() {
   const [pros, setPros] = useState<any[]>([]);
   const [selectedPro, setSelectedPro] = useState("");
   const [finalPrice, setFinalPrice] = useState("");
+  const [proCutPercent, setProCutPercent] = useState("40");
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [adminId, setAdminId] = useState<string | null>(null);
   const supabase = createClient();
@@ -69,7 +70,8 @@ export default function AdminOrderDetail() {
   async function confirmPrice() {
     const price = Number(finalPrice);
     if (!price || price <= 0) return;
-    await supabase.from("orders").update({ price, price_confirmed: true }).eq("id", id);
+    const percent = Math.min(45, Math.max(0, Number(proCutPercent) || 0));
+    await supabase.from("orders").update({ price, price_confirmed: true, pro_cut_percent: percent }).eq("id", id);
 
     if (conversationId && adminId && order) {
       await supabase.from("messages").insert({
@@ -152,6 +154,8 @@ export default function AdminOrderDetail() {
   const enteredPrice = Number(finalPrice) || 0;
   const enteredFee = useMemo(() => stripeFee(enteredPrice), [enteredPrice]);
   const enteredNet = Math.round((enteredPrice - enteredFee) * 100) / 100;
+  const enteredPercent = Math.min(45, Math.max(0, Number(proCutPercent) || 0));
+  const enteredProCut = Math.round((enteredPrice * enteredPercent) / 100 * 100) / 100;
 
   if (!order) return <p className="text-center mt-20">Loading...</p>;
 
@@ -177,7 +181,8 @@ export default function AdminOrderDetail() {
           </p>
           {order.price_confirmed && (
             <p className="text-xs text-gray-500 mt-1">
-              Est. Stripe fee: ${confirmedFee.toFixed(2)} · You keep: ${confirmedNet.toFixed(2)}
+              Est. Stripe fee: ${confirmedFee.toFixed(2)} · Pro gets: ${Number(order.pro_earnings ?? 0).toFixed(2)}
+              {" "}({order.pro_cut_percent ?? 0}%) · You keep: ${(confirmedNet - Number(order.pro_earnings ?? 0)).toFixed(2)}
             </p>
           )}
         </div>
@@ -197,10 +202,24 @@ export default function AdminOrderDetail() {
               />
               <button className="btn-primary whitespace-nowrap" onClick={confirmPrice}>Confirm Price</button>
             </div>
+            <div className="flex items-center gap-2 mt-3">
+              <label className="text-xs text-gray-400 whitespace-nowrap">Pro gets:</label>
+              <input
+                type="number"
+                min={0}
+                max={45}
+                step="1"
+                className="input w-20"
+                value={proCutPercent}
+                onChange={(e) => setProCutPercent(e.target.value)}
+              />
+              <span className="text-xs text-gray-400">% (max 45%) — the pro only ever sees the dollar amount, never the total price</span>
+            </div>
             {enteredPrice > 0 && (
               <p className="text-xs text-gray-400 mt-2">
-                Stripe fee (est.): <span className="text-red-400">-${enteredFee.toFixed(2)}</span> · You'd keep:{" "}
-                <span className="text-accent2 font-semibold">${enteredNet.toFixed(2)}</span>
+                Stripe fee (est.): <span className="text-red-400">-${enteredFee.toFixed(2)}</span> · Pro gets:{" "}
+                <span className="text-accent2 font-semibold">${enteredProCut.toFixed(2)}</span> · You'd keep:{" "}
+                <span className="text-accent2 font-semibold">${(enteredNet - enteredProCut).toFixed(2)}</span>
               </p>
             )}
             <p className="text-xs text-gray-400 mt-2">

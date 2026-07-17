@@ -24,7 +24,11 @@ export default function ProOrderDetail() {
     }
     setUserId(user.id);
 
-    const { data: orderData } = await supabase.from("orders").select("*").eq("id", id).single();
+    const { data: orderData } = await supabase
+      .from("orders")
+      .select("id, order_number, title, description, status, pro_earnings, delivered_at, evidence_url, pro_payout_due_at, pro_paid_at")
+      .eq("id", id)
+      .single();
     setOrder(orderData);
 
     const { data: conv } = await supabase
@@ -40,11 +44,22 @@ export default function ProOrderDetail() {
     load();
   }, [id]);
 
-  async function startOrder() {
+  async function acceptOrder() {
     setUpdating(true);
     await supabase.from("orders").update({ status: "in_progress" }).eq("id", id);
     setUpdating(false);
     load();
+  }
+
+  async function declineOrder() {
+    if (!confirm("Decline this order? It'll go back to unassigned so support can offer it to someone else.")) return;
+    setUpdating(true);
+    await supabase.from("orders").update({ status: "paid", pro_id: null }).eq("id", id);
+    if (conversationId) {
+      await supabase.from("conversations").update({ pro_id: null }).eq("id", conversationId);
+    }
+    setUpdating(false);
+    window.location.href = "/pro";
   }
 
   async function submitEvidence(file: File) {
@@ -75,7 +90,7 @@ export default function ProOrderDetail() {
   if (!order || !userId) return <p className="text-center mt-20">Loading...</p>;
 
   const statusLabels: Record<string, string> = {
-    assigned: "Assigned — not started",
+    assigned: "New offer — respond below",
     in_progress: "In progress",
     delivered: "Delivered — waiting for client to confirm",
     completed: "Completed — awaiting payout",
@@ -88,12 +103,23 @@ export default function ProOrderDetail() {
         <p className="text-sm text-gray-400">{order.order_number}</p>
         <h1 className="text-xl font-bold">{order.title}</h1>
         <p className="text-gray-400 text-sm mt-2 whitespace-pre-line">{order.description}</p>
-        <p className="mt-3 font-bold">${order.price} — {statusLabels[order.status] ?? order.status}</p>
+        <p className="mt-3 font-bold">Your payout: ${Number(order.pro_earnings ?? 0).toFixed(2)} — {statusLabels[order.status] ?? order.status}</p>
 
         {order.status === "assigned" && (
-          <button className="btn-primary w-full mt-4" onClick={startOrder} disabled={updating}>
-            {updating ? "Starting..." : "Start Order"}
-          </button>
+          <div className="mt-4 border border-yellow-500/30 rounded-lg p-4">
+            <p className="text-sm text-yellow-400 font-semibold mb-1">New order offer</p>
+            <p className="text-xs text-gray-400 mb-3">
+              You'd earn <span className="text-accent2 font-semibold">${Number(order.pro_earnings ?? 0).toFixed(2)}</span> for this one.
+            </p>
+            <div className="flex gap-2">
+              <button className="btn-primary flex-1" onClick={acceptOrder} disabled={updating}>
+                {updating ? "..." : "Accept & Start"}
+              </button>
+              <button className="btn-secondary flex-1 text-red-400" onClick={declineOrder} disabled={updating}>
+                Decline
+              </button>
+            </div>
+          </div>
         )}
 
         {order.status === "in_progress" && (
