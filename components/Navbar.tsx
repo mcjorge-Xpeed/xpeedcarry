@@ -60,24 +60,26 @@ export default function Navbar() {
             onMouseEnter={() => setGamesOpen(true)}
             onMouseLeave={() => setGamesOpen(false)}
           >
-            <button className="hover:text-accent2 transition flex items-center gap-1">
+            <Link href="/#games" className="hover:text-accent2 transition flex items-center gap-1">
               Games
               <span className="text-[10px]">▾</span>
-            </button>
+            </Link>
             {gamesOpen && games.length > 0 && (
-              <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-[560px] card p-3 shadow-xl grid grid-cols-2 gap-1">
-                {games.map((g) => (
-                  <Link
-                    key={g.id}
-                    href={`/order/new?game=${g.slug}`}
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition"
-                  >
-                    <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0">
-                      <Image src={g.image_url} alt={g.name} fill className="object-cover" />
-                    </div>
-                    <span className="text-sm">{g.name}</span>
-                  </Link>
-                ))}
+              <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 w-[560px]">
+                <div className="card p-3 shadow-xl grid grid-cols-2 gap-1">
+                  {games.map((g) => (
+                    <Link
+                      key={g.id}
+                      href={`/order/new?game=${g.slug}`}
+                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition"
+                    >
+                      <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0">
+                        <Image src={g.image_url} alt={g.name} fill className="object-cover" />
+                      </div>
+                      <span className="text-sm">{g.name}</span>
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>
