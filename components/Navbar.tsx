@@ -97,8 +97,6 @@ export default function Navbar() {
             Support
           </Link>
 
-          {email && userId && <NotificationBell userId={userId} />}
-
           {email ? (
             <div className="relative">
               <button
@@ -140,6 +138,8 @@ export default function Navbar() {
               Sign in
             </Link>
           )}
+
+          {email && userId && <NotificationBell userId={userId} />}
         </div>
       </div>
     </nav>

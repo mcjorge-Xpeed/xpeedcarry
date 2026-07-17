@@ -438,3 +438,35 @@ create trigger trg_notify_pro_order_offer
   for each row execute function notify_pro_order_offer();
 
 alter publication supabase_realtime add table notifications;
+
+-- =========================================================
+-- NOTIFICATIONS: mensaje nuevo en el chat de soporte directo (agregado
+-- 2026-07-17). Solo avisa a los admins cuando alguien escribe en una
+-- conversación type='support' (la de /support), no en cada mensaje de
+-- cada chat de orden (eso saturaría la campanita sin agregar valor,
+-- ya que el admin vigila el inbox completo de todas formas).
+-- =========================================================
+alter table notifications add column conversation_id uuid references conversations(id) on delete cascade;
+
+create or replace function notify_admins_support_message()
+returns trigger as $$
+declare
+  conv conversations%rowtype;
+  client_name text;
+begin
+  select * into conv from conversations where id = new.conversation_id;
+  if conv.type = 'support' then
+    select full_name into client_name from profiles where id = conv.client_id;
+    insert into notifications (user_id, type, conversation_id, title, body)
+    select id, 'new_message', new.conversation_id, 'New support message',
+      coalesce(client_name, 'A client') || ' sent a message in support chat'
+    from profiles
+    where role = 'admin' and id <> new.sender_id;
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger trg_notify_admins_support_message
+  after insert on messages
+  for each row execute function notify_admins_support_message();

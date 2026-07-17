@@ -8,6 +8,7 @@ type Notification = {
   id: string;
   type: string;
   order_id: string | null;
+  conversation_id: string | null;
   title: string;
   body: string;
   read: boolean;
@@ -16,6 +17,7 @@ type Notification = {
 
 function linkFor(n: Notification) {
   if (n.type === "order_offer") return `/pro/orders/${n.order_id}`;
+  if (n.type === "new_message") return `/admin/support/${n.conversation_id}`;
   return `/admin/orders/${n.order_id}`;
 }
 
