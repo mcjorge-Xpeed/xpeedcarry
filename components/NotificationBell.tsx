@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { useClickOutside } from "@/lib/useClickOutside";
 
 type Notification = {
   id: string;
@@ -25,7 +26,10 @@ export default function NotificationBell({ userId }: { userId: string }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [open, setOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
+
+  useClickOutside(wrapperRef, () => setOpen(false));
 
   useEffect(() => {
     supabase
@@ -68,7 +72,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="relative">
+    <div className="relative" ref={wrapperRef} onMouseLeave={() => setOpen(false)}>
       <button
         onClick={toggleOpen}
         className="relative w-9 h-9 rounded-full bg-[#121018] border border-white/10 hover:border-accent transition flex items-center justify-center"

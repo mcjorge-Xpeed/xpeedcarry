@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import NewOrderNotifier from "@/components/NewOrderNotifier";
 import NotificationBell from "@/components/NotificationBell";
+import { useClickOutside } from "@/lib/useClickOutside";
 
 type Game = { id: string; name: string; slug: string; image_url: string };
 
@@ -15,8 +16,14 @@ export default function Navbar() {
   const [role, setRole] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [gamesOpen, setGamesOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [games, setGames] = useState<Game[]>([]);
+  const accountRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
+
+  useClickOutside(accountRef, () => setOpen(false));
+  useClickOutside(mobileMenuRef, () => setMobileMenuOpen(false));
 
   async function loadRole(userId: string) {
     const { data } = await supabase.from("profiles").select("role").eq("id", userId).single();
@@ -61,6 +68,28 @@ export default function Navbar() {
           <span>Xpeed<span className="text-accent">carry</span></span>
         </Link>
         <div className="flex gap-6 items-center text-sm">
+          <div className="relative sm:hidden" ref={mobileMenuRef}>
+            <button
+              onClick={() => setMobileMenuOpen((o) => !o)}
+              className="w-9 h-9 rounded-full bg-[#121018] border border-white/10 hover:border-accent transition flex items-center justify-center"
+              aria-label="Menu"
+            >
+              ☰
+            </button>
+            {mobileMenuOpen && (
+              <div className="absolute left-0 mt-2 w-48 card p-2 text-sm shadow-xl">
+                <Link href="/#games" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
+                  Games
+                </Link>
+                <Link href="/order/new" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
+                  Custom Order
+                </Link>
+                <Link href="/support" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
+                  Support
+                </Link>
+              </div>
+            )}
+          </div>
           <div
             className="relative hidden sm:block"
             onMouseEnter={() => setGamesOpen(true)}
@@ -98,19 +127,16 @@ export default function Navbar() {
           </Link>
 
           {email ? (
-            <div className="relative">
+            <div className="relative" ref={accountRef} onMouseLeave={() => setOpen(false)}>
               <button
                 onClick={() => setOpen((o) => !o)}
-                className="flex items-center gap-2 bg-[#121018] border border-white/10 rounded-full pl-1 pr-3 py-1 hover:border-accent transition"
+                className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-accent2 flex items-center justify-center text-xs font-bold hover:opacity-90 transition"
               >
-                <span className="w-6 h-6 rounded-full bg-gradient-to-br from-accent to-accent2 flex items-center justify-center text-xs font-bold">
-                  {email[0].toUpperCase()}
-                </span>
-                <span className="max-w-[120px] truncate">{email}</span>
+                {email[0].toUpperCase()}
               </button>
               {open && (
                 <div className="absolute right-0 mt-2 w-48 card p-2 text-sm shadow-xl">
-                  <p className="px-3 py-2 text-gray-400 text-xs">Signed in</p>
+                  <p className="px-3 py-2 text-gray-400 text-xs truncate">{email}</p>
                   <Link href="/order" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
                     My Orders
                   </Link>
