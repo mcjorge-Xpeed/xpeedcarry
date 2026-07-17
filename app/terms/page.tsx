@@ -33,6 +33,14 @@ export default function TermsPage() {
             (base service + selected options) are the final price for that configuration. We reserve the
             right to decline or cancel an order before work begins, in which case you will be refunded in full.
           </p>
+          <p>
+            <strong className="text-white">Self-Play orders</strong> are priced in part on your self-reported
+            skill level and experience. If your pro determines during the order that your actual skill is
+            significantly different from what was described, we may pause the order and offer you a revised
+            price for the remaining work before continuing. You're free to accept the revised price or decline
+            it — if you decline, we'll cancel the unstarted portion and refund it per our{" "}
+            <a href="/refund" className="text-accent hover:underline">Refund Policy</a>.
+          </p>
         </section>
 
         <section>

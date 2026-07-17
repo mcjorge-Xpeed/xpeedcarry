@@ -41,8 +41,9 @@ export default function TermsGateModal({
             I agree to the{" "}
             <Link href="/terms" target="_blank" className="text-accent hover:underline">Terms</Link>,{" "}
             <Link href="/privacy" target="_blank" className="text-accent hover:underline">Privacy Policy</Link>,{" "}
-            <Link href="/refund" target="_blank" className="text-accent hover:underline">Refund Policy</Link>, and{" "}
-            <Link href="/account-handling" target="_blank" className="text-accent hover:underline">Account Handling Rules</Link>.
+            <Link href="/refund" target="_blank" className="text-accent hover:underline">Refund Policy</Link>,{" "}
+            <Link href="/account-handling" target="_blank" className="text-accent hover:underline">Account Handling Rules</Link>, and{" "}
+            <Link href="/guidelines" target="_blank" className="text-accent hover:underline">Community Guidelines</Link>.
           </span>
         </label>
         <div className="flex gap-2">

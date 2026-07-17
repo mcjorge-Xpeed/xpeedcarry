@@ -51,6 +51,10 @@ export default function GuidelinesPage() {
             <li>Never solicit off-platform payment or contact.</li>
             <li>Keep any account access from a Piloted order strictly confidential — see the <a href="/account-handling" className="text-accent hover:underline">Account Handling Rules</a>.</li>
           </ul>
+          <p className="pt-2">
+            Violating these guidelines on an order forfeits your payout for that order, on top of any
+            account suspension.
+          </p>
         </section>
       </div>
     </div>

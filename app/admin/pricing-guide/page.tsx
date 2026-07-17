@@ -42,14 +42,20 @@ export default async function PricingGuidePage() {
             patience than a strong one, so price it up accordingly using the difficulty tiers below —
             treat Self-Play as "Piloted price + difficulty surcharge", not a fixed add-on.
           </li>
+          <li>
+            • <strong className="text-accent">$5 minimum surcharge, always</strong> — never quote Self-Play at
+            the same price as Piloted, no matter how skilled the client claims to be. Even a strong player
+            is slower than a pro doing it directly, and this protects the pro if the client's self-assessment
+            turns out optimistic.
+          </li>
           <li>• <strong className="text-accent">Difficulty multiplier</strong> — start from the game's base numbers below, then scale up based on how hard/time-consuming the specific request is:</li>
         </ul>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
           {[
-            { label: "Easy", mult: "×1", selfplay: "+$3", desc: "Standard, matches the base numbers below" },
-            { label: "Medium", mult: "×1.3", selfplay: "+$5–7", desc: "A bit more time/skill than usual" },
-            { label: "Hard", mult: "×1.6–2", selfplay: "+$8–12", desc: "Long grind, high risk, tight timeframe" },
-            { label: "Extreme", mult: "×2.5+", selfplay: "+$15+", desc: "Rare/hardest content, weak player, use judgment" },
+            { label: "Easy", mult: "×1", selfplay: "+$5", desc: "Standard, matches the base numbers below" },
+            { label: "Medium", mult: "×1.3", selfplay: "+$7–10", desc: "A bit more time/skill than usual" },
+            { label: "Hard", mult: "×1.6–2", selfplay: "+$10–15", desc: "Long grind, high risk, tight timeframe" },
+            { label: "Extreme", mult: "×2.5+", selfplay: "+$18+", desc: "Rare/hardest content, weak player, use judgment" },
           ].map((tier) => (
             <div key={tier.label} className="border border-white/10 rounded-lg p-3">
               <p className="font-semibold text-sm">{tier.label}</p>
@@ -59,6 +65,30 @@ export default async function PricingGuidePage() {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="card p-6 mb-8 border-accent2/20">
+        <h2 className="font-semibold mb-3">Evaluating a Self-Play client before quoting</h2>
+        <p className="text-sm text-gray-300 mb-3">
+          You're setting a price before the pro has actually seen them play, so treat this as an estimate,
+          not a guarantee. Ask in chat before confirming price:
+        </p>
+        <ul className="text-sm text-gray-300 space-y-1 mb-3 list-disc pl-5">
+          <li>What's your current level/rank/gear in this game?</li>
+          <li>Roughly how many hours have you played it?</li>
+          <li>Have you done this specific thing before (this boss, this mode, this content)?</li>
+        </ul>
+        <p className="text-sm text-gray-300 mb-3">
+          <strong className="text-accent">When unsure, round up a tier.</strong> It's much easier to offer a
+          small discount afterward than to ask a client for more money mid-order.
+        </p>
+        <p className="text-sm text-gray-300">
+          <strong className="text-accent">If the pro finds the client is significantly weaker than described:</strong>{" "}
+          have them stop and message you instead of pushing through or eating the loss. Pause the order, agree
+          on a revised price with the client in chat, and only continue once they accept it (this is disclosed
+          to clients in the Terms of Service, so it's not a surprise). If they decline, cancel and refund the
+          unstarted portion per the Refund Policy.
+        </p>
       </div>
 
       <div className="card p-6 mb-8 border-accent/20">

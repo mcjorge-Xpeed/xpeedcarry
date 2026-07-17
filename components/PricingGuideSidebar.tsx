@@ -8,10 +8,10 @@ type OptionGroup = { id: string; label: string; type: "radio" | "checkbox"; opti
 type Game = { name: string; slug: string; base_price: number; options_config: { groups?: OptionGroup[] } };
 
 const TIERS = [
-  { label: "Easy", mult: "×1", selfplay: "+$3" },
-  { label: "Medium", mult: "×1.3", selfplay: "+$5–7" },
-  { label: "Hard", mult: "×1.6–2", selfplay: "+$8–12" },
-  { label: "Extreme", mult: "×2.5+", selfplay: "+$15+" },
+  { label: "Easy", mult: "×1", selfplay: "+$5" },
+  { label: "Medium", mult: "×1.3", selfplay: "+$7–10" },
+  { label: "Hard", mult: "×1.6–2", selfplay: "+$10–15" },
+  { label: "Extreme", mult: "×2.5+", selfplay: "+$18+" },
 ];
 
 export default function PricingGuideSidebar() {
@@ -52,7 +52,8 @@ export default function PricingGuideSidebar() {
               ))}
             </div>
             <p className="text-[11px] text-gray-500 mt-2">
-              Self-Play = Piloted price + surcharge above, judged by skill/difficulty. Never quote below $10 total.
+              Self-Play = Piloted price + surcharge above ($5 min, always). Never quote below $10 total.
+              If the pro finds the client is much weaker than described, pause and requote before continuing.
             </p>
           </div>
 

@@ -31,6 +31,12 @@ export default function RefundPage() {
             for reasons unrelated to our service (see the account risk disclosure in our{" "}
             <a href="/terms" className="text-accent hover:underline">Terms</a>).
           </p>
+          <p>
+            If your account is suspended for violating our{" "}
+            <a href="/guidelines" className="text-accent hover:underline">Community Guidelines</a> (for
+            example, abusive behavior toward a pro or support), any order affected by that suspension is
+            not eligible for a refund.
+          </p>
         </section>
 
         <section>
