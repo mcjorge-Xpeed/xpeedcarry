@@ -10,7 +10,7 @@ import PricingGuideSidebar from "@/components/PricingGuideSidebar";
 
 // Stripe's standard US online-card rate. If your account is set up under a
 // different country or takes a lot of international cards, check your real
-// rate in the Stripe Dashboard — this is an estimate, not exact.
+// rate in the Stripe Dashboard, this is an estimate, not exact.
 const STRIPE_PCT = 0.029;
 const STRIPE_FIXED = 0.3;
 
@@ -93,7 +93,7 @@ export default function AdminOrderDetail() {
 
   async function assignPro() {
     // Deliberately doesn't touch conversations.pro_id (and doesn't touch
-    // order status) — the pro can accept/decline right away, but only gets
+    // order status), the pro can accept/decline right away, but only gets
     // chat access and can only start once the client has actually paid
     // (that link is made server-side in the Stripe webhook).
     await supabase
@@ -148,7 +148,7 @@ export default function AdminOrderDetail() {
       router.push("/admin");
     } else {
       setDeleting(false);
-      alert("Couldn't delete the order — try again.");
+      alert("Couldn't delete the order, try again.");
     }
   }
 
@@ -178,7 +178,7 @@ export default function AdminOrderDetail() {
           <h1 className="text-xl font-bold">{order.title}</h1>
           <p className="text-gray-400 text-sm mt-1">{order.description}</p>
           <p className="font-bold mt-2">
-            {order.price_confirmed ? `$${order.price}` : "Price not set yet"} — Status: {order.status}
+            {order.price_confirmed ? `$${order.price}` : "Price not set yet"}, Status: {order.status}
           </p>
           {order.price_confirmed && (
             <p className="text-xs text-gray-500 mt-1">
@@ -214,7 +214,7 @@ export default function AdminOrderDetail() {
                 value={proCutPercent}
                 onChange={(e) => setProCutPercent(e.target.value)}
               />
-              <span className="text-xs text-gray-400">% (max 45%) — the pro only ever sees the dollar amount, never the total price</span>
+              <span className="text-xs text-gray-400">% (max 45%): the pro only ever sees the dollar amount, never the total price</span>
             </div>
             {enteredPrice > 0 && (
               <p className="text-xs text-gray-400 mt-2">
@@ -224,7 +224,7 @@ export default function AdminOrderDetail() {
               </p>
             )}
             <p className="text-xs text-gray-400 mt-2">
-              Agree on a price with the client in the chat first, then confirm it here — the client will
+              Agree on a price with the client in the chat first, then confirm it here, the client will
               see a "Pay Now" button appear on their order page.
             </p>
           </div>
@@ -246,9 +246,9 @@ export default function AdminOrderDetail() {
               <p className="text-xs text-gray-400 mt-2">
                 {order.pro_accepted
                   ? order.status === "pending_payment"
-                    ? `${pro?.full_name ?? "Pro"} accepted — they can start as soon as the client pays.`
+                    ? `${pro?.full_name ?? "Pro"} accepted, they can start as soon as the client pays.`
                     : `${pro?.full_name ?? "Pro"} accepted and can already see the chat.`
-                  : `Offered to ${pro?.full_name ?? "pro"} — waiting for them to accept or decline.`}
+                  : `Offered to ${pro?.full_name ?? "pro"}, waiting for them to accept or decline.`}
               </p>
             )}
           </div>
@@ -256,13 +256,13 @@ export default function AdminOrderDetail() {
 
         {order.status === "in_progress" && (
           <p className="text-sm text-gray-500">
-            Waiting for the pro to deliver — they'll upload proof and mark it delivered from their dashboard.
+            Waiting for the pro to deliver, they'll upload proof and mark it delivered from their dashboard.
           </p>
         )}
 
         {order.status === "delivered" && (
           <div className="border border-yellow-500/30 rounded-lg p-4">
-            <p className="text-sm text-yellow-400 font-semibold mb-1">Delivered — waiting for client confirmation</p>
+            <p className="text-sm text-yellow-400 font-semibold mb-1">Delivered, waiting for client confirmation</p>
             <p className="text-xs text-gray-400 mb-2">
               Delivered {order.delivered_at ? new Date(order.delivered_at).toLocaleString() : "-"} (
               {hoursSinceDelivered.toFixed(1)}h ago)
@@ -276,7 +276,7 @@ export default function AdminOrderDetail() {
               {overrideAvailable ? "Override & Confirm Completion" : `Available in ${(12 - hoursSinceDelivered).toFixed(1)}h`}
             </button>
             <p className="text-xs text-gray-500 mt-2">
-              Only use this if the client hasn't responded — normally let them confirm from their own order page.
+              Only use this if the client hasn't responded, normally let them confirm from their own order page.
             </p>
           </div>
         )}
@@ -289,7 +289,7 @@ export default function AdminOrderDetail() {
             <p className="text-sm text-gray-400 mb-2">
               Pro payout date: {order.pro_payout_due_at ? new Date(order.pro_payout_due_at).toLocaleDateString() : "-"}
               {" "}(paid on the 14th/28th, not right away)
-              {payoutReady && <span className="text-yellow-400 font-semibold"> — Ready to pay</span>}
+              {payoutReady && <span className="text-yellow-400 font-semibold"> - Ready to pay</span>}
             </p>
             <p className="text-xs text-gray-500 mb-2">
               Tip: pay pros in bulk from the <Link href="/admin/payroll" className="text-accent hover:underline">Payroll</Link> page instead of one by one.
@@ -309,7 +309,7 @@ export default function AdminOrderDetail() {
         ) : (
           order.status !== "pro_paid" && (
             <button className="btn-secondary text-sm text-red-400" onClick={cancelAndClose}>
-              Client not interested — Cancel Order & Close Chat
+              Client not interested, Cancel Order & Close Chat
             </button>
           )
         )}

@@ -48,7 +48,7 @@ export default function ProOrderDetail() {
     setUpdating(true);
     const updates: Record<string, any> = { pro_accepted: true };
     // If the client already paid by the time we accept, we can start right
-    // away — otherwise we wait for the webhook to flip us to in_progress
+    // away, otherwise we wait for the webhook to flip us to in_progress
     // once payment comes through.
     if (order.status !== "pending_payment") {
       updates.status = "in_progress";
@@ -97,11 +97,11 @@ export default function ProOrderDetail() {
   if (!order || !userId) return <p className="text-center mt-20">Loading...</p>;
 
   const statusLabels: Record<string, string> = {
-    pending_payment: order.pro_accepted ? "Accepted — waiting for client to pay" : "New offer — respond below",
-    paid: "Paid — starting soon",
+    pending_payment: order.pro_accepted ? "Accepted, waiting for client to pay" : "New offer, respond below",
+    paid: "Paid, starting soon",
     in_progress: "In progress",
-    delivered: "Delivered — waiting for client to confirm",
-    completed: "Completed — awaiting payout",
+    delivered: "Delivered, waiting for client to confirm",
+    completed: "Completed, awaiting payout",
     pro_paid: "Paid out",
   };
 
@@ -113,7 +113,7 @@ export default function ProOrderDetail() {
         <p className="text-sm text-gray-400">{order.order_number}</p>
         <h1 className="text-xl font-bold">{order.title}</h1>
         <p className="text-gray-400 text-sm mt-2 whitespace-pre-line">{order.description}</p>
-        <p className="mt-3 font-bold">Your payout: ${Number(order.pro_earnings ?? 0).toFixed(2)} — {statusLabels[order.status] ?? order.status}</p>
+        <p className="mt-3 font-bold">Your payout: ${Number(order.pro_earnings ?? 0).toFixed(2)}, {statusLabels[order.status] ?? order.status}</p>
 
         {!order.pro_accepted && (
           <div className="mt-4 border border-yellow-500/30 rounded-lg p-4">
@@ -136,7 +136,7 @@ export default function ProOrderDetail() {
           <div className="mt-4 border border-white/10 rounded-lg p-4">
             <p className="text-sm text-gray-300">✅ You accepted this order.</p>
             <p className="text-xs text-gray-500 mt-1">
-              Waiting for the client to pay — you'll be able to start and chat with them as soon as that happens.
+              Waiting for the client to pay, you'll be able to start and chat with them as soon as that happens.
             </p>
           </div>
         )}
@@ -177,7 +177,7 @@ export default function ProOrderDetail() {
 
         {order.status === "completed" && (
           <p className="text-xs text-gray-500 mt-4">
-            Confirmed complete — you'll be paid out on the next 14th or 28th, whichever comes first.
+            Confirmed complete, you'll be paid out on the next 14th or 28th, whichever comes first.
           </p>
         )}
         {order.status === "pro_paid" && (

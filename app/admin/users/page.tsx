@@ -56,7 +56,7 @@ export default function AdminUsersPage() {
     <div className="max-w-4xl mx-auto px-6 py-10">
       <h1 className="text-2xl font-bold mb-2">Users</h1>
       <p className="text-gray-400 text-sm mb-8">
-        Change a user's role, or suspend a client/pro who breaks the rules — suspended accounts lose all access to the site until you reactivate them.
+        Change a user's role, or suspend a client/pro who breaks the rules. Suspended accounts lose all access to the site until you reactivate them.
       </p>
 
       <div className="card overflow-x-auto">

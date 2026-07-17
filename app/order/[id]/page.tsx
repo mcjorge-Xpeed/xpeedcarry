@@ -57,7 +57,7 @@ export default function OrderDetailPage() {
     paid: "Paid - finding a pro",
     assigned: "Pro assigned",
     in_progress: "In progress",
-    delivered: "Delivered — please confirm",
+    delivered: "Delivered, please confirm",
     completed: "Completed",
     pro_paid: "Pro paid",
     cancelled: "Cancelled",
@@ -78,7 +78,7 @@ export default function OrderDetailPage() {
         </div>
         <p className="text-gray-400 text-sm mt-2 whitespace-pre-line">{order.description}</p>
         <p className="mt-3 font-bold">
-          {awaitingQuote ? "Price pending — chat with support below" : `$${order.price}`}
+          {awaitingQuote ? "Price pending, chat with support below" : `$${order.price}`}
         </p>
 
         {readyToPay && (

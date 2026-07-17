@@ -100,7 +100,7 @@ export default async function AdminPage() {
 
       {inbox.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold mb-4">Inbox — all chats</h2>
+          <h2 className="text-xl font-semibold mb-4">Inbox: all chats</h2>
           <div className="card overflow-x-auto mb-10">
             <table className="w-full text-sm">
               <thead className="text-left text-gray-400 border-b border-white/10">

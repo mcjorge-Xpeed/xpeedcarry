@@ -48,13 +48,13 @@ export default function ProDashboard() {
 
   function statusLabel(o: any) {
     if (o.status === "pending_payment") {
-      return o.pro_accepted ? "Accepted — waiting for payment" : "New offer — respond";
+      return o.pro_accepted ? "Accepted, waiting for payment" : "New offer, respond";
     }
     const labels: Record<string, string> = {
-      paid: "Paid — starting soon",
+      paid: "Paid, starting soon",
       in_progress: "In progress",
-      delivered: "Delivered — waiting for client",
-      completed: "Completed — awaiting payout",
+      delivered: "Delivered, waiting for client",
+      completed: "Completed, awaiting payout",
       pro_paid: "Paid out",
     };
     return labels[o.status] ?? o.status;

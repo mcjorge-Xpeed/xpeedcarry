@@ -29,26 +29,26 @@ export default async function PricingGuidePage() {
     <div className="max-w-4xl mx-auto px-6 py-10">
       <h1 className="text-2xl font-bold mb-2">Pricing Guide (internal)</h1>
       <p className="text-gray-400 text-sm mb-8">
-        Reference only — customers never see this. Use it to quote consistently in chat.
+        Reference only, customers never see this. Use it to quote consistently in chat.
       </p>
 
       <div className="card p-6 mb-8">
         <h2 className="font-semibold mb-3">Universal rules</h2>
         <ul className="text-sm text-gray-300 space-y-2">
           <li>
-            • <strong className="text-accent">Self-Play is NOT a flat fee</strong> — it varies based on the order's
+            • <strong className="text-accent">Self-Play is NOT a flat fee:</strong> it varies based on the order's
             difficulty and how skilled the client actually is (ask in chat, or judge from how they describe
             their goal). A weak player asking for a Self-Play carry takes much more of the pro's time and
-            patience than a strong one, so price it up accordingly using the difficulty tiers below —
+            patience than a strong one, so price it up accordingly using the difficulty tiers below,
             treat Self-Play as "Piloted price + difficulty surcharge", not a fixed add-on.
           </li>
           <li>
-            • <strong className="text-accent">$5 minimum surcharge, always</strong> — never quote Self-Play at
+            • <strong className="text-accent">$5 minimum surcharge, always:</strong> never quote Self-Play at
             the same price as Piloted, no matter how skilled the client claims to be. Even a strong player
             is slower than a pro doing it directly, and this protects the pro if the client's self-assessment
             turns out optimistic.
           </li>
-          <li>• <strong className="text-accent">Difficulty multiplier</strong> — start from the game's base numbers below, then scale up based on how hard/time-consuming the specific request is:</li>
+          <li>• <strong className="text-accent">Difficulty multiplier:</strong> start from the game's base numbers below, then scale up based on how hard/time-consuming the specific request is:</li>
         </ul>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
           {[
@@ -95,13 +95,13 @@ export default async function PricingGuidePage() {
         <h2 className="font-semibold mb-3">Stripe fees & minimum pricing</h2>
         <p className="text-sm text-gray-300 mb-4">
           Stripe takes roughly <strong className="text-accent">2.9% + $0.30</strong> per card payment
-          (this is the standard US online rate — check your actual Stripe Dashboard settings, since it can be
+          (this is the standard US online rate, check your actual Stripe Dashboard settings, since it can be
           higher for international cards or a different home country). That $0.30 fixed part hits small
           orders hard: on a $5 order it eats ~9% of the price; on a $50 order it's only ~3.5%.
         </p>
         <p className="text-sm text-gray-300 mb-4">
           <strong className="text-accent">Recommended: don't quote below a $10 total</strong> once you factor
-          in Stripe's cut and whatever you pay the pro — anything cheaper barely clears the transaction fee,
+          in Stripe's cut and whatever you pay the pro, anything cheaper barely clears the transaction fee,
           let alone leaves a real margin. When a client asks for something small, either bundle it with
           something else or round up.
         </p>
@@ -119,7 +119,7 @@ export default async function PricingGuidePage() {
           })}
         </div>
         <p className="text-xs text-gray-500 mt-3">
-          "Net" here is before whatever you pay the pro for the order — this is only the Stripe cut.
+          "Net" here is before whatever you pay the pro for the order, this is only the Stripe cut.
         </p>
       </div>
 

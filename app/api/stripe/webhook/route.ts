@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         .single();
 
       // Si el pro ya había aceptado la oferta antes de que se pagara, arranca
-      // directo a "in_progress" — la promesa del negocio es que el cliente
+      // directo a "in_progress": la promesa del negocio es que el cliente
       // paga sabiendo que el pro ya está listo, sin esperar más pasos.
       const readyProId = order?.pro_id && order?.pro_accepted ? order.pro_id : null;
 
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         .eq("id", orderId);
 
       // La conversación de la orden ya se crea cuando el cliente arma el pedido
-      // (antes de pagar, para poder negociar el precio) — solo la creamos acá
+      // (antes de pagar, para poder negociar el precio), solo la creamos acá
       // como respaldo, por si por algún motivo no existiera todavía.
       const { data: existingConv } = await supabase
         .from("conversations")

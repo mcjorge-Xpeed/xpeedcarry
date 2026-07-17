@@ -66,7 +66,7 @@ export default function PayrollPage() {
     setFeeEditingPro(null);
     setFeeInput("0");
     if (!res.ok) {
-      alert("Couldn't mark this payout as paid — try again.");
+      alert("Couldn't mark this payout as paid, try again.");
       return;
     }
     load();
@@ -91,7 +91,7 @@ export default function PayrollPage() {
     <div className="max-w-4xl mx-auto px-6 py-10">
       <h1 className="text-2xl font-bold mb-2">Payroll</h1>
       <p className="text-gray-400 text-sm mb-6">
-        Pros are paid twice a month — the 14th and the 28th. Completed orders are grouped by pro so you
+        Pros are paid twice a month: the 14th and the 28th. Completed orders are grouped by pro so you
         can pay one lump sum per pro instead of order-by-order. Amounts shown are the pro's cut only
         (never the client's total), and each pro gets an email once you mark them as paid.
       </p>
@@ -124,9 +124,9 @@ export default function PayrollPage() {
                   <p className="text-xs text-gray-400">
                     {dueDate ? `Payout date: ${format(dueDate, "MM/dd/yyyy")}` : "-"}
                     {ready ? (
-                      <span className="text-yellow-400 font-semibold"> — Ready to pay</span>
+                      <span className="text-yellow-400 font-semibold"> - Ready to pay</span>
                     ) : (
-                      <span> — not due yet</span>
+                      <span> - not due yet</span>
                     )}
                   </p>
                 </div>
@@ -148,7 +148,7 @@ export default function PayrollPage() {
               {isEditingFee ? (
                 <div className="border border-white/10 rounded-lg p-3 space-y-2">
                   <label className="text-xs text-gray-400 block">
-                    Transfer fee for sending this to their personal bank (Revolut, wire, etc.) — optional
+                    Transfer fee for sending this to their personal bank (Revolut, wire, etc.), optional
                   </label>
                   <div className="flex items-center gap-2">
                     <span className="text-sm">$</span>
@@ -178,7 +178,7 @@ export default function PayrollPage() {
                       onClick={() => confirmPayPro(proId, group.orders.map((o) => o.id))}
                       disabled={payingPro === proId}
                     >
-                      {payingPro === proId ? "Marking as paid..." : `Confirm — sent $${net.toFixed(2)}`}
+                      {payingPro === proId ? "Marking as paid..." : `Confirm: sent $${net.toFixed(2)}`}
                     </button>
                   </div>
                 </div>

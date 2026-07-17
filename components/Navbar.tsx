@@ -5,11 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import NewOrderNotifier from "@/components/NewOrderNotifier";
+import NotificationBell from "@/components/NotificationBell";
 
 type Game = { id: string; name: string; slug: string; image_url: string };
 
 export default function Navbar() {
   const [email, setEmail] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [gamesOpen, setGamesOpen] = useState(false);
@@ -24,11 +26,13 @@ export default function Navbar() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setEmail(data.user?.email ?? null);
+      setUserId(data.user?.id ?? null);
       if (data.user) loadRole(data.user.id);
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setEmail(session?.user?.email ?? null);
+      setUserId(session?.user?.id ?? null);
       if (session?.user) loadRole(session.user.id);
       else setRole(null);
     });
@@ -92,6 +96,8 @@ export default function Navbar() {
           <Link href="/support" className="hidden sm:inline hover:text-accent2 transition">
             Support
           </Link>
+
+          {email && userId && <NotificationBell userId={userId} />}
 
           {email ? (
             <div className="relative">

@@ -4,7 +4,7 @@ export default function PrivacyPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-14">
       <h1 className="text-3xl font-bold mb-2">Privacy Policy</h1>
-      <p className="text-gray-400 text-sm mb-8">Last updated: this is a starting template — have a lawyer review it before you rely on it for real transactions.</p>
+      <p className="text-gray-400 text-sm mb-8">Last updated: this is a starting template, have a lawyer review it before you rely on it for real transactions.</p>
 
       <div className="card p-6 space-y-4 text-sm text-gray-300 leading-relaxed">
         <section>
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-white font-semibold text-lg mb-2">2. Payment data</h2>
           <p>
-            Payments are processed by Stripe. We never see or store your full card number — Stripe
+            Payments are processed by Stripe. We never see or store your full card number: Stripe
             handles that directly and securely.
           </p>
         </section>

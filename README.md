@@ -1,4 +1,4 @@
-# GamePro — Plataforma de órdenes de gaming
+# GamePro: Plataforma de órdenes de gaming
 
 MVP funcional: catálogo de juegos, órdenes personalizadas, pago con Stripe,
 chat de soporte, chat cliente-pro y panel de administración (clientes, pros,
@@ -26,7 +26,7 @@ el panel admin más adelante si quieres agregar esa función.
 ## 2. Crear la cuenta de Stripe
 
 1. Ve a https://dashboard.stripe.com/register y crea tu cuenta (esta es tu
-   "cuenta concentrada" — todos los pagos de clientes caen aquí).
+   "cuenta concentrada": todos los pagos de clientes caen aquí).
 2. Mientras activas la cuenta puedes trabajar en **modo prueba** (test mode).
 3. Ve a **Developers > API keys** y copia la **Secret key** →
    `STRIPE_SECRET_KEY`.
@@ -90,7 +90,7 @@ Luego en Vercel:
   **"Marcar como pagado al pro"** para dejarlo registrado.
 
 > Elegiste pagos manuales, así que el dinero de Stripe se queda en tu
-> cuenta concentrada hasta que tú decidas transferirlo — no hay reparto
+> cuenta concentrada hasta que tú decidas transferirlo, no hay reparto
 > automático (eso sería Stripe Connect, que puedes agregar después si
 > escalas y quieres automatizar los pagos a muchos pros).
 
@@ -98,7 +98,7 @@ Luego en Vercel:
 
 - **client**: crea órdenes, paga, chatea con soporte y con su pro asignado.
 - **pro**: ve las órdenes que le asignes y chatea con el cliente.
-- **admin**: ve todo — clientes, pros, órdenes, chats — y controla el flujo
+- **admin**: ve todo (clientes, pros, órdenes, chats) y controla el flujo
   de pagos.
 
 ## Lo que falta / próximos pasos sugeridos
@@ -108,5 +108,5 @@ Luego en Vercel:
 - Subida de comprobantes/capturas en el chat.
 - Notificaciones por correo (Supabase tiene esto integrado, o Resend).
 - Revisar bien las políticas de RLS en `schema.sql` antes de manejar pagos
-  reales — están pensadas como punto de partida sólido, no como auditoría
+  reales: están pensadas como punto de partida sólido, no como auditoría
   de seguridad final.

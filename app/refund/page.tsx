@@ -4,7 +4,7 @@ export default function RefundPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-14">
       <h1 className="text-3xl font-bold mb-2">Refund Policy</h1>
-      <p className="text-gray-400 text-sm mb-8">Last updated: this is a starting template — have a lawyer review it before you rely on it for real transactions.</p>
+      <p className="text-gray-400 text-sm mb-8">Last updated: this is a starting template, have a lawyer review it before you rely on it for real transactions.</p>
 
       <div className="card p-6 space-y-4 text-sm text-gray-300 leading-relaxed">
         <section>

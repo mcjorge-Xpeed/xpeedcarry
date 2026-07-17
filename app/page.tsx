@@ -81,9 +81,9 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             { step: "1", title: "Tell us what you need", desc: "Pick Piloted or Self-Play and describe your goal." },
-            { step: "2", title: "Confirm your price", desc: "Chat with support — no surprises, no obligation." },
+            { step: "2", title: "Confirm your price", desc: "Chat with support, no surprises, no obligation." },
             { step: "3", title: "Pay securely", desc: "Stripe Checkout. We never see your card details." },
-            { step: "4", title: "Track it in chat", desc: "Your pro gets to work — follow along live." },
+            { step: "4", title: "Track it in chat", desc: "Your pro gets to work, follow along live." },
           ].map((s) => (
             <div key={s.step} className="card p-6 text-center hover:-translate-y-1 transition-transform">
               <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-gradient-to-br from-accent to-accent2 flex items-center justify-center font-bold text-[#07070d]">
@@ -100,7 +100,7 @@ export default async function HomePage() {
         <div className="card p-8 sm:p-12 text-center hero-gradient">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3">Don't see your game?</h2>
           <p className="text-gray-400 max-w-lg mx-auto mb-6">
-            Tell us what you need and we'll build a custom order for it — any game, any goal.
+            Tell us what you need and we'll build a custom order for it: any game, any goal.
           </p>
           <Link href="/order/new" className="btn-primary inline-block">
             Create Custom Order

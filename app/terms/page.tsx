@@ -4,7 +4,7 @@ export default function TermsPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-14 prose-invert">
       <h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
-      <p className="text-gray-400 text-sm mb-8">Last updated: this is a starting template — have a lawyer review it before you rely on it for real transactions.</p>
+      <p className="text-gray-400 text-sm mb-8">Last updated: this is a starting template, have a lawyer review it before you rely on it for real transactions.</p>
 
       <div className="card p-6 mb-6 space-y-4 text-sm text-gray-300 leading-relaxed">
         <section>
@@ -38,7 +38,7 @@ export default function TermsPage() {
             skill level and experience. If your pro determines during the order that your actual skill is
             significantly different from what was described, we may pause the order and offer you a revised
             price for the remaining work before continuing. You're free to accept the revised price or decline
-            it — if you decline, we'll cancel the unstarted portion and refund it per our{" "}
+            it. If you decline, we'll cancel the unstarted portion and refund it per our{" "}
             <a href="/refund" className="text-accent hover:underline">Refund Policy</a>.
           </p>
         </section>
@@ -81,7 +81,7 @@ export default function TermsPage() {
         <section>
           <h2 className="text-white font-semibold text-lg mb-2">8. Conduct and account suspension</h2>
           <p>
-            Everyone using XpeedCarry — clients and pros alike — is expected to follow our{" "}
+            Everyone using XpeedCarry, clients and pros alike, is expected to follow our{" "}
             <a href="/guidelines" className="text-accent hover:underline">Community Guidelines</a>, including
             treating support, pros, and clients with respect at all times. Accounts that violate this may be
             suspended, losing access to the entire platform, at our discretion.

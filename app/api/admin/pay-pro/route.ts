@@ -64,7 +64,7 @@ export async function POST(req: Request) {
         body: JSON.stringify({
           from: "XpeedCarry Payroll <noreply@xpeedcarry.net>",
           to: proEmail,
-          subject: `You've been paid — $${netTotal.toFixed(2)}`,
+          subject: `You've been paid: $${netTotal.toFixed(2)}`,
           html: `
             <p>Hi,</p>
             <p>Your payout for ${orders.length} completed order(s) has just been sent.</p>
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
               fee > 0 ? ` (after a $${fee.toFixed(2)} transfer fee)` : ""
             }</p>
             <p>Orders: ${orders.map((o) => o.order_number).join(", ")}</p>
-            <p>— XpeedCarry</p>
+            <p>- XpeedCarry</p>
           `,
         }),
       });

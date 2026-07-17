@@ -49,7 +49,7 @@ function NewOrderForm() {
     }
 
     const modeLabel = serviceMode === "piloted" ? "Piloted" : "Self-Play";
-    const title = game ? `${game.name} — ${modeLabel}` : `Custom Order — ${modeLabel}`;
+    const title = game ? `${game.name}: ${modeLabel}` : `Custom Order: ${modeLabel}`;
     const fullDescription = `Service mode: ${modeLabel}\n\n${description}`;
 
     const { data: order, error: orderError } = await supabase
@@ -114,7 +114,7 @@ function NewOrderForm() {
                   <span className="info-tooltip hidden group-hover:block">
                     {mode === "piloted"
                       ? "A pro logs into your account and completes the order for you."
-                      : "Play alongside a pro in a duo session. Price depends on your skill level and how difficult the order is — support will confirm it with you."}
+                      : "Play alongside a pro in a duo session. Price depends on your skill level and how difficult the order is, support will confirm it with you."}
                   </span>
                 </span>
               </label>

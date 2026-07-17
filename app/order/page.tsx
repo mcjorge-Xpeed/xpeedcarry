@@ -31,10 +31,10 @@ export default function MyOrdersPage() {
 
   const statusLabels: Record<string, string> = {
     pending_payment: "Waiting for price confirmation",
-    paid: "Paid — assigning a pro",
+    paid: "Paid, assigning a pro",
     assigned: "Pro assigned",
     in_progress: "In progress",
-    delivered: "Delivered — review & confirm",
+    delivered: "Delivered, review & confirm",
     completed: "Completed",
     pro_paid: "Completed",
     cancelled: "Cancelled",

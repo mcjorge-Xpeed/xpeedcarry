@@ -32,7 +32,7 @@ export default function NewOrderNotifier() {
 
           if ("Notification" in window && Notification.permission === "granted") {
             new Notification("New order on XpeedCarry", {
-              body: `${order.order_number} — ${order.title}`,
+              body: `${order.order_number}: ${order.title}`,
             });
           }
         }

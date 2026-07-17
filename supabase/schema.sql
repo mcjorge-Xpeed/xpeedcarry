@@ -376,3 +376,65 @@ create policy "authenticated users can upload evidence"
 create policy "anyone can view evidence"
   on storage.objects for select
   using (bucket_id = 'order-evidence');
+
+-- =========================================================
+-- NOTIFICATIONS: campanita en el navbar (agregado 2026-07-17)
+-- Alimentada por triggers, no por el código de la app: no hace falta
+-- tocar assignPro() ni la creación de órdenes para que esto funcione.
+-- =========================================================
+create table notifications (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid not null references profiles(id) on delete cascade,
+  type text not null, -- 'new_order' | 'order_offer'
+  order_id uuid references orders(id) on delete cascade,
+  title text not null,
+  body text not null,
+  read boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+alter table notifications enable row level security;
+
+create policy "usuario ve sus propias notificaciones"
+  on notifications for select
+  using (user_id = auth.uid());
+
+create policy "usuario marca sus notificaciones como leidas"
+  on notifications for update
+  using (user_id = auth.uid())
+  with check (user_id = auth.uid());
+
+-- Notifica a todos los admins cuando se crea una orden nueva
+create or replace function notify_admins_new_order()
+returns trigger as $$
+begin
+  insert into notifications (user_id, type, order_id, title, body)
+  select id, 'new_order', new.id, 'New order', new.order_number || ': ' || new.title
+  from profiles where role = 'admin';
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger trg_notify_admins_new_order
+  after insert on orders
+  for each row execute function notify_admins_new_order();
+
+-- Notifica al pro cuando el admin le ofrece una orden (o se la vuelve a
+-- ofrecer tras un decline)
+create or replace function notify_pro_order_offer()
+returns trigger as $$
+begin
+  if new.pro_id is not null and new.pro_accepted = false
+     and (old.pro_id is distinct from new.pro_id or old.pro_accepted is distinct from new.pro_accepted) then
+    insert into notifications (user_id, type, order_id, title, body)
+    values (new.pro_id, 'order_offer', new.id, 'New order offer', new.order_number || ': ' || new.title);
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger trg_notify_pro_order_offer
+  after update on orders
+  for each row execute function notify_pro_order_offer();
+
+alter publication supabase_realtime add table notifications;
