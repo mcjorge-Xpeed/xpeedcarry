@@ -216,18 +216,31 @@ export default function AdminOrderDetail() {
               />
               <button className="btn-primary whitespace-nowrap" onClick={confirmPrice}>Confirm Price</button>
             </div>
-            <div className="flex items-center gap-2 mt-3">
+            <div className="mt-3">
               <label className="text-xs text-gray-400 whitespace-nowrap">Pro gets:</label>
-              <input
-                type="number"
-                min={0}
-                max={45}
-                step="1"
-                className="input w-20"
-                value={proCutPercent}
-                onChange={(e) => setProCutPercent(e.target.value)}
-              />
-              <span className="text-xs text-gray-400">% (max 45%): the pro only ever sees the dollar amount, never the total price</span>
+              <div className="flex gap-2 mt-1">
+                <button
+                  type="button"
+                  onClick={() => setProCutPercent("40")}
+                  className={`flex-1 text-sm px-3 py-2 rounded border transition ${
+                    proCutPercent === "40" ? "border-accent text-accent bg-accent/10" : "border-white/10 text-gray-400"
+                  }`}
+                >
+                  🏠 Casa (40% neto)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setProCutPercent("30")}
+                  className={`flex-1 text-sm px-3 py-2 rounded border transition ${
+                    proCutPercent === "30" ? "border-accent text-accent bg-accent/10" : "border-white/10 text-gray-400"
+                  }`}
+                >
+                  Normal (30% neto)
+                </button>
+              </div>
+              <p className="text-xs text-gray-400 mt-1">
+                The pro only ever sees the dollar amount, never the total price.
+              </p>
             </div>
             {enteredPrice > 0 && (
               <p className="text-xs text-gray-400 mt-2">

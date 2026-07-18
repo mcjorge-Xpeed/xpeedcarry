@@ -56,6 +56,11 @@ export default function AdminUsersPage() {
     load();
   }
 
+  async function toggleHousePro(id: string, currentlyHouse: boolean) {
+    await supabase.from("profiles").update({ is_house_pro: !currentlyHouse }).eq("id", id);
+    load();
+  }
+
   function toggleColumn(role: string) {
     setVisibleRoles((prev) => ({ ...prev, [role]: !prev[role] }));
   }
@@ -138,6 +143,18 @@ export default function AdminUsersPage() {
                           {p.active ? "Suspend" : "Reactivate"}
                         </button>
                       </div>
+                      {r === "pro" && (
+                        <button
+                          onClick={() => toggleHousePro(p.id, !!p.is_house_pro)}
+                          className={`mt-2 w-full text-xs px-2 py-1 rounded border transition ${
+                            p.is_house_pro
+                              ? "border-accent text-accent bg-accent/10"
+                              : "border-white/10 text-gray-500"
+                          }`}
+                        >
+                          {p.is_house_pro ? "🏠 De casa (40% neto)" : "Normal (30% neto)"}
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>

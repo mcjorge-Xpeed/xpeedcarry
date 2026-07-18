@@ -18,6 +18,11 @@ create table profiles (
   role user_role not null default 'client',
   avatar_url text,
   active boolean not null default true,
+  -- Solo aplica a pros: "de casa" cobra 40% neto (43% - 3% al fondo de
+  -- reserva), pro nuevo/normal cobra 30% neto (35% - 5% al fondo de
+  -- reserva) -- decisión 2026-07-17, mayor % de reserva para pros nuevos
+  -- porque representan más riesgo de reclamos.
+  is_house_pro boolean not null default false,
   created_at timestamptz not null default now()
 );
 
@@ -490,3 +495,51 @@ $$ language plpgsql security definer;
 create trigger trg_notify_admins_support_message
   after insert on messages
   for each row execute function notify_admins_support_message();
+
+-- =========================================================
+-- FONDO DE RESERVA para reclamos/disputas (agregado 2026-07-17)
+-- Cuando una orden se completa, se aparta automáticamente un % del
+-- precio: 3% si el pro es "de casa" (cobra 40% neto), 5% si es
+-- normal/nuevo (cobra 30% neto, mayor % porque representa más riesgo).
+-- Solo admin puede ver o mover este fondo (no support).
+-- =========================================================
+create table reserve_fund_ledger (
+  id uuid primary key default uuid_generate_v4(),
+  order_id uuid references orders(id) on delete set null,
+  type text not null, -- 'contribution' | 'withdrawal'
+  amount numeric(10,2) not null,
+  note text,
+  created_at timestamptz not null default now()
+);
+
+alter table reserve_fund_ledger enable row level security;
+
+create policy "solo admin ve el fondo de reserva"
+  on reserve_fund_ledger for select
+  using (is_admin());
+
+create policy "solo admin registra movimientos del fondo"
+  on reserve_fund_ledger for insert
+  with check (is_admin());
+
+create or replace function contribute_to_reserve_fund()
+returns trigger as $$
+declare
+  house boolean;
+  reserve_pct numeric;
+begin
+  if new.status = 'completed' and old.status is distinct from 'completed' and new.pro_id is not null then
+    select is_house_pro into house from profiles where id = new.pro_id;
+    reserve_pct := case when house then 3 else 5 end;
+    insert into reserve_fund_ledger (order_id, type, amount, note)
+    values (new.id, 'contribution', round((new.price * reserve_pct / 100)::numeric, 2), new.order_number || ' completed');
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger trg_contribute_to_reserve_fund
+  after update on orders
+  for each row execute function contribute_to_reserve_fund();
+
+alter publication supabase_realtime add table reserve_fund_ledger;

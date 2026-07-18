@@ -69,6 +69,11 @@ export default async function AdminPage() {
               💰 Payroll
             </Link>
           )}
+          {isAdmin && (
+            <Link href="/admin/finance" className="btn-secondary text-sm">
+              📈 Finance
+            </Link>
+          )}
           <Link href="/admin/pricing-guide" className="btn-secondary text-sm">
             📋 Pricing Guide
           </Link>
