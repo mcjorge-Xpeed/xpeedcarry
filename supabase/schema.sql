@@ -386,6 +386,91 @@ insert into games (name, slug, image_url, description, base_price, options_confi
         {"label":"Specific Pal request","price":8}]}
     ]}'::jsonb);
 
+-- Agregados 2026-07-18. Resident Evil es franquicia genérica (a propósito,
+-- no un título específico); el resto son juegos concretos.
+insert into games (name, slug, image_url, description, base_price, options_config) values
+  ('Crimson Desert', 'crimson-desert', '/games/crimson-desert.jpg', 'Story progression, boss kills and gear crafting help.', 4.99,
+    '{"groups":[
+      {"id":"service","label":"Service Type","type":"radio","options":[
+        {"label":"Early story progress","price":15},
+        {"label":"Specific boss kill","price":20},
+        {"label":"Full story completion","price":85}]},
+      {"id":"addons","label":"Add-ons","type":"checkbox","options":[
+        {"label":"Play together (duo session)","price":12},
+        {"label":"Gear crafting/farming","price":10}]}
+    ]}'::jsonb),
+  ('Elden Ring Nightreign', 'elden-ring-nightreign', '/games/elden-ring-nightreign.jpg', 'Nightlord kills, expedition wins and relic farming.', 4.99,
+    '{"groups":[
+      {"id":"service","label":"Service Type","type":"radio","options":[
+        {"label":"Nightlord boss kill","price":20},
+        {"label":"Expedition win (full run)","price":25},
+        {"label":"Relic farming session","price":15}]},
+      {"id":"addons","label":"Add-ons","type":"checkbox","options":[
+        {"label":"Play together (duo/trio)","price":15},
+        {"label":"Specific character unlock","price":10}]}
+    ]}'::jsonb),
+  ('Borderlands 4', 'borderlands-4', '/games/borderlands-4.jpg', 'Fast leveling, Vault Hunter completion and loot farming.', 4.99,
+    '{"groups":[
+      {"id":"service","label":"Service Type","type":"radio","options":[
+        {"label":"Level boost (10 levels)","price":10},
+        {"label":"Full story completion","price":40},
+        {"label":"Raid boss farming","price":20}]},
+      {"id":"addons","label":"Add-ons","type":"checkbox","options":[
+        {"label":"Play together (duo session)","price":12},
+        {"label":"Specific legendary farming","price":10}]}
+    ]}'::jsonb),
+  ('Monster Hunter World', 'monster-hunter-world', '/games/monster-hunter-world.jpg', 'Story completion, monster kills and armor set farming (base game + Iceborne).', 4.99,
+    '{"groups":[
+      {"id":"service","label":"Service Type","type":"radio","options":[
+        {"label":"Base story completion","price":30},
+        {"label":"Iceborne story completion","price":35},
+        {"label":"Specific monster kill","price":12},
+        {"label":"HR leveling session","price":15}]},
+      {"id":"addons","label":"Add-ons","type":"checkbox","options":[
+        {"label":"Play together (duo session)","price":12},
+        {"label":"Specific armor set farming","price":10}]}
+    ]}'::jsonb),
+  ('Monster Hunter Rise', 'monster-hunter-rise', '/games/monster-hunter-rise.jpg', 'Story completion, monster kills and Rampage/armor farming (base game + Sunbreak).', 4.99,
+    '{"groups":[
+      {"id":"service","label":"Service Type","type":"radio","options":[
+        {"label":"Base story completion","price":25},
+        {"label":"Sunbreak story completion","price":30},
+        {"label":"Specific monster kill","price":12},
+        {"label":"HR/MR leveling session","price":15}]},
+      {"id":"addons","label":"Add-ons","type":"checkbox","options":[
+        {"label":"Play together (duo session)","price":12},
+        {"label":"Specific armor set farming","price":10}]}
+    ]}'::jsonb),
+  ('Marathon', 'marathon', '/games/marathon.jpg', 'Fast leveling, gear extraction runs and vendor rep grinding.', 4.99,
+    '{"groups":[
+      {"id":"service","label":"Service Type","type":"radio","options":[
+        {"label":"Level boost (10 levels)","price":10},
+        {"label":"Gear extraction run","price":15},
+        {"label":"Vendor reputation grind","price":15}]},
+      {"id":"addons","label":"Add-ons","type":"checkbox","options":[
+        {"label":"Play together (duo session)","price":12},
+        {"label":"Specific loadout farming","price":8}]}
+    ]}'::jsonb),
+  ('Battlefield 6', 'battlefield-6', '/games/battlefield-6.jpg', 'Rank leveling, weapon mastery and battle pass completion.', 4.99,
+    '{"groups":[
+      {"id":"service","label":"Service Type","type":"radio","options":[
+        {"label":"Weapon leveling (1 weapon, max level)","price":10},
+        {"label":"Rank leveling (1-50)","price":25},
+        {"label":"Battle pass completion","price":30}]},
+      {"id":"addons","label":"Add-ons","type":"checkbox","options":[
+        {"label":"Play together (duo session)","price":15},
+        {"label":"Specific camo/mastery request","price":10}]}
+    ]}'::jsonb),
+  ('Resident Evil', 'resident-evil', '/games/resident-evil.jpg', 'Full playthrough completion, speedrun unlockables and hardest-difficulty clears (any title in the series, tell us which one).', 4.99,
+    '{"groups":[
+      {"id":"service","label":"Service Type","type":"radio","options":[
+        {"label":"Full playthrough (standard difficulty)","price":35},
+        {"label":"Speedrun unlockable clear","price":25},
+        {"label":"Hardest difficulty clear (e.g. Professional/Inferno)","price":45}]},
+      {"id":"addons","label":"Add-ons","type":"checkbox","options":[
+        {"label":"Play together (duo session)","price":12}]}
+    ]}'::jsonb);
+
 -- =========================================================
 -- STORAGE: comprobantes de entrega (capturas/video que sube el pro)
 -- =========================================================
