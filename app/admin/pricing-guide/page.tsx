@@ -11,7 +11,7 @@ export default async function PricingGuidePage() {
   const { data: { user } } = await supabase.auth.getUser();
   const { data: me } = await supabase.from("profiles").select("role").eq("id", user?.id).single();
 
-  if (me?.role !== "admin") {
+  if (me?.role !== "admin" && me?.role !== "support") {
     return (
       <div className="max-w-md mx-auto mt-20 text-center">
         <p>You don't have admin permissions.</p>

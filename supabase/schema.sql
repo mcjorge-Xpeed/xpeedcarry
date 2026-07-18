@@ -6,8 +6,11 @@
 -- Extensión para UUID
 create extension if not exists "uuid-ossp";
 
--- ---------- PERFILES (clientes, pros, admin) ----------
-create type user_role as enum ('client', 'pro', 'admin');
+-- ---------- PERFILES (clientes, pros, support, admin) ----------
+-- 'support' agregado 2026-07-17: mismo acceso día a día que admin (chats,
+-- cotizar, asignar pro) pero SIN poder suspender cuentas, cambiar roles,
+-- borrar órdenes ni correr nómina (eso queda solo para 'admin').
+create type user_role as enum ('client', 'pro', 'support', 'admin');
 
 create table profiles (
   id uuid primary key references auth.users(id) on delete cascade,
@@ -167,10 +170,20 @@ returns boolean as $$
   );
 $$ language sql stable security definer;
 
--- PROFILES
-create policy "ver propio perfil o admin ve todos"
+-- Helper: ¿el usuario actual es "staff" (admin o support)? Usado para el
+-- acceso día a día (chats, cotizar, asignar pro). Las acciones delicadas
+-- (suspender, cambiar roles, borrar, nómina) siguen usando is_admin() a secas.
+create function is_staff()
+returns boolean as $$
+  select exists (
+    select 1 from profiles where id = auth.uid() and role in ('admin', 'support')
+  );
+$$ language sql stable security definer;
+
+-- PROFILES (suspender/reactivar y cambiar rol quedan solo para admin)
+create policy "ver propio perfil o staff ve todos"
   on profiles for select
-  using (id = auth.uid() or is_admin());
+  using (id = auth.uid() or is_staff());
 
 create policy "actualizar propio perfil"
   on profiles for update
@@ -184,17 +197,17 @@ create policy "solo admin edita juegos"
   on games for all using (is_admin()) with check (is_admin());
 
 -- ORDERS
-create policy "cliente ve sus ordenes, pro ve las asignadas, admin ve todo"
+create policy "cliente ve sus ordenes, pro ve las asignadas, staff ve todo"
   on orders for select
-  using (client_id = auth.uid() or pro_id = auth.uid() or is_admin());
+  using (client_id = auth.uid() or pro_id = auth.uid() or is_staff());
 
 create policy "cliente crea su propia orden"
   on orders for insert
   with check (client_id = auth.uid());
 
-create policy "admin y pro asignado actualizan orden"
+create policy "staff y pro asignado actualizan orden"
   on orders for update
-  using (is_admin() or pro_id = auth.uid());
+  using (is_staff() or pro_id = auth.uid());
 
 create policy "cliente confirma su propia orden entregada"
   on orders for update
@@ -202,33 +215,37 @@ create policy "cliente confirma su propia orden entregada"
   with check (client_id = auth.uid());
 
 -- CONVERSATIONS
-create policy "participantes o admin ven la conversacion"
+create policy "participantes o staff ven la conversacion"
   on conversations for select
-  using (client_id = auth.uid() or pro_id = auth.uid() or is_admin());
+  using (client_id = auth.uid() or pro_id = auth.uid() or is_staff());
 
-create policy "cliente o admin crean conversacion"
+create policy "cliente o staff crean conversacion"
   on conversations for insert
-  with check (client_id = auth.uid() or is_admin());
+  with check (client_id = auth.uid() or is_staff());
+
+create policy "staff actualiza conversaciones"
+  on conversations for update
+  using (is_staff());
 
 -- MESSAGES
-create policy "participantes o admin ven mensajes"
+create policy "participantes o staff ven mensajes"
   on messages for select
   using (
     exists (
       select 1 from conversations c
       where c.id = conversation_id
-      and (c.client_id = auth.uid() or c.pro_id = auth.uid() or is_admin())
+      and (c.client_id = auth.uid() or c.pro_id = auth.uid() or is_staff())
     )
   );
 
-create policy "participantes o admin envian mensajes"
+create policy "participantes o staff envian mensajes"
   on messages for insert
   with check (
     sender_id = auth.uid()
     and exists (
       select 1 from conversations c
       where c.id = conversation_id
-      and (c.client_id = auth.uid() or c.pro_id = auth.uid() or is_admin())
+      and (c.client_id = auth.uid() or c.pro_id = auth.uid() or is_staff())
     )
   );
 
@@ -407,13 +424,13 @@ create policy "usuario marca sus notificaciones como leidas"
   using (user_id = auth.uid())
   with check (user_id = auth.uid());
 
--- Notifica a todos los admins cuando se crea una orden nueva
+-- Notifica a todo el staff (admin + support) cuando se crea una orden nueva
 create or replace function notify_admins_new_order()
 returns trigger as $$
 begin
   insert into notifications (user_id, type, order_id, title, body)
   select id, 'new_order', new.id, 'New order', new.order_number || ': ' || new.title
-  from profiles where role = 'admin';
+  from profiles where role in ('admin', 'support');
   return new;
 end;
 $$ language plpgsql security definer;
@@ -464,7 +481,7 @@ begin
     select id, 'new_message', new.conversation_id, 'New support message',
       coalesce(client_name, 'A client') || ' sent a message in support chat'
     from profiles
-    where role = 'admin' and id <> new.sender_id;
+    where role in ('admin', 'support') and id <> new.sender_id;
   end if;
   return new;
 end;

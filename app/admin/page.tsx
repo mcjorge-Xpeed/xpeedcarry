@@ -10,8 +10,10 @@ export default async function AdminPage() {
 
   const { data: { user } } = await supabase.auth.getUser();
   const { data: me } = await supabase.from("profiles").select("role").eq("id", user?.id).single();
+  const isAdmin = me?.role === "admin";
+  const isStaff = isAdmin || me?.role === "support";
 
-  if (me?.role !== "admin") {
+  if (!isStaff) {
     return (
       <div className="max-w-md mx-auto mt-20 text-center">
         <p>You don't have admin permissions.</p>
@@ -57,12 +59,16 @@ export default async function AdminPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold">Admin Panel</h1>
         <div className="flex gap-2">
-          <Link href="/admin/users" className="btn-secondary text-sm">
-            🛡️ Users
-          </Link>
-          <Link href="/admin/payroll" className="btn-secondary text-sm">
-            💰 Payroll
-          </Link>
+          {isAdmin && (
+            <Link href="/admin/users" className="btn-secondary text-sm">
+              🛡️ Users
+            </Link>
+          )}
+          {isAdmin && (
+            <Link href="/admin/payroll" className="btn-secondary text-sm">
+              💰 Payroll
+            </Link>
+          )}
           <Link href="/admin/pricing-guide" className="btn-secondary text-sm">
             📋 Pricing Guide
           </Link>
@@ -92,9 +98,11 @@ export default async function AdminPage() {
               {pendingPayouts.length} completed order(s), ${pendingPayoutTotal.toFixed(2)} total. Paid out on the 14th and 28th.
             </p>
           </div>
-          <Link href="/admin/payroll" className="btn-primary text-sm">
-            Open Payroll
-          </Link>
+          {isAdmin && (
+            <Link href="/admin/payroll" className="btn-primary text-sm">
+              Open Payroll
+            </Link>
+          )}
         </div>
       )}
 

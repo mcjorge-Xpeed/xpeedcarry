@@ -3,10 +3,24 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
+const ROLE_ORDER = ["client", "support", "pro", "admin"] as const;
+const ROLE_LABELS: Record<string, string> = {
+  client: "Clientes",
+  support: "Support",
+  pro: "Pros",
+  admin: "Admins",
+};
+
 export default function AdminUsersPage() {
   const [profiles, setProfiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [visibleRoles, setVisibleRoles] = useState<Record<string, boolean>>({
+    client: true,
+    support: true,
+    pro: true,
+    admin: true,
+  });
   const supabase = createClient();
 
   async function load() {
@@ -42,6 +56,10 @@ export default function AdminUsersPage() {
     load();
   }
 
+  function toggleColumn(role: string) {
+    setVisibleRoles((prev) => ({ ...prev, [role]: !prev[role] }));
+  }
+
   if (loading) return <p className="text-center mt-20">Loading...</p>;
 
   if (isAdmin === false) {
@@ -52,58 +70,82 @@ export default function AdminUsersPage() {
     );
   }
 
+  const shownRoles = ROLE_ORDER.filter((r) => visibleRoles[r]);
+
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10">
+    <div className="max-w-6xl mx-auto px-6 py-10">
       <h1 className="text-2xl font-bold mb-2">Users</h1>
-      <p className="text-gray-400 text-sm mb-8">
-        Change a user's role, or suspend a client/pro who breaks the rules. Suspended accounts lose all access to the site until you reactivate them.
+      <p className="text-gray-400 text-sm mb-6">
+        Change a user's role, or suspend a client/pro/support who breaks the rules. Suspended accounts lose all access to the site until you reactivate them.
       </p>
 
-      <div className="card overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="text-left text-gray-400 border-b border-white/10">
-            <tr>
-              <th className="p-3">Name</th>
-              <th className="p-3">Role</th>
-              <th className="p-3">Status</th>
-              <th className="p-3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {profiles.map((p) => (
-              <tr key={p.id} className="border-b border-white/5">
-                <td className="p-3">{p.full_name ?? "-"}</td>
-                <td className="p-3">
-                  <select
-                    value={p.role}
-                    onChange={(e) => changeRole(p.id, e.target.value)}
-                    className="input py-1 px-2 text-sm w-auto capitalize"
-                  >
-                    <option value="client">Client</option>
-                    <option value="pro">Pro</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </td>
-                <td className="p-3">
-                  {p.active ? (
-                    <span className="text-accent2">Active</span>
-                  ) : (
-                    <span className="text-red-400">Suspended</span>
-                  )}
-                </td>
-                <td className="p-3">
-                  <button
-                    className={`text-sm hover:underline ${p.active ? "text-red-400" : "text-accent2"}`}
-                    onClick={() => toggleSuspend(p.id, p.active)}
-                  >
-                    {p.active ? "Suspend" : "Reactivate"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="flex gap-2 mb-6 flex-wrap">
+        {ROLE_ORDER.map((r) => {
+          const count = profiles.filter((p) => p.role === r).length;
+          const on = visibleRoles[r];
+          return (
+            <button
+              key={r}
+              onClick={() => toggleColumn(r)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                on ? "border-accent text-accent bg-accent/10" : "border-white/10 text-gray-500"
+              }`}
+            >
+              {on ? "✓ " : ""}
+              {ROLE_LABELS[r]} ({count})
+            </button>
+          );
+        })}
       </div>
+
+      {shownRoles.length === 0 ? (
+        <p className="text-gray-500 text-sm">Selecciona al menos una columna para mostrar.</p>
+      ) : (
+        <div
+          className="grid gap-4"
+          style={{ gridTemplateColumns: `repeat(${shownRoles.length}, minmax(0, 1fr))` }}
+        >
+          {shownRoles.map((r) => {
+            const roleProfiles = profiles.filter((p) => p.role === r);
+            return (
+              <div key={r} className="card p-4 min-w-0">
+                <h2 className="font-semibold mb-3">{ROLE_LABELS[r]}</h2>
+                <div className="flex flex-col gap-3">
+                  {roleProfiles.length === 0 && (
+                    <p className="text-xs text-gray-500">No users yet.</p>
+                  )}
+                  {roleProfiles.map((p) => (
+                    <div key={p.id} className="border border-white/10 rounded-lg p-3">
+                      <p className="font-medium text-sm truncate">{p.full_name ?? "-"}</p>
+                      <select
+                        value={p.role}
+                        onChange={(e) => changeRole(p.id, e.target.value)}
+                        className="input py-1 px-2 text-xs w-full mt-2 capitalize"
+                      >
+                        <option value="client">Client</option>
+                        <option value="support">Support</option>
+                        <option value="pro">Pro</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                      <div className="flex items-center justify-between mt-2">
+                        <span className={`text-xs ${p.active ? "text-accent2" : "text-red-400"}`}>
+                          {p.active ? "Active" : "Suspended"}
+                        </span>
+                        <button
+                          className={`text-xs hover:underline ${p.active ? "text-red-400" : "text-accent2"}`}
+                          onClick={() => toggleSuspend(p.id, p.active)}
+                        >
+                          {p.active ? "Suspend" : "Reactivate"}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

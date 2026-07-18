@@ -10,6 +10,7 @@ export default function AdminSupportChat() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [adminId, setAdminId] = useState<string | null>(null);
+  const [isStaff, setIsStaff] = useState<boolean | null>(null);
   const [clientName, setClientName] = useState<string>("");
   const [closing, setClosing] = useState(false);
   const supabase = createClient();
@@ -18,6 +19,9 @@ export default function AdminSupportChat() {
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setAdminId(user?.id ?? null);
+
+      const { data: me } = await supabase.from("profiles").select("role").eq("id", user?.id).single();
+      setIsStaff(me?.role === "admin" || me?.role === "support");
 
       const { data: conv } = await supabase
         .from("conversations")
@@ -34,7 +38,15 @@ export default function AdminSupportChat() {
     router.push("/admin");
   }
 
-  if (!adminId) return <p className="text-center mt-20">Loading...</p>;
+  if (!adminId || isStaff === null) return <p className="text-center mt-20">Loading...</p>;
+
+  if (!isStaff) {
+    return (
+      <div className="max-w-md mx-auto mt-20 text-center">
+        <p>You don't have admin permissions.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto mt-10 px-4">

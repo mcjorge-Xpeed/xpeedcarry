@@ -31,11 +31,16 @@ export default function AdminOrderDetail() {
   const [proCutPercent, setProCutPercent] = useState("40");
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [adminId, setAdminId] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const supabase = createClient();
+  const isAdmin = role === "admin";
 
   async function load() {
     const { data: { user } } = await supabase.auth.getUser();
     setAdminId(user?.id ?? null);
+
+    const { data: me } = await supabase.from("profiles").select("role").eq("id", user?.id).single();
+    setRole(me?.role ?? null);
 
     const { data: orderData } = await supabase.from("orders").select("*").eq("id", id).single();
     setOrder(orderData);
@@ -158,7 +163,15 @@ export default function AdminOrderDetail() {
   const enteredPercent = Math.min(45, Math.max(0, Number(proCutPercent) || 0));
   const enteredProCut = Math.round((enteredPrice * enteredPercent) / 100 * 100) / 100;
 
-  if (!order) return <p className="text-center mt-20">Loading...</p>;
+  if (!order || role === null) return <p className="text-center mt-20">Loading...</p>;
+
+  if (role !== "admin" && role !== "support") {
+    return (
+      <div className="max-w-md mx-auto mt-20 text-center">
+        <p>You don't have admin permissions.</p>
+      </div>
+    );
+  }
 
   const payoutReady = order.pro_payout_due_at && new Date(order.pro_payout_due_at) <= new Date();
   const confirmedFee = order.price_confirmed ? stripeFee(Number(order.price)) : 0;
@@ -291,12 +304,16 @@ export default function AdminOrderDetail() {
               {" "}(paid on the 14th/28th, not right away)
               {payoutReady && <span className="text-yellow-400 font-semibold"> - Ready to pay</span>}
             </p>
-            <p className="text-xs text-gray-500 mb-2">
-              Tip: pay pros in bulk from the <Link href="/admin/payroll" className="text-accent hover:underline">Payroll</Link> page instead of one by one.
-            </p>
-            <button className="btn-primary" onClick={markProPaid}>
-              Mark as paid to pro (manual, via Stripe)
-            </button>
+            {isAdmin && (
+              <>
+                <p className="text-xs text-gray-500 mb-2">
+                  Tip: pay pros in bulk from the <Link href="/admin/payroll" className="text-accent hover:underline">Payroll</Link> page instead of one by one.
+                </p>
+                <button className="btn-primary" onClick={markProPaid}>
+                  Mark as paid to pro (manual, via Stripe)
+                </button>
+              </>
+            )}
           </div>
         )}
 
@@ -314,38 +331,42 @@ export default function AdminOrderDetail() {
           )
         )}
 
-        <div className="border-t border-white/10 pt-4">
-          <p className="text-xs uppercase tracking-widest text-red-400 font-bold mb-2">Moderation</p>
-          <p className="text-xs text-gray-500 mb-3">
-            Use if someone was disrespectful, demanded things outside this order, or broke the rules.
-            Suspending blocks that account from using the site entirely until you reactivate it.
-          </p>
-          <div className="flex gap-2 flex-wrap">
-            {client && (
-              <button
-                className={`btn-secondary text-sm ${client.active ? "text-red-400" : "text-accent2"}`}
-                onClick={() => toggleSuspend(client.id, client.active)}
-              >
-                {client.active ? `Suspend Client (${client.full_name ?? "client"})` : `Reactivate Client (${client.full_name ?? "client"})`}
-              </button>
-            )}
-            {pro && (
-              <button
-                className={`btn-secondary text-sm ${pro.active ? "text-red-400" : "text-accent2"}`}
-                onClick={() => toggleSuspend(pro.id, pro.active)}
-              >
-                {pro.active ? `Suspend Pro (${pro.full_name ?? "pro"})` : `Reactivate Pro (${pro.full_name ?? "pro"})`}
-              </button>
-            )}
+        {isAdmin && (
+          <div className="border-t border-white/10 pt-4">
+            <p className="text-xs uppercase tracking-widest text-red-400 font-bold mb-2">Moderation</p>
+            <p className="text-xs text-gray-500 mb-3">
+              Use if someone was disrespectful, demanded things outside this order, or broke the rules.
+              Suspending blocks that account from using the site entirely until you reactivate it.
+            </p>
+            <div className="flex gap-2 flex-wrap">
+              {client && (
+                <button
+                  className={`btn-secondary text-sm ${client.active ? "text-red-400" : "text-accent2"}`}
+                  onClick={() => toggleSuspend(client.id, client.active)}
+                >
+                  {client.active ? `Suspend Client (${client.full_name ?? "client"})` : `Reactivate Client (${client.full_name ?? "client"})`}
+                </button>
+              )}
+              {pro && (
+                <button
+                  className={`btn-secondary text-sm ${pro.active ? "text-red-400" : "text-accent2"}`}
+                  onClick={() => toggleSuspend(pro.id, pro.active)}
+                >
+                  {pro.active ? `Suspend Pro (${pro.full_name ?? "pro"})` : `Reactivate Pro (${pro.full_name ?? "pro"})`}
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="border-t border-white/10 pt-4">
-          <p className="text-xs uppercase tracking-widest text-red-400 font-bold mb-2">Danger Zone</p>
-          <button className="btn-secondary text-sm text-red-400" onClick={deleteOrder} disabled={deleting}>
-            {deleting ? "Deleting..." : "Delete Order Permanently"}
-          </button>
-        </div>
+        {isAdmin && (
+          <div className="border-t border-white/10 pt-4">
+            <p className="text-xs uppercase tracking-widest text-red-400 font-bold mb-2">Danger Zone</p>
+            <button className="btn-secondary text-sm text-red-400" onClick={deleteOrder} disabled={deleting}>
+              {deleting ? "Deleting..." : "Delete Order Permanently"}
+            </button>
+          </div>
+        )}
       </div>
 
       {conversationId && adminId && (

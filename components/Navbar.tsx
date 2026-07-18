@@ -146,9 +146,9 @@ export default function Navbar() {
                         Pro Dashboard
                       </Link>
                     )}
-                    {role === "admin" && (
+                    {(role === "admin" || role === "support") && (
                       <Link href="/admin" onClick={() => setOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
-                        Admin Panel
+                        {role === "admin" ? "Admin Panel" : "Support Panel"}
                       </Link>
                     )}
                     <button
@@ -171,7 +171,7 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-    {role === "admin" && <NewOrderNotifier />}
+    {(role === "admin" || role === "support") && <NewOrderNotifier />}
     </>
   );
 }
