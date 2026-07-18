@@ -92,15 +92,20 @@ export default function OrderDetailPage() {
         {order.status === "delivered" && (
           <div className="mt-4 border-t border-white/10 pt-4">
             <p className="text-sm text-gray-300 mb-2">Your pro says this order is done. Please review:</p>
-            {order.evidence_url && (
-              <a
-                href={order.evidence_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-accent hover:underline text-sm block mb-3"
-              >
-                View proof of completion →
-              </a>
+            {(order.evidence_urls ?? []).length > 0 && (
+              <div className="flex flex-col gap-1 mb-3">
+                {order.evidence_urls.map((url: string, i: number) => (
+                  <a
+                    key={url}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent hover:underline text-sm block"
+                  >
+                    View proof of completion {order.evidence_urls.length > 1 ? `#${i + 1}` : ""} →
+                  </a>
+                ))}
+              </div>
             )}
             <button className="btn-primary w-full" onClick={confirmCompletion} disabled={confirming}>
               {confirming ? "Confirming..." : "Confirm & Release"}

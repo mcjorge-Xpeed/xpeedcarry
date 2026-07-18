@@ -13,6 +13,8 @@ export default function ProOrderDetail() {
   const [updating, setUpdating] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [stagedUrls, setStagedUrls] = useState<string[]>([]);
+  const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
 
@@ -26,7 +28,7 @@ export default function ProOrderDetail() {
 
     const { data: orderData } = await supabase
       .from("orders")
-      .select("id, order_number, title, description, status, pro_accepted, pro_earnings, delivered_at, evidence_url, pro_payout_due_at, pro_paid_at")
+      .select("id, order_number, title, description, status, pro_accepted, pro_earnings, delivered_at, evidence_urls, pro_payout_due_at, pro_paid_at")
       .eq("id", id)
       .single();
     setOrder(orderData);
@@ -71,28 +73,40 @@ export default function ProOrderDetail() {
     window.location.href = "/pro";
   }
 
-  async function submitEvidence(file: File) {
+  async function addFiles(files: FileList) {
     setError("");
     setUploading(true);
 
-    const ext = file.name.split(".").pop();
-    const path = `${id}/${Date.now()}.${ext}`;
+    for (const file of Array.from(files)) {
+      const ext = file.name.split(".").pop();
+      const path = `${id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
-    const { error: uploadError } = await supabase.storage.from("order-evidence").upload(path, file);
-    if (uploadError) {
-      setError(uploadError.message);
-      setUploading(false);
-      return;
+      const { error: uploadError } = await supabase.storage.from("order-evidence").upload(path, file);
+      if (uploadError) {
+        setError(uploadError.message);
+        continue;
+      }
+      const { data: publicUrl } = supabase.storage.from("order-evidence").getPublicUrl(path);
+      setStagedUrls((prev) => [...prev, publicUrl.publicUrl]);
     }
 
-    const { data: publicUrl } = supabase.storage.from("order-evidence").getPublicUrl(path);
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
 
+  function removeStaged(url: string) {
+    setStagedUrls((prev) => prev.filter((u) => u !== url));
+  }
+
+  async function confirmDelivery() {
+    if (stagedUrls.length === 0) return;
+    setSubmitting(true);
     await supabase
       .from("orders")
-      .update({ status: "delivered", delivered_at: new Date().toISOString(), evidence_url: publicUrl.publicUrl })
+      .update({ status: "delivered", delivered_at: new Date().toISOString(), evidence_urls: stagedUrls })
       .eq("id", id);
-
-    setUploading(false);
+    setSubmitting(false);
+    setStagedUrls([]);
     load();
   }
 
@@ -146,30 +160,61 @@ export default function ProOrderDetail() {
         {order.status === "in_progress" && (
           <div className="mt-4 border-t border-white/10 pt-4">
             <label className="text-sm text-gray-400 mb-2 block">
-              Upload proof of completion (screenshot or video) before marking this as delivered.
+              Upload proof of completion (screenshots or videos). Add as many as you need, then confirm.
             </label>
             <input
               ref={fileInputRef}
               type="file"
               accept="image/*,video/*"
+              multiple
               className="input"
               onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) submitEvidence(file);
+                if (e.target.files && e.target.files.length > 0) addFiles(e.target.files);
               }}
               disabled={uploading}
             />
             {uploading && <p className="text-xs text-gray-400 mt-2">Uploading...</p>}
             {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
+
+            {stagedUrls.length > 0 && (
+              <div className="mt-3 flex flex-col gap-2">
+                {stagedUrls.map((url) => (
+                  <div key={url} className="flex items-center justify-between bg-[#121018] border border-white/10 rounded px-3 py-2">
+                    <a href={url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm truncate">
+                      {url.split("/").pop()}
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => removeStaged(url)}
+                      className="text-red-400 text-xs hover:underline ml-3 flex-shrink-0"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button
+              className="btn-primary w-full mt-3"
+              onClick={confirmDelivery}
+              disabled={stagedUrls.length === 0 || submitting || uploading}
+            >
+              {submitting ? "Submitting..." : `Mark as Complete (${stagedUrls.length} file${stagedUrls.length === 1 ? "" : "s"})`}
+            </button>
           </div>
         )}
 
         {order.status === "delivered" && (
           <div className="mt-4 border-t border-white/10 pt-4">
-            {order.evidence_url && (
-              <a href={order.evidence_url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm">
-                View uploaded evidence →
-              </a>
+            {(order.evidence_urls ?? []).length > 0 && (
+              <div className="flex flex-col gap-1">
+                {order.evidence_urls.map((url: string, i: number) => (
+                  <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm">
+                    View uploaded evidence {order.evidence_urls.length > 1 ? `#${i + 1}` : ""} →
+                  </a>
+                ))}
+              </div>
             )}
             <p className="text-xs text-gray-500 mt-2">
               Waiting for the client to confirm. If they don't respond, support can override after 12 hours.

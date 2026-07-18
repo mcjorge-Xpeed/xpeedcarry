@@ -87,7 +87,7 @@ create table orders (
   stripe_payment_intent text,
   paid_at timestamptz,
   delivered_at timestamptz,
-  evidence_url text,
+  evidence_urls text[] not null default '{}', -- varias capturas/videos de prueba (2026-07-18, antes era una sola)
   confirmed_by text,
   pro_payout_due_at timestamptz,
   pro_paid_at timestamptz,
