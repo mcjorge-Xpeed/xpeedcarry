@@ -331,7 +331,16 @@ export default function AdminOrderDetail() {
         )}
 
         {order.status === "pro_paid" && (
-          <p className="text-accent2 font-semibold">✅ Paid to pro on {new Date(order.pro_paid_at).toLocaleDateString()}</p>
+          <div>
+            <p className="text-accent2 font-semibold">✅ Paid to pro on {new Date(order.pro_paid_at).toLocaleDateString()}</p>
+            <p className="text-xs text-gray-500 mt-1">
+              Gross: ${Number(order.pro_earnings ?? 0).toFixed(2)}
+              {Number(order.pro_payout_fee ?? 0) > 0 && (
+                <> · Transfer fee: -${Number(order.pro_payout_fee).toFixed(2)} · Net sent: $
+                {(Number(order.pro_earnings ?? 0) - Number(order.pro_payout_fee ?? 0)).toFixed(2)}</>
+              )}
+            </p>
+          </div>
         )}
 
         {order.status === "cancelled" ? (

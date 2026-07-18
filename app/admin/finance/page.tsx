@@ -38,9 +38,9 @@ function AnimatedNumber({ value }: { value: number }) {
   return <>${displayed.toFixed(2)}</>;
 }
 
-type CardProps = { emoji: string; label: string; value: number; color: string };
+type CardProps = { emoji: string; label: string; value: number; color: string; subtitle?: string };
 
-function FinanceCard({ emoji, label, value, color }: CardProps) {
+function FinanceCard({ emoji, label, value, color, subtitle }: CardProps) {
   return (
     <div className="card p-5">
       <p className="text-gray-400 text-sm mb-1">
@@ -49,6 +49,7 @@ function FinanceCard({ emoji, label, value, color }: CardProps) {
       <p className={`text-3xl font-bold ${color}`}>
         <AnimatedNumber value={value} />
       </p>
+      {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
     </div>
   );
 }
@@ -57,7 +58,8 @@ export default function FinancePage() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [revenue, setRevenue] = useState(0);
   const [stripeFees, setStripeFees] = useState(0);
-  const [paidToPros, setPaidToPros] = useState(0);
+  const [paidToProsGross, setPaidToProsGross] = useState(0);
+  const [transferFees, setTransferFees] = useState(0);
   const [reserveBalance, setReserveBalance] = useState(0);
   const [ledger, setLedger] = useState<any[]>([]);
   const [withdrawAmount, setWithdrawAmount] = useState("");
@@ -76,21 +78,26 @@ export default function FinancePage() {
 
     const { data: orders } = await supabase
       .from("orders")
-      .select("price, status, pro_earnings")
+      .select("price, status, pro_earnings, pro_payout_fee")
       .not("status", "in", "(pending_payment,cancelled)");
 
     let rev = 0;
     let fees = 0;
-    let pros = 0;
+    let prosGross = 0;
+    let transferFees = 0;
     for (const o of orders ?? []) {
       const price = Number(o.price) || 0;
       rev += price;
       fees += stripeFee(price);
-      if (o.status === "pro_paid") pros += Number(o.pro_earnings) || 0;
+      if (o.status === "pro_paid") {
+        prosGross += Number(o.pro_earnings) || 0;
+        transferFees += Number(o.pro_payout_fee) || 0;
+      }
     }
     setRevenue(Math.round(rev * 100) / 100);
     setStripeFees(Math.round(fees * 100) / 100);
-    setPaidToPros(Math.round(pros * 100) / 100);
+    setPaidToProsGross(Math.round(prosGross * 100) / 100);
+    setTransferFees(Math.round(transferFees * 100) / 100);
 
     const { data: ledgerRows } = await supabase
       .from("reserve_fund_ledger")
@@ -122,7 +129,11 @@ export default function FinancePage() {
   const reserveContributions = ledger
     .filter((r) => r.type === "contribution")
     .reduce((sum, r) => sum + Number(r.amount), 0);
-  const netMargin = Math.round((revenue - stripeFees - paidToPros - reserveContributions) * 100) / 100;
+  // Net margin uses the pro's gross earnings, not the net-after-transfer-fee
+  // amount, since the transfer fee is the pro's cost, not ours, it never
+  // touches our own margin either way.
+  const netMargin = Math.round((revenue - stripeFees - paidToProsGross - reserveContributions) * 100) / 100;
+  const paidToProsNet = Math.round((paidToProsGross - transferFees) * 100) / 100;
 
   async function submitWithdrawal(e: React.FormEvent) {
     e.preventDefault();
@@ -160,7 +171,13 @@ export default function FinancePage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
         <FinanceCard emoji="💰" label="Total Revenue" value={revenue} color="text-accent2" />
         <FinanceCard emoji="🏦" label="Stripe Fees" value={stripeFees} color="text-red-400" />
-        <FinanceCard emoji="🎮" label="Paid to Pros" value={paidToPros} color="text-sky-400" />
+        <FinanceCard
+          emoji="🎮"
+          label="Paid to Pros"
+          value={paidToProsNet}
+          color="text-sky-400"
+          subtitle={transferFees > 0 ? `$${paidToProsGross.toFixed(2)} gross, -$${transferFees.toFixed(2)} transfer fees` : undefined}
+        />
         <FinanceCard emoji="🛡️" label="Reserve Fund Balance" value={reserveBalance} color="text-accent2" />
         <FinanceCard emoji="📈" label="Your Net Margin" value={netMargin} color="text-accent" />
       </div>
