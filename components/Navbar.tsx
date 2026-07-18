@@ -18,6 +18,7 @@ export default function Navbar() {
   const [gamesOpen, setGamesOpen] = useState(false);
   const [gameSearch, setGameSearch] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileGamesExpanded, setMobileGamesExpanded] = useState(false);
   const [games, setGames] = useState<Game[]>([]);
   const filteredGames = games.filter((g) => g.name.toLowerCase().includes(gameSearch.toLowerCase()));
   const accountRef = useRef<HTMLDivElement>(null);
@@ -25,7 +26,7 @@ export default function Navbar() {
   const supabase = createClient();
 
   useClickOutside(accountRef, () => setOpen(false));
-  useClickOutside(mobileMenuRef, () => setMobileMenuOpen(false));
+  useClickOutside(mobileMenuRef, () => { setMobileMenuOpen(false); setMobileGamesExpanded(false); setGameSearch(""); });
 
   async function loadRole(userId: string) {
     const { data } = await supabase.from("profiles").select("role").eq("id", userId).single();
@@ -79,10 +80,47 @@ export default function Navbar() {
               ☰
             </button>
             {mobileMenuOpen && (
-              <div className="absolute left-0 mt-2 w-48 card p-2 text-sm shadow-xl">
-                <Link href="/#games" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
+              <div className={`absolute left-0 mt-2 card p-2 text-sm shadow-xl ${mobileGamesExpanded ? "w-72" : "w-48"}`}>
+                <button
+                  onClick={() => setMobileGamesExpanded((o) => !o)}
+                  className="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-white/5"
+                >
                   Games
-                </Link>
+                  <span className="text-[10px]">{mobileGamesExpanded ? "▲" : "▾"}</span>
+                </button>
+                {mobileGamesExpanded && (
+                  <div className="px-1 pb-2">
+                    <div className="relative mb-2 mt-1">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">🔍</span>
+                      <input
+                        type="text"
+                        placeholder="Search games..."
+                        value={gameSearch}
+                        onChange={(e) => setGameSearch(e.target.value)}
+                        className="input pl-9 text-sm w-full"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1 max-h-60 overflow-y-auto">
+                      {filteredGames.length === 0 ? (
+                        <p className="text-xs text-gray-500 text-center py-4">No games found.</p>
+                      ) : (
+                        filteredGames.map((g) => (
+                          <Link
+                            key={g.id}
+                            href={`/order/new?game=${g.slug}`}
+                            onClick={() => { setMobileMenuOpen(false); setMobileGamesExpanded(false); setGameSearch(""); }}
+                            className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/5 transition"
+                          >
+                            <div className="relative w-8 h-8 rounded overflow-hidden flex-shrink-0">
+                              <Image src={g.image_url} alt={g.name} fill className="object-cover" />
+                            </div>
+                            <span className="text-sm">{g.name}</span>
+                          </Link>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
                 <Link href="/order/new" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
                   Custom Order
                 </Link>
