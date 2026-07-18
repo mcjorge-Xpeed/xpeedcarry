@@ -28,7 +28,7 @@ export default function ProDashboard() {
 
       const { data } = await supabase
         .from("orders")
-        .select("id, order_number, title, status, pro_accepted, pro_earnings, created_at, client:client_id(full_name)")
+        .select("id, order_number, title, status, pro_accepted, pro_earnings, pro_payout_due_at, created_at, client:client_id(full_name)")
         .eq("pro_id", user.id)
         .order("created_at", { ascending: false });
       setOrders(data ?? []);
@@ -60,12 +60,38 @@ export default function ProDashboard() {
     return labels[o.status] ?? o.status;
   }
 
+  const onHold = orders
+    .filter((o) => o.status === "completed")
+    .reduce((sum, o) => sum + (Number(o.pro_earnings) || 0), 0);
+  const totalPaid = orders
+    .filter((o) => o.status === "pro_paid")
+    .reduce((sum, o) => sum + (Number(o.pro_earnings) || 0), 0);
+  const nextPayoutDate = orders
+    .filter((o) => o.status === "completed" && o.pro_payout_due_at)
+    .map((o) => new Date(o.pro_payout_due_at).getTime())
+    .sort((a, b) => a - b)[0];
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       <h1 className="text-2xl font-bold mb-2">My Orders</h1>
-      <p className="text-gray-400 text-sm mb-8">
+      <p className="text-gray-400 text-sm mb-6">
         Orders assigned to you. Pros are paid twice a month, on the 14th and the 28th.
       </p>
+
+      <div className="card p-5 mb-8">
+        <p className="text-gray-400 text-sm mb-1">🔒 On Hold</p>
+        <p className="text-3xl font-bold text-accent2">${onHold.toFixed(2)}</p>
+        <p className="text-xs text-gray-500 mt-1">
+          {nextPayoutDate
+            ? `Clears automatically on your next payout: ${new Date(nextPayoutDate).toLocaleDateString()}`
+            : "Clears automatically on your next payout (14th or 28th)."}
+        </p>
+        {totalPaid > 0 && (
+          <p className="text-xs text-gray-500 mt-2 pt-2 border-t border-white/10">
+            Total paid out so far: <span className="text-gray-300">${totalPaid.toFixed(2)}</span>
+          </p>
+        )}
+      </div>
 
       {orders.length === 0 ? (
         <p className="text-gray-500">No orders assigned to you yet.</p>
