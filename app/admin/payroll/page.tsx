@@ -12,8 +12,11 @@ type OrderRow = {
   pro_id: string;
 };
 
+type PayoutInfo = { full_name: string | null; bank_name: string | null; clabe: string | null };
+
 export default function PayrollPage() {
   const [groups, setGroups] = useState<Record<string, { proName: string; orders: OrderRow[] }>>({});
+  const [payoutInfo, setPayoutInfo] = useState<Record<string, PayoutInfo>>({});
   const [loading, setLoading] = useState(true);
   const [payingPro, setPayingPro] = useState<string | null>(null);
   const [feeEditingPro, setFeeEditingPro] = useState<string | null>(null);
@@ -48,6 +51,20 @@ export default function PayrollPage() {
       byPro[proId].orders.push(o as any);
     }
     setGroups(byPro);
+
+    const proIds = Object.keys(byPro).filter((id) => id !== "unassigned");
+    if (proIds.length > 0) {
+      const { data: infoRows } = await supabase
+        .from("pro_payout_info")
+        .select("id, full_name, bank_name, clabe")
+        .in("id", proIds);
+      const infoMap: Record<string, PayoutInfo> = {};
+      for (const row of infoRows ?? []) {
+        infoMap[row.id] = { full_name: row.full_name, bank_name: row.bank_name, clabe: row.clabe };
+      }
+      setPayoutInfo(infoMap);
+    }
+
     setLoading(false);
   }
 
@@ -135,6 +152,16 @@ export default function PayrollPage() {
                   <p className="text-xs text-gray-400">{group.orders.length} order(s)</p>
                 </div>
               </div>
+
+              {payoutInfo[proId] && (payoutInfo[proId].clabe || payoutInfo[proId].bank_name) ? (
+                <div className="text-xs text-gray-400 bg-[#121018] border border-white/10 rounded p-2 mb-3">
+                  <p>👤 {payoutInfo[proId].full_name || "-"}</p>
+                  <p>🏦 {payoutInfo[proId].bank_name || "-"}</p>
+                  <p>🔢 CLABE: {payoutInfo[proId].clabe || "-"}</p>
+                </div>
+              ) : proId !== "unassigned" ? (
+                <p className="text-xs text-yellow-400 mb-3">⚠ This pro hasn't saved their payment details yet.</p>
+              ) : null}
 
               <ul className="text-sm text-gray-300 space-y-1 mb-4">
                 {group.orders.map((o) => (

@@ -543,3 +543,31 @@ create trigger trg_contribute_to_reserve_fund
   for each row execute function contribute_to_reserve_fund();
 
 alter publication supabase_realtime add table reserve_fund_ledger;
+
+-- =========================================================
+-- DATOS DE PAGO DEL PRO (agregado 2026-07-18)
+-- Nombre completo, banco y CLABE para transferirle. Tabla aparte del
+-- perfil general y con RLS propio: solo el pro dueño y admin (NO
+-- support) pueden verla, es información financiera sensible.
+-- =========================================================
+create table pro_payout_info (
+  id uuid primary key references profiles(id) on delete cascade,
+  full_name text,
+  bank_name text,
+  clabe text,
+  updated_at timestamptz not null default now()
+);
+
+alter table pro_payout_info enable row level security;
+
+create policy "pro ve/edita su propio pago, admin ve todos"
+  on pro_payout_info for select
+  using (id = auth.uid() or is_admin());
+
+create policy "pro guarda su propio pago"
+  on pro_payout_info for insert
+  with check (id = auth.uid() or is_admin());
+
+create policy "pro actualiza su propio pago"
+  on pro_payout_info for update
+  using (id = auth.uid() or is_admin());

@@ -8,6 +8,12 @@ export default function ProDashboard() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isPro, setIsPro] = useState<boolean | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [payoutFullName, setPayoutFullName] = useState("");
+  const [payoutBankName, setPayoutBankName] = useState("");
+  const [payoutClabe, setPayoutClabe] = useState("");
+  const [savingPayout, setSavingPayout] = useState(false);
+  const [payoutSaved, setPayoutSaved] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
@@ -17,6 +23,7 @@ export default function ProDashboard() {
         window.location.href = "/login";
         return;
       }
+      setUserId(user.id);
 
       const { data: me } = await supabase.from("profiles").select("role").eq("id", user.id).single();
       if (me?.role !== "pro" && me?.role !== "admin") {
@@ -32,9 +39,37 @@ export default function ProDashboard() {
         .eq("pro_id", user.id)
         .order("created_at", { ascending: false });
       setOrders(data ?? []);
+
+      const { data: payoutInfo } = await supabase
+        .from("pro_payout_info")
+        .select("full_name, bank_name, clabe")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (payoutInfo) {
+        setPayoutFullName(payoutInfo.full_name ?? "");
+        setPayoutBankName(payoutInfo.bank_name ?? "");
+        setPayoutClabe(payoutInfo.clabe ?? "");
+      }
+
       setLoading(false);
     })();
   }, []);
+
+  async function savePayoutInfo(e: React.FormEvent) {
+    e.preventDefault();
+    if (!userId) return;
+    setSavingPayout(true);
+    setPayoutSaved(false);
+    await supabase.from("pro_payout_info").upsert({
+      id: userId,
+      full_name: payoutFullName,
+      bank_name: payoutBankName,
+      clabe: payoutClabe,
+      updated_at: new Date().toISOString(),
+    });
+    setSavingPayout(false);
+    setPayoutSaved(true);
+  }
 
   if (loading) return <p className="text-center mt-20">Loading...</p>;
 
@@ -91,6 +126,41 @@ export default function ProDashboard() {
             Total paid out so far: <span className="text-gray-300">${totalPaid.toFixed(2)}</span>
           </p>
         )}
+      </div>
+
+      <div className="card p-5 mb-8">
+        <h2 className="font-semibold mb-1">Payment details</h2>
+        <p className="text-xs text-gray-500 mb-3">
+          Only visible to admin, used to transfer your payouts. Not shared with anyone else.
+        </p>
+        <form onSubmit={savePayoutInfo} className="flex flex-col gap-2 max-w-sm">
+          <input
+            type="text"
+            placeholder="Full name (as it appears on your bank account)"
+            className="input"
+            value={payoutFullName}
+            onChange={(e) => setPayoutFullName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Bank name"
+            className="input"
+            value={payoutBankName}
+            onChange={(e) => setPayoutBankName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="CLABE (18 digits)"
+            maxLength={18}
+            className="input"
+            value={payoutClabe}
+            onChange={(e) => setPayoutClabe(e.target.value.replace(/\D/g, ""))}
+          />
+          <button className="btn-primary text-sm" disabled={savingPayout}>
+            {savingPayout ? "Saving..." : "Save Payment Details"}
+          </button>
+          {payoutSaved && <p className="text-accent2 text-xs">✅ Saved.</p>}
+        </form>
       </div>
 
       {orders.length === 0 ? (
