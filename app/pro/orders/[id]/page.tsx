@@ -46,14 +46,15 @@ export default function ProOrderDetail() {
 
   async function acceptOrder() {
     setUpdating(true);
-    const updates: Record<string, any> = { pro_accepted: true };
-    // If the client already paid by the time we accept, we can start right
-    // away, otherwise we wait for the webhook to flip us to in_progress
-    // once payment comes through.
-    if (order.status !== "pending_payment") {
-      updates.status = "in_progress";
-    }
-    await supabase.from("orders").update(updates).eq("id", id);
+    // Goes through a server route (not a direct client update) because
+    // granting chat access when payment already landed means writing to
+    // conversations.pro_id, and pros don't have RLS permission to do that
+    // themselves, only the server's admin client can.
+    await fetch("/api/pro/respond-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderId: id, accept: true }),
+    });
     setUpdating(false);
     load();
   }
@@ -61,10 +62,11 @@ export default function ProOrderDetail() {
   async function declineOrder() {
     if (!confirm("Decline this order? It'll go back to unassigned so support can offer it to someone else.")) return;
     setUpdating(true);
-    await supabase.from("orders").update({ pro_id: null, pro_accepted: false }).eq("id", id);
-    if (conversationId) {
-      await supabase.from("conversations").update({ pro_id: null }).eq("id", conversationId);
-    }
+    await fetch("/api/pro/respond-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderId: id, accept: false }),
+    });
     setUpdating(false);
     window.location.href = "/pro";
   }
