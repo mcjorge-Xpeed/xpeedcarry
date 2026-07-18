@@ -16,8 +16,10 @@ export default function Navbar() {
   const [role, setRole] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [gamesOpen, setGamesOpen] = useState(false);
+  const [gameSearch, setGameSearch] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [games, setGames] = useState<Game[]>([]);
+  const filteredGames = games.filter((g) => g.name.toLowerCase().includes(gameSearch.toLowerCase()));
   const accountRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
@@ -93,7 +95,7 @@ export default function Navbar() {
           <div
             className="relative hidden sm:block"
             onMouseEnter={() => setGamesOpen(true)}
-            onMouseLeave={() => setGamesOpen(false)}
+            onMouseLeave={() => { setGamesOpen(false); setGameSearch(""); }}
           >
             <Link href="/#games" className="hover:text-accent2 transition flex items-center gap-1">
               Games
@@ -101,20 +103,37 @@ export default function Navbar() {
             </Link>
             {gamesOpen && games.length > 0 && (
               <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 w-[560px]">
-                <div className="card p-3 shadow-xl grid grid-cols-2 gap-1">
-                  {games.map((g) => (
-                    <Link
-                      key={g.id}
-                      href={`/order/new?game=${g.slug}`}
-                      onClick={() => setGamesOpen(false)}
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition"
-                    >
-                      <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0">
-                        <Image src={g.image_url} alt={g.name} fill className="object-cover" />
-                      </div>
-                      <span className="text-sm">{g.name}</span>
-                    </Link>
-                  ))}
+                <div className="card p-3 shadow-xl">
+                  <div className="relative mb-2">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">🔍</span>
+                    <input
+                      type="text"
+                      autoFocus
+                      placeholder="Search games..."
+                      value={gameSearch}
+                      onChange={(e) => setGameSearch(e.target.value)}
+                      className="input pl-9 text-sm w-full"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-1 max-h-80 overflow-y-auto">
+                    {filteredGames.length === 0 ? (
+                      <p className="col-span-2 text-sm text-gray-500 text-center py-6">No games found.</p>
+                    ) : (
+                      filteredGames.map((g) => (
+                        <Link
+                          key={g.id}
+                          href={`/order/new?game=${g.slug}`}
+                          onClick={() => { setGamesOpen(false); setGameSearch(""); }}
+                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition"
+                        >
+                          <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0">
+                            <Image src={g.image_url} alt={g.name} fill className="object-cover" />
+                          </div>
+                          <span className="text-sm">{g.name}</span>
+                        </Link>
+                      ))
+                    )}
+                  </div>
                 </div>
               </div>
             )}
