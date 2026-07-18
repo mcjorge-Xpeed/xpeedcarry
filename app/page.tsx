@@ -41,7 +41,7 @@ export default async function HomePage() {
         <div className="flex flex-wrap gap-3 justify-center mt-14 relative">
           <span className="badge-pill">🔒 Secure Stripe Checkout</span>
           <span className="badge-pill">💬 Direct chat with your pro</span>
-          <span className="badge-pill">⚡ Leveling-focused, no rank risk</span>
+          <span className="badge-pill">🎯 Tailored to every client</span>
           <span className="badge-pill">🕒 24/7 support</span>
         </div>
       </section>
