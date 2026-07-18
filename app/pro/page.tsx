@@ -14,6 +14,7 @@ export default function ProDashboard() {
   const [payoutClabe, setPayoutClabe] = useState("");
   const [savingPayout, setSavingPayout] = useState(false);
   const [payoutSaved, setPayoutSaved] = useState(false);
+  const [payoutUpdatedAt, setPayoutUpdatedAt] = useState<string | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -42,13 +43,14 @@ export default function ProDashboard() {
 
       const { data: payoutInfo } = await supabase
         .from("pro_payout_info")
-        .select("full_name, bank_name, clabe")
+        .select("full_name, bank_name, clabe, updated_at")
         .eq("id", user.id)
         .maybeSingle();
       if (payoutInfo) {
         setPayoutFullName(payoutInfo.full_name ?? "");
         setPayoutBankName(payoutInfo.bank_name ?? "");
         setPayoutClabe(payoutInfo.clabe ?? "");
+        setPayoutUpdatedAt(payoutInfo.updated_at ?? null);
       }
 
       setLoading(false);
@@ -60,13 +62,15 @@ export default function ProDashboard() {
     if (!userId) return;
     setSavingPayout(true);
     setPayoutSaved(false);
+    const now = new Date().toISOString();
     await supabase.from("pro_payout_info").upsert({
       id: userId,
       full_name: payoutFullName,
       bank_name: payoutBankName,
       clabe: payoutClabe,
-      updated_at: new Date().toISOString(),
+      updated_at: now,
     });
+    setPayoutUpdatedAt(now);
     setSavingPayout(false);
     setPayoutSaved(true);
   }
@@ -160,6 +164,11 @@ export default function ProDashboard() {
             {savingPayout ? "Saving..." : "Save Payment Details"}
           </button>
           {payoutSaved && <p className="text-accent2 text-xs">✅ Saved.</p>}
+          {payoutUpdatedAt && (
+            <p className="text-xs text-gray-500">
+              Last updated: {new Date(payoutUpdatedAt).toLocaleString()}
+            </p>
+          )}
         </form>
       </div>
 
