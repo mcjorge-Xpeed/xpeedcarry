@@ -571,3 +571,32 @@ create policy "pro guarda su propio pago"
 create policy "pro actualiza su propio pago"
   on pro_payout_info for update
   using (id = auth.uid() or is_admin());
+
+-- =========================================================
+-- AMONESTACIONES DE PROS (agregado 2026-07-18)
+-- Amarilla/roja + categoría (basada en Community Guidelines/Terms hoy,
+-- pero "category" es texto libre a propósito: si cambian la redacción
+-- de las reglas después, no hace falta migrar nada aquí). Solo
+-- registro por ahora, sin consecuencia automática (se define después
+-- en el reglamento interno). Staff (admin+support) puede ponerlas;
+-- el historial completo solo se ve en /admin/users (admin-only).
+-- =========================================================
+create table pro_warnings (
+  id uuid primary key default uuid_generate_v4(),
+  pro_id uuid not null references profiles(id) on delete cascade,
+  type text not null, -- 'yellow' | 'red'
+  category text not null,
+  note text,
+  issued_by uuid references profiles(id),
+  created_at timestamptz not null default now()
+);
+
+alter table pro_warnings enable row level security;
+
+create policy "staff ve y registra amonestaciones"
+  on pro_warnings for select
+  using (is_staff());
+
+create policy "staff registra amonestaciones"
+  on pro_warnings for insert
+  with check (is_staff());

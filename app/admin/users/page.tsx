@@ -21,6 +21,8 @@ export default function AdminUsersPage() {
     pro: true,
     admin: true,
   });
+  const [warningsByPro, setWarningsByPro] = useState<Record<string, any[]>>({});
+  const [expandedWarnings, setExpandedWarnings] = useState<Record<string, boolean>>({});
   const supabase = createClient();
 
   async function load() {
@@ -39,6 +41,18 @@ export default function AdminUsersPage() {
       .select("*")
       .order("created_at", { ascending: false });
     setProfiles(data ?? []);
+
+    const { data: warnings } = await supabase
+      .from("pro_warnings")
+      .select("*")
+      .order("created_at", { ascending: false });
+    const byPro: Record<string, any[]> = {};
+    for (const w of warnings ?? []) {
+      if (!byPro[w.pro_id]) byPro[w.pro_id] = [];
+      byPro[w.pro_id].push(w);
+    }
+    setWarningsByPro(byPro);
+
     setLoading(false);
   }
 
@@ -155,6 +169,37 @@ export default function AdminUsersPage() {
                           {p.is_house_pro ? "🏠 De casa (40% neto)" : "Normal (30% neto)"}
                         </button>
                       )}
+                      {r === "pro" && (() => {
+                        const warnings = warningsByPro[p.id] ?? [];
+                        const yellowCount = warnings.filter((w) => w.type === "yellow").length;
+                        const redCount = warnings.filter((w) => w.type === "red").length;
+                        const expanded = expandedWarnings[p.id];
+                        if (warnings.length === 0) {
+                          return <p className="text-xs text-gray-500 mt-2">No warnings.</p>;
+                        }
+                        return (
+                          <div className="mt-2">
+                            <button
+                              onClick={() => setExpandedWarnings((prev) => ({ ...prev, [p.id]: !prev[p.id] }))}
+                              className="text-xs text-gray-400 hover:underline"
+                            >
+                              {yellowCount > 0 && `🟡 ${yellowCount}`} {redCount > 0 && `🔴 ${redCount}`} {expanded ? "▲" : "▼"}
+                            </button>
+                            {expanded && (
+                              <ul className="mt-1 flex flex-col gap-1">
+                                {warnings.map((w) => (
+                                  <li key={w.id} className="text-xs text-gray-500 border-t border-white/5 pt-1">
+                                    {w.type === "yellow" ? "🟡" : "🔴"} {w.category}
+                                    {w.note && `: ${w.note}`}
+                                    <br />
+                                    <span className="text-gray-600">{new Date(w.created_at).toLocaleDateString()}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
                   ))}
                 </div>

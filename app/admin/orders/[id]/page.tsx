@@ -18,6 +18,25 @@ function stripeFee(amount: number) {
   return Math.round((amount * STRIPE_PCT + STRIPE_FIXED) * 100) / 100;
 }
 
+// Categories drawn from Community Guidelines / Terms. Kept as plain text
+// (not a DB enum) on purpose, so wording can change later without a migration.
+const WARNING_CATEGORIES: Record<"yellow" | "red", string[]> = {
+  yellow: [
+    "Unprofessional tone / minor disrespect",
+    "Late or unresponsive without notice",
+    "Went outside agreed scope without checking with support",
+    "Client complained about effort/quality",
+    "Other",
+  ],
+  red: [
+    "Harassment, threats, discrimination, or abusive language",
+    "Solicited off-platform payment or contact",
+    "Broke account-handling confidentiality",
+    "Repeated or severe scope violation",
+    "Other",
+  ],
+};
+
 export default function AdminOrderDetail() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -32,6 +51,11 @@ export default function AdminOrderDetail() {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [adminId, setAdminId] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
+  const [warningType, setWarningType] = useState<"yellow" | "red">("yellow");
+  const [warningCategory, setWarningCategory] = useState(WARNING_CATEGORIES.yellow[0]);
+  const [warningNote, setWarningNote] = useState("");
+  const [submittingWarning, setSubmittingWarning] = useState(false);
+  const [warningSaved, setWarningSaved] = useState(false);
   const supabase = createClient();
   const isAdmin = role === "admin";
 
@@ -112,6 +136,23 @@ export default function AdminOrderDetail() {
   async function overrideConfirm() {
     await supabase.from("orders").update({ status: "completed", confirmed_by: "admin_override" }).eq("id", id);
     load();
+  }
+
+  async function submitWarning(e: React.FormEvent) {
+    e.preventDefault();
+    if (!pro || !adminId) return;
+    setSubmittingWarning(true);
+    setWarningSaved(false);
+    await supabase.from("pro_warnings").insert({
+      pro_id: pro.id,
+      type: warningType,
+      category: warningCategory,
+      note: warningNote || null,
+      issued_by: adminId,
+    });
+    setWarningNote("");
+    setSubmittingWarning(false);
+    setWarningSaved(true);
   }
 
   async function toggleSuspend(profileId: string, currentlyActive: boolean) {
@@ -355,6 +396,57 @@ export default function AdminOrderDetail() {
               Client not interested, Cancel Order & Close Chat
             </button>
           )
+        )}
+
+        {pro && (
+          <div className="border-t border-white/10 pt-4">
+            <p className="text-xs uppercase tracking-widest text-yellow-400 font-bold mb-2">Log a warning ({pro.full_name ?? "pro"})</p>
+            <p className="text-xs text-gray-500 mb-3">
+              Just a record for now, no automatic consequence yet.
+            </p>
+            <form onSubmit={submitWarning} className="flex flex-col gap-2 max-w-md">
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setWarningType("yellow"); setWarningCategory(WARNING_CATEGORIES.yellow[0]); }}
+                  className={`flex-1 text-sm px-3 py-2 rounded border transition ${
+                    warningType === "yellow" ? "border-yellow-400 text-yellow-400 bg-yellow-400/10" : "border-white/10 text-gray-400"
+                  }`}
+                >
+                  🟡 Yellow
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setWarningType("red"); setWarningCategory(WARNING_CATEGORIES.red[0]); }}
+                  className={`flex-1 text-sm px-3 py-2 rounded border transition ${
+                    warningType === "red" ? "border-red-400 text-red-400 bg-red-400/10" : "border-white/10 text-gray-400"
+                  }`}
+                >
+                  🔴 Red
+                </button>
+              </div>
+              <select
+                className="input text-sm"
+                value={warningCategory}
+                onChange={(e) => setWarningCategory(e.target.value)}
+              >
+                {WARNING_CATEGORIES[warningType].map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                placeholder="Note (optional)"
+                className="input text-sm"
+                value={warningNote}
+                onChange={(e) => setWarningNote(e.target.value)}
+              />
+              <button className="btn-secondary text-sm" disabled={submittingWarning}>
+                {submittingWarning ? "Saving..." : "Log Warning"}
+              </button>
+              {warningSaved && <p className="text-accent2 text-xs">✅ Logged.</p>}
+            </form>
+          </div>
         )}
 
         {isAdmin && (
