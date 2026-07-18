@@ -18,7 +18,12 @@ function NewOrderForm() {
   const [loadingGame, setLoadingGame] = useState(!!gameSlug);
 
   const [serviceMode, setServiceMode] = useState<"piloted" | "selfplay">("piloted");
+  const [device, setDevice] = useState("PC");
   const [description, setDescription] = useState("");
+
+  // Nintendo only makes sense for a true Custom Order (no specific game),
+  // since none of the catalog games are on Switch, only offer it there.
+  const deviceOptions = game ? ["PC", "PlayStation", "Xbox"] : ["PC", "PlayStation", "Xbox", "Nintendo"];
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -50,7 +55,7 @@ function NewOrderForm() {
 
     const modeLabel = serviceMode === "piloted" ? "Piloted" : "Self-Play";
     const title = game ? `${game.name}: ${modeLabel}` : `Custom Order: ${modeLabel}`;
-    const fullDescription = `Service mode: ${modeLabel}\n\n${description}`;
+    const fullDescription = `Service mode: ${modeLabel}\nDevice: ${device}\n\n${description}`;
 
     const { data: order, error: orderError } = await supabase
       .from("orders")
@@ -117,6 +122,23 @@ function NewOrderForm() {
                       : "Play alongside a pro in a duo session. Price depends on your skill level and how difficult the order is, support will confirm it with you."}
                   </span>
                 </span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label className="text-sm text-gray-400 mb-2 block">Device</label>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {deviceOptions.map((d) => (
+              <label key={d} className={`choice-card justify-center ${device === d ? "active" : ""}`}>
+                <input
+                  type="radio"
+                  name="device"
+                  className="sr-only"
+                  checked={device === d}
+                  onChange={() => setDevice(d)}
+                />
+                <span className="text-sm font-semibold">{d}</span>
               </label>
             ))}
           </div>
