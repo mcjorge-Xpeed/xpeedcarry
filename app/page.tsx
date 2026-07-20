@@ -110,7 +110,10 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {testimonials.map((t) => {
-              const initial = t.client_name ? `${t.client_name.split(" ")[0]} ${t.client_name.split(" ")[1]?.[0] ?? ""}.` : "Verified Client";
+              const hasRealName = t.client_name && !t.client_name.includes("@");
+              const initial = hasRealName
+                ? `${t.client_name.split(" ")[0]}${t.client_name.split(" ")[1]?.[0] ? " " + t.client_name.split(" ")[1][0] + "." : ""}`
+                : "Verified Client";
               return (
                 <div key={t.id} className="card p-6">
                   <p className="text-yellow-400 mb-2">{"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}</p>
