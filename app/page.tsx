@@ -52,6 +52,39 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="px-6 pt-16 max-w-6xl mx-auto">
+        <div className="text-center mb-8">
+          <span className="text-xs font-bold uppercase tracking-widest text-accent2">What sets us apart</span>
+          <h2 className="text-2xl sm:text-3xl font-bold mt-1">Specialty Services</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <Link href="/order/new?service=trophy-hunting" className="card hero-gradient p-6 hover:-translate-y-1 transition-transform">
+            <span className="text-3xl mb-3 block">🏆</span>
+            <h3 className="font-semibold text-lg mb-1">Achievement / Trophy Hunting</h3>
+            <p className="text-sm text-gray-400">Clean up your achievement or trophy list with a dedicated hunter.</p>
+            <p className="mt-3 text-accent2 font-bold flex items-center gap-1">
+              Get a Quote <span className="transition-transform group-hover:translate-x-1">→</span>
+            </p>
+          </Link>
+          <Link href="/order/new?service=rent-a-buddy" className="card hero-gradient p-6 hover:-translate-y-1 transition-transform">
+            <span className="text-3xl mb-3 block">🎮</span>
+            <h3 className="font-semibold text-lg mb-1">Rent-a-Buddy</h3>
+            <p className="text-sm text-gray-400">A top-tier companion for a relaxed, fun co-op session. Casual, no pressure.</p>
+            <p className="mt-3 text-accent2 font-bold flex items-center gap-1">
+              Get a Quote <span className="transition-transform group-hover:translate-x-1">→</span>
+            </p>
+          </Link>
+          <Link href="/order/new?service=gamerscore-boosting" className="card hero-gradient p-6 hover:-translate-y-1 transition-transform">
+            <span className="text-3xl mb-3 block">🎯</span>
+            <h3 className="font-semibold text-lg mb-1">Gamerscore Boosting</h3>
+            <p className="text-sm text-gray-400">Boost your Gamerscore efficiently and safely with a dedicated specialist.</p>
+            <p className="mt-3 text-accent2 font-bold flex items-center gap-1">
+              Get a Quote <span className="transition-transform group-hover:translate-x-1">→</span>
+            </p>
+          </Link>
+        </div>
+      </section>
+
       <section id="games" className="px-6 py-16 max-w-6xl mx-auto">
         <div className="flex items-end justify-between mb-8">
           <div>

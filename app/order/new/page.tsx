@@ -10,9 +10,29 @@ type Game = {
   slug: string;
 };
 
+const SERVICES: Record<string, { title: string; blurb: string }> = {
+  "trophy-hunting": {
+    title: "Achievement / Trophy Hunting Service",
+    blurb:
+      "Tell us which game, your target achievements/trophies, and any specific goals. We'll match you with a dedicated hunter to clean up your list.",
+  },
+  "rent-a-buddy": {
+    title: "Rent-a-Buddy Service",
+    blurb:
+      "Tell us which game and what you'd like to play together. We'll match you with a top-tier companion for a relaxed, fun session. This is a casual co-op service, so goals are flexible and just for fun.",
+  },
+  "gamerscore-boosting": {
+    title: "Gamerscore Boosting Service",
+    blurb:
+      "Tell us your current score, your target milestone, and any account details. We'll assign a specialist to boost your gamerscore efficiently and safely.",
+  },
+};
+
 function NewOrderForm() {
   const searchParams = useSearchParams();
   const gameSlug = searchParams.get("game") || "";
+  const serviceKey = searchParams.get("service") || "";
+  const service = SERVICES[serviceKey];
 
   const [game, setGame] = useState<Game | null>(null);
   const [loadingGame, setLoadingGame] = useState(!!gameSlug);
@@ -20,6 +40,10 @@ function NewOrderForm() {
   const [serviceMode, setServiceMode] = useState<"piloted" | "selfplay">("piloted");
   const [device, setDevice] = useState("PC");
   const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (serviceKey === "rent-a-buddy") setServiceMode("selfplay");
+  }, [serviceKey]);
 
   // Nintendo only makes sense for a true Custom Order (no specific game),
   // since none of the catalog games are on Switch, only offer it there.
@@ -54,7 +78,8 @@ function NewOrderForm() {
     }
 
     const modeLabel = serviceMode === "piloted" ? "Piloted" : "Self-Play";
-    const title = game ? `${game.name}: ${modeLabel}` : `Custom Order: ${modeLabel}`;
+    const baseTitle = game ? game.name : service ? service.title : "Custom Order";
+    const title = `${baseTitle}: ${modeLabel}`;
     const fullDescription = `Service mode: ${modeLabel}\nDevice: ${device}\n\n${description}`;
 
     const { data: order, error: orderError } = await supabase
@@ -92,12 +117,14 @@ function NewOrderForm() {
 
   return (
     <div className="max-w-lg mx-auto mt-10 card p-8">
-      <h1 className="text-xl font-bold mb-1">{game ? `${game.name} Order` : "Custom Order"}</h1>
+      <h1 className="text-xl font-bold mb-1">{game ? `${game.name} Order` : service ? service.title : "Custom Order"}</h1>
       <p className="text-sm text-gray-400 mb-6">
-        Choose how you want it done, tell us what you need, and support will confirm the final price
-        with you in chat before you pay.
+        {service
+          ? `${service.blurb} Support will confirm the final price with you in chat before you pay.`
+          : "Choose how you want it done, tell us what you need, and support will confirm the final price with you in chat before you pay."}
       </p>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {serviceKey !== "rent-a-buddy" && (
         <div>
           <label className="text-sm text-gray-400 mb-2 block">Service Mode</label>
           <div className="grid grid-cols-2 gap-3">
@@ -126,6 +153,7 @@ function NewOrderForm() {
             ))}
           </div>
         </div>
+        )}
         <div>
           <label className="text-sm text-gray-400 mb-2 block">Device</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
