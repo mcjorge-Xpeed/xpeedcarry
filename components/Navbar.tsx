@@ -91,13 +91,12 @@ export default function Navbar() {
                 {mobileGamesExpanded && (
                   <div className="px-1 pb-2">
                     <div className="relative mb-2 mt-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">🔍</span>
                       <input
                         type="text"
                         placeholder="Search games..."
                         value={gameSearch}
                         onChange={(e) => setGameSearch(e.target.value)}
-                        className="input pl-9 text-sm w-full"
+                        className="input text-sm w-full"
                       />
                     </div>
                     <div className="flex flex-col gap-1 max-h-60 overflow-y-auto">
@@ -143,14 +142,13 @@ export default function Navbar() {
               <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 w-[560px]">
                 <div className="card p-3 shadow-xl">
                   <div className="relative mb-2">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">🔍</span>
                     <input
                       type="text"
                       autoFocus
                       placeholder="Search games..."
                       value={gameSearch}
                       onChange={(e) => setGameSearch(e.target.value)}
-                      className="input pl-9 text-sm w-full"
+                      className="input text-sm w-full"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-1 max-h-80 overflow-y-auto">
