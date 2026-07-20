@@ -22,7 +22,7 @@ export async function POST(req: Request) {
   const admin = createAdminClient();
   const { data: orders, error: fetchError } = await admin
     .from("orders")
-    .select("id, order_number, pro_id, pro_earnings")
+    .select("id, order_number, pro_id, pro_earnings, tip_pro_payout")
     .in("id", orderIds);
 
   if (fetchError || !orders || orders.length === 0) {
@@ -30,14 +30,18 @@ export async function POST(req: Request) {
   }
 
   const proId = orders[0].pro_id;
-  const grossTotal = orders.reduce((sum, o) => sum + Number(o.pro_earnings ?? 0), 0);
+  const grossTotal = orders.reduce(
+    (sum, o) => sum + Number(o.pro_earnings ?? 0) + Number(o.tip_pro_payout ?? 0),
+    0
+  );
   const fee = Math.max(0, Number(transferFee) || 0);
   const netTotal = Math.round((grossTotal - fee) * 100) / 100;
 
   // Split the transfer fee proportionally across each order by its share of
   // the total payout, so each order keeps an accurate net-paid record.
   for (const o of orders) {
-    const share = grossTotal > 0 ? Number(o.pro_earnings ?? 0) / grossTotal : 0;
+    const orderGross = Number(o.pro_earnings ?? 0) + Number(o.tip_pro_payout ?? 0);
+    const share = grossTotal > 0 ? orderGross / grossTotal : 0;
     const orderFee = Math.round(fee * share * 100) / 100;
     await admin
       .from("orders")

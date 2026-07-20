@@ -362,6 +362,19 @@ export default function AdminOrderDetail() {
               {" "}(paid on the 14th/28th, not right away)
               {payoutReady && <span className="text-yellow-400 font-semibold"> - Ready to pay</span>}
             </p>
+
+            {order.rated_at && (
+              <p className="text-sm text-gray-300 mb-1">
+                Client rating: <span className="text-yellow-400">{"★".repeat(order.rating)}{"☆".repeat(5 - order.rating)}</span>
+                {order.rating_comment && <span className="text-gray-400"> — "{order.rating_comment}"</span>}
+              </p>
+            )}
+            {order.tip_paid_at && (
+              <p className="text-sm text-gray-300 mb-2">
+                Tip: ${Number(order.tip_amount).toFixed(2)} (pro gets ${Number(order.tip_pro_payout).toFixed(2)}, XpeedCarry keeps ${(Number(order.tip_amount) - Number(order.tip_pro_payout)).toFixed(2)})
+              </p>
+            )}
+
             {isAdmin && (
               <>
                 <p className="text-xs text-gray-500 mb-2">

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { redirectToCheckout } from "@/lib/checkout";
+import { redirectToCheckout, redirectToTipCheckout } from "@/lib/checkout";
 import Chat from "@/components/Chat";
 import TermsGateModal from "@/components/TermsGateModal";
 
@@ -14,6 +14,12 @@ export default function OrderDetailPage() {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [showTerms, setShowTerms] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [ratingComment, setRatingComment] = useState("");
+  const [savingRating, setSavingRating] = useState(false);
+  const [tipCustom, setTipCustom] = useState("");
+  const [tipSkipped, setTipSkipped] = useState(false);
+  const [sendingTip, setSendingTip] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
@@ -48,6 +54,24 @@ export default function OrderDetailPage() {
     const { data: orderData } = await supabase.from("orders").select("*").eq("id", id).single();
     setOrder(orderData);
     setConfirming(false);
+  }
+
+  async function submitRating() {
+    if (ratingValue === 0) return;
+    setSavingRating(true);
+    await supabase
+      .from("orders")
+      .update({ rating: ratingValue, rating_comment: ratingComment || null, rated_at: new Date().toISOString() })
+      .eq("id", id);
+    const { data: orderData } = await supabase.from("orders").select("*").eq("id", id).single();
+    setOrder(orderData);
+    setSavingRating(false);
+  }
+
+  async function sendTip(amount: number) {
+    setSendingTip(true);
+    await redirectToTipCheckout(order.id, amount);
+    setSendingTip(false);
   }
 
   if (!order) return <p className="text-center mt-20">Loading order...</p>;
@@ -113,6 +137,78 @@ export default function OrderDetailPage() {
             <p className="text-xs text-gray-500 mt-2">
               Something wrong? Reply in the chat below instead of confirming.
             </p>
+          </div>
+        )}
+
+        {order.status === "completed" && (
+          <div className="mt-4 border-t border-white/10 pt-4">
+            {order.rated_at ? (
+              <p className="text-sm text-gray-300 mb-4">✅ Thanks for rating this order!</p>
+            ) : (
+              <div className="mb-5">
+                <p className="text-sm text-gray-300 mb-2">How was your experience? (optional)</p>
+                <div className="flex gap-1 mb-2">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <button
+                      key={n}
+                      type="button"
+                      onClick={() => setRatingValue(n)}
+                      className={`text-2xl leading-none ${n <= ratingValue ? "text-yellow-400" : "text-gray-600"}`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+                {ratingValue > 0 && (
+                  <div className="flex flex-col gap-2">
+                    <textarea
+                      className="input text-sm"
+                      placeholder="Anything to add? (optional)"
+                      value={ratingComment}
+                      onChange={(e) => setRatingComment(e.target.value)}
+                      rows={2}
+                    />
+                    <button className="btn-secondary text-sm w-fit" onClick={submitRating} disabled={savingRating}>
+                      {savingRating ? "Saving..." : "Submit rating"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {order.tip_paid_at ? (
+              <p className="text-sm text-gray-300">🎉 You tipped ${Number(order.tip_amount).toFixed(2)} — thank you!</p>
+            ) : !tipSkipped ? (
+              <div>
+                <p className="text-sm text-gray-300 mb-2">Happy with your pro? Leave them a tip (optional).</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  {[3, 5, 10].map((amt) => (
+                    <button key={amt} className="btn-secondary text-sm" onClick={() => sendTip(amt)} disabled={sendingTip}>
+                      ${amt}
+                    </button>
+                  ))}
+                  <input
+                    type="number"
+                    min={1}
+                    step="1"
+                    placeholder="Other"
+                    className="input w-20 text-sm"
+                    value={tipCustom}
+                    onChange={(e) => setTipCustom(e.target.value)}
+                  />
+                  <button
+                    className="btn-secondary text-sm"
+                    disabled={sendingTip || !tipCustom}
+                    onClick={() => sendTip(Number(tipCustom))}
+                  >
+                    Send
+                  </button>
+                  <button className="text-xs text-gray-500 hover:text-gray-300" onClick={() => setTipSkipped(true)}>
+                    No, thanks
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </div>
         )}
       </div>

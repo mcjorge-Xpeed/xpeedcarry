@@ -18,6 +18,19 @@ export async function POST(req: Request) {
     const session = event.data.object as Stripe.Checkout.Session;
     const orderId = session.metadata?.order_id;
 
+    if (orderId && session.metadata?.type === "tip") {
+      const supabase = createAdminClient();
+      await supabase
+        .from("orders")
+        .update({
+          tip_amount: (session.amount_total ?? 0) / 100,
+          tip_paid_at: new Date().toISOString(),
+          tip_stripe_session_id: session.id,
+        })
+        .eq("id", orderId);
+      return NextResponse.json({ received: true });
+    }
+
     if (orderId) {
       const supabase = createAdminClient();
 

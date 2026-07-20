@@ -10,6 +10,7 @@ type OrderRow = {
   pro_earnings: number;
   pro_payout_due_at: string;
   pro_id: string;
+  tip_pro_payout: number;
 };
 
 type PayoutInfo = { full_name: string | null; bank_name: string | null; clabe: string | null };
@@ -39,7 +40,7 @@ export default function PayrollPage() {
 
     const { data: orders } = await supabase
       .from("orders")
-      .select("id, order_number, pro_earnings, pro_payout_due_at, pro_id, pro:pro_id(full_name)")
+      .select("id, order_number, pro_earnings, pro_payout_due_at, pro_id, tip_pro_payout, pro:pro_id(full_name)")
       .eq("status", "completed")
       .order("pro_payout_due_at", { ascending: true });
 
@@ -126,7 +127,10 @@ export default function PayrollPage() {
 
       <div className="flex flex-col gap-5">
         {proEntries.map(([proId, group]) => {
-          const gross = group.orders.reduce((sum, o) => sum + Number(o.pro_earnings ?? 0), 0);
+          const gross = group.orders.reduce(
+            (sum, o) => sum + Number(o.pro_earnings ?? 0) + Number(o.tip_pro_payout ?? 0),
+            0
+          );
           const dueDate = group.orders[0]?.pro_payout_due_at ? new Date(group.orders[0].pro_payout_due_at) : null;
           const ready = dueDate ? dueDate <= today : false;
           const isEditingFee = feeEditingPro === proId;
@@ -167,7 +171,12 @@ export default function PayrollPage() {
                 {group.orders.map((o) => (
                   <li key={o.id} className="flex justify-between">
                     <span>{o.order_number}</span>
-                    <span>${Number(o.pro_earnings ?? 0).toFixed(2)}</span>
+                    <span>
+                      ${Number(o.pro_earnings ?? 0).toFixed(2)}
+                      {Number(o.tip_pro_payout ?? 0) > 0 && (
+                        <span className="text-yellow-400"> +${Number(o.tip_pro_payout).toFixed(2)} tip</span>
+                      )}
+                    </span>
                   </li>
                 ))}
               </ul>
