@@ -77,18 +77,21 @@ export default async function AdminPage() {
           <Link href="/admin/pricing-guide" className="btn-secondary text-sm">
             📋 Pricing Guide
           </Link>
+          <Link href="/admin/applicants" className="btn-secondary text-sm">
+            📥 Applicants
+          </Link>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-        <div className="card p-5">
+        <Link href="/admin/users?role=client" className="card p-5 hover:-translate-y-1 transition-transform">
           <p className="text-gray-400 text-sm">Clients</p>
           <p className="text-3xl font-bold">{clients?.length ?? 0}</p>
-        </div>
-        <div className="card p-5">
+        </Link>
+        <Link href="/admin/users?role=pro" className="card p-5 hover:-translate-y-1 transition-transform">
           <p className="text-gray-400 text-sm">Pros</p>
           <p className="text-3xl font-bold">{pros?.length ?? 0}</p>
-        </div>
+        </Link>
         <div className="card p-5">
           <p className="text-gray-400 text-sm">Total Orders</p>
           <p className="text-3xl font-bold">{orders?.length ?? 0}</p>

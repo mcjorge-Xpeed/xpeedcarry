@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
+const CEO_ADMIN_ID = "0b29152f-5c04-4067-bd33-50d39b0c79cd";
 const ROLE_ORDER = ["client", "support", "pro", "admin"] as const;
 const ROLE_LABELS: Record<string, string> = {
   client: "Clientes",
@@ -21,8 +22,17 @@ export default function AdminUsersPage() {
     pro: true,
     admin: true,
   });
+
+  useEffect(() => {
+    const role = new URLSearchParams(window.location.search).get("role");
+    if (role && ROLE_ORDER.includes(role as any)) {
+      setVisibleRoles({ client: false, support: false, pro: false, admin: false, [role]: true });
+    }
+  }, []);
   const [warningsByPro, setWarningsByPro] = useState<Record<string, any[]>>({});
   const [expandedWarnings, setExpandedWarnings] = useState<Record<string, boolean>>({});
+  const [lockClicks, setLockClicks] = useState(0);
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
   const supabase = createClient();
 
   async function load() {
@@ -73,6 +83,16 @@ export default function AdminUsersPage() {
   async function toggleHousePro(id: string, currentlyHouse: boolean) {
     await supabase.from("profiles").update({ is_house_pro: !currentlyHouse }).eq("id", id);
     load();
+  }
+
+  function handleLockClick() {
+    const next = lockClicks + 1;
+    if (next >= 10) {
+      setShowEasterEgg(true);
+      setLockClicks(0);
+    } else {
+      setLockClicks(next);
+    }
   }
 
   function toggleColumn(role: string) {
@@ -136,27 +156,45 @@ export default function AdminUsersPage() {
                   {roleProfiles.map((p) => (
                     <div key={p.id} className="border border-white/10 rounded-lg p-3">
                       <p className="font-medium text-sm truncate">{p.full_name ?? "-"}</p>
-                      <select
-                        value={p.role}
-                        onChange={(e) => changeRole(p.id, e.target.value)}
-                        className="input py-1 px-2 text-xs w-full mt-2 capitalize"
-                      >
-                        <option value="client">Client</option>
-                        <option value="support">Support</option>
-                        <option value="pro">Pro</option>
-                        <option value="admin">Admin</option>
-                      </select>
-                      <div className="flex items-center justify-between mt-2">
-                        <span className={`text-xs ${p.active ? "text-accent2" : "text-red-400"}`}>
-                          {p.active ? "Active" : "Suspended"}
-                        </span>
-                        <button
-                          className={`text-xs hover:underline ${p.active ? "text-red-400" : "text-accent2"}`}
-                          onClick={() => toggleSuspend(p.id, p.active)}
-                        >
-                          {p.active ? "Suspend" : "Reactivate"}
-                        </button>
-                      </div>
+                      {p.id === CEO_ADMIN_ID ? (
+                        <div className="mt-2">
+                          <button
+                            onClick={handleLockClick}
+                            className="w-full text-xs px-2 py-1.5 rounded border border-accent/40 text-accent bg-accent/5"
+                          >
+                            🛡️ Protected (CEO)
+                          </button>
+                          {showEasterEgg && (
+                            <p className="text-xs text-yellow-400 mt-1 text-center">
+                              🛡️ Nice try. This account is untouchable — even the database says no. — The CEO
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <>
+                          <select
+                            value={p.role}
+                            onChange={(e) => changeRole(p.id, e.target.value)}
+                            className="input py-1 px-2 text-xs w-full mt-2 capitalize"
+                          >
+                            <option value="client">Client</option>
+                            <option value="support">Support</option>
+                            <option value="pro">Pro</option>
+                            <option value="admin">Admin</option>
+                          </select>
+                          <div className="flex items-center justify-between mt-2">
+                            <span className={`text-xs ${p.active ? "text-accent2" : "text-red-400"}`}>
+                              {p.active ? "Active" : "Suspended"}
+                            </span>
+                            <button
+                              className={`text-xs hover:underline ${p.active ? "text-red-400" : "text-accent2"}`}
+                              onClick={() => toggleSuspend(p.id, p.active)}
+                            >
+                              {p.active ? "Suspend" : "Reactivate"}
+                            </button>
+                          </div>
+                        </>
+                      )}
                       {r === "pro" && (
                         <button
                           onClick={() => toggleHousePro(p.id, !!p.is_house_pro)}

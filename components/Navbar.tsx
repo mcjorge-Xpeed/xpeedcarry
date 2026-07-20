@@ -20,6 +20,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileGamesExpanded, setMobileGamesExpanded] = useState(false);
   const [games, setGames] = useState<Game[]>([]);
+  const [hiringOpen, setHiringOpen] = useState(false);
   const filteredGames = games.filter((g) => g.name.toLowerCase().includes(gameSearch.toLowerCase()));
   const accountRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -53,6 +54,13 @@ export default function Navbar() {
       .eq("active", true)
       .order("created_at")
       .then(({ data }) => setGames((data as Game[]) ?? []));
+
+    supabase
+      .from("site_settings")
+      .select("hiring_open")
+      .eq("id", 1)
+      .single()
+      .then(({ data }) => setHiringOpen(!!data?.hiring_open));
 
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -126,6 +134,14 @@ export default function Navbar() {
                 <Link href="/support" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded hover:bg-white/5">
                   Support
                 </Link>
+                <Link
+                  href="/join"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded hover:bg-white/5"
+                >
+                  <span className={`w-2 h-2 rounded-full ${hiringOpen ? "bg-green-400 animate-pulse" : "bg-gray-600"}`} />
+                  Join Us
+                </Link>
               </div>
             )}
           </div>
@@ -179,6 +195,10 @@ export default function Navbar() {
           </Link>
           <Link href="/support" className="hidden sm:inline hover:text-accent2 transition">
             Support
+          </Link>
+          <Link href="/join" className="hidden sm:flex items-center gap-1.5 hover:text-accent2 transition">
+            <span className={`w-2 h-2 rounded-full ${hiringOpen ? "bg-green-400 animate-pulse" : "bg-gray-600"}`} />
+            Join Us
           </Link>
 
           {email ? (
