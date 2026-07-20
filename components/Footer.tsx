@@ -1,8 +1,12 @@
 import Link from "next/link";
+import TrustpilotWidget from "@/components/TrustpilotWidget";
 
 export default function Footer() {
   return (
     <footer className="text-center px-6 py-10 border-t border-white/[0.08] text-[#a9a9b8] mt-10">
+      <div className="max-w-[240px] mx-auto mb-6">
+        <TrustpilotWidget />
+      </div>
       <p>&copy; {new Date().getFullYear()} XpeedCarry. All rights reserved.</p>
       <div className="flex justify-center gap-4 flex-wrap mt-3 text-sm">
         <Link href="/" className="hover:text-white transition">Home</Link>
