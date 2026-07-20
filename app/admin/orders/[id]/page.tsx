@@ -160,6 +160,11 @@ export default function AdminOrderDetail() {
     load();
   }
 
+  async function toggleFeatured() {
+    await supabase.from("orders").update({ featured_on_site: !order.featured_on_site }).eq("id", id);
+    load();
+  }
+
   async function markProPaid() {
     const { data: { user } } = await supabase.auth.getUser();
     await supabase
@@ -364,10 +369,16 @@ export default function AdminOrderDetail() {
             </p>
 
             {order.rated_at && (
-              <p className="text-sm text-gray-300 mb-1">
-                Client rating: <span className="text-yellow-400">{"★".repeat(order.rating)}{"☆".repeat(5 - order.rating)}</span>
-                {order.rating_comment && <span className="text-gray-400"> — "{order.rating_comment}"</span>}
-              </p>
+              <div className="mb-2">
+                <p className="text-sm text-gray-300">
+                  Client rating: <span className="text-yellow-400">{"★".repeat(order.rating)}{"☆".repeat(5 - order.rating)}</span>
+                  {order.rating_comment && <span className="text-gray-400"> — "{order.rating_comment}"</span>}
+                </p>
+                <label className="flex items-center gap-2 text-xs text-gray-400 mt-1">
+                  <input type="checkbox" checked={!!order.featured_on_site} onChange={toggleFeatured} />
+                  Feature this review on the homepage
+                </label>
+              </div>
             )}
             {order.tip_paid_at && (
               <p className="text-sm text-gray-300 mb-2">

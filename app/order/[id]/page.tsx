@@ -20,6 +20,7 @@ export default function OrderDetailPage() {
   const [tipCustom, setTipCustom] = useState("");
   const [tipSkipped, setTipSkipped] = useState(false);
   const [sendingTip, setSendingTip] = useState(false);
+  const [copied, setCopied] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
@@ -66,6 +67,12 @@ export default function OrderDetailPage() {
     const { data: orderData } = await supabase.from("orders").select("*").eq("id", id).single();
     setOrder(orderData);
     setSavingRating(false);
+  }
+
+  async function copyReview() {
+    await navigator.clipboard.writeText(order.rating_comment);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   async function sendTip(amount: number) {
@@ -143,7 +150,25 @@ export default function OrderDetailPage() {
         {order.status === "completed" && (
           <div className="mt-4 border-t border-white/10 pt-4">
             {order.rated_at ? (
-              <p className="text-sm text-gray-300 mb-4">✅ Thanks for rating this order!</p>
+              <div className="mb-4">
+                <p className="text-sm text-gray-300 mb-2">✅ Thanks for rating this order!</p>
+                <p className="text-xs text-gray-400 mb-2">Mind sharing it on Trustpilot too? Really helps us out.</p>
+                <div className="flex flex-wrap gap-2">
+                  {order.rating_comment && (
+                    <button className="btn-secondary text-sm" onClick={copyReview}>
+                      {copied ? "Copied!" : "Copy my review"}
+                    </button>
+                  )}
+                  <a
+                    href="https://www.trustpilot.com/review/xpeedcarry.net"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary text-sm"
+                  >
+                    Open Trustpilot →
+                  </a>
+                </div>
+              </div>
             ) : (
               <div className="mb-5">
                 <p className="text-sm text-gray-300 mb-2">How was your experience? (optional)</p>

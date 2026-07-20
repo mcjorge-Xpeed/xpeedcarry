@@ -12,6 +12,12 @@ export default async function HomePage() {
     .eq("active", true)
     .order("created_at");
 
+  const { data: testimonials } = await supabase
+    .from("public_testimonials")
+    .select("*")
+    .order("rated_at", { ascending: false })
+    .limit(6);
+
   return (
     <div>
       <section className="hero-gradient px-6 pt-24 pb-20 text-center relative overflow-hidden">
@@ -95,6 +101,27 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {testimonials && testimonials.length > 0 && (
+        <section className="px-6 py-16 max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <span className="text-xs font-bold uppercase tracking-widest text-accent2">Reviews</span>
+            <h2 className="text-2xl sm:text-3xl font-bold mt-1">What Our Clients Say</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {testimonials.map((t) => {
+              const initial = t.client_name ? `${t.client_name.split(" ")[0]} ${t.client_name.split(" ")[1]?.[0] ?? ""}.` : "Verified Client";
+              return (
+                <div key={t.id} className="card p-6">
+                  <p className="text-yellow-400 mb-2">{"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}</p>
+                  {t.rating_comment && <p className="text-sm text-gray-300 mb-3">"{t.rating_comment}"</p>}
+                  <p className="text-xs text-gray-500">{initial}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <section className="px-6 py-16 max-w-6xl mx-auto">
         <div className="card p-8 sm:p-12 text-center hero-gradient">
