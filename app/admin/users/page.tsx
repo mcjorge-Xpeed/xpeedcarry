@@ -71,7 +71,11 @@ export default function AdminUsersPage() {
   }, []);
 
   async function toggleSuspend(id: string, currentlyActive: boolean) {
-    await supabase.from("profiles").update({ active: !currentlyActive }).eq("id", id);
+    const updates: any = { active: !currentlyActive };
+    // Reactivar a alguien limpia también la marca de ban permanente,
+    // si no quedaría "activo" pero marcado como baneado para siempre.
+    if (!currentlyActive) updates.permanently_banned = false;
+    await supabase.from("profiles").update(updates).eq("id", id);
     load();
   }
 
@@ -82,6 +86,28 @@ export default function AdminUsersPage() {
 
   async function toggleHousePro(id: string, currentlyHouse: boolean) {
     await supabase.from("profiles").update({ is_house_pro: !currentlyHouse }).eq("id", id);
+    load();
+  }
+
+  async function deleteWarning(warning: any) {
+    if (!confirm("Delete this warning? This reverts any payout it withheld and recalculates the pro's active rate penalty.")) return;
+    await supabase
+      .from("orders")
+      .update({ payout_withheld: false, withheld_by_warning_id: null })
+      .eq("withheld_by_warning_id", warning.id);
+    await supabase.from("pro_warnings").delete().eq("id", warning.id);
+
+    if (warning.type === "yellow") {
+      const { count } = await supabase
+        .from("pro_warnings")
+        .select("id", { count: "exact", head: true })
+        .eq("pro_id", warning.pro_id)
+        .eq("type", "yellow");
+      if ((count ?? 0) < 2) {
+        await supabase.from("profiles").update({ penalty_orders_remaining: 0 }).eq("id", warning.pro_id);
+      }
+    }
+
     load();
   }
 
@@ -236,10 +262,16 @@ export default function AdminUsersPage() {
                               <ul className="mt-1 flex flex-col gap-1">
                                 {warnings.map((w) => (
                                   <li key={w.id} className="text-xs text-gray-500 border-t border-white/5 pt-1">
-                                    {w.type === "yellow" ? "🟡" : "🔴"} {w.category}
+                                    {w.type === "yellow" ? "🟡" : w.type === "red" ? "🔴" : "🔍"} {w.category}
                                     {w.note && `: ${w.note}`}
+                                    {w.fine_amount > 0 && <span className="text-red-400"> · Fine: ${Number(w.fine_amount).toFixed(2)}</span>}
                                     <br />
                                     <span className="text-gray-600">{new Date(w.created_at).toLocaleDateString()}</span>
+                                    {isAdmin && (
+                                      <button onClick={() => deleteWarning(w)} className="ml-2 text-red-400 hover:underline">
+                                        🗑 Delete
+                                      </button>
+                                    )}
                                   </li>
                                 ))}
                               </ul>

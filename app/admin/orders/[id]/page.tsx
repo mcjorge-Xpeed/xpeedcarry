@@ -193,26 +193,33 @@ export default function AdminOrderDetail() {
     const scope = warningType === "red" ? withholdScope : "order";
     const fine = warningType === "red" ? Number(fineAmount) || 0 : 0;
 
-    await supabase.from("pro_warnings").insert({
-      pro_id: pro.id,
-      order_id: order.id,
-      type: warningType,
-      category: warningCategory,
-      note: warningNote || null,
-      issued_by: adminId,
-      withhold_scope: scope,
-      fine_amount: fine || null,
-    });
+    const { data: inserted } = await supabase
+      .from("pro_warnings")
+      .insert({
+        pro_id: pro.id,
+        order_id: order.id,
+        type: warningType,
+        category: warningCategory,
+        note: warningNote || null,
+        issued_by: adminId,
+        withhold_scope: scope,
+        fine_amount: fine || null,
+      })
+      .select()
+      .single();
 
     if (scope === "total") {
       await supabase
         .from("orders")
-        .update({ payout_withheld: true })
+        .update({ payout_withheld: true, withheld_by_warning_id: inserted?.id })
         .eq("pro_id", pro.id)
         .eq("status", "completed")
         .is("pro_paid_at", null);
     } else {
-      await supabase.from("orders").update({ payout_withheld: true }).eq("id", order.id);
+      await supabase
+        .from("orders")
+        .update({ payout_withheld: true, withheld_by_warning_id: inserted?.id })
+        .eq("id", order.id);
     }
 
     // 2da amarilla: activa tarifa reducida en las próximas 3 órdenes.
@@ -231,15 +238,22 @@ export default function AdminOrderDetail() {
     if (!confirm(`Put ${pro.full_name ?? "this pro"} under investigation? This blocks their account entirely and withholds this order's payout until you resolve it.`)) return;
     setStartingInvestigation(true);
     await supabase.from("profiles").update({ under_investigation: true }).eq("id", pro.id);
-    await supabase.from("orders").update({ payout_withheld: true }).eq("id", order.id);
-    await supabase.from("pro_warnings").insert({
-      pro_id: pro.id,
-      order_id: order.id,
-      type: "investigating",
-      category: "Under investigation",
-      note: warningNote || null,
-      issued_by: adminId,
-    });
+    const { data: inserted } = await supabase
+      .from("pro_warnings")
+      .insert({
+        pro_id: pro.id,
+        order_id: order.id,
+        type: "investigating",
+        category: "Under investigation",
+        note: warningNote || null,
+        issued_by: adminId,
+      })
+      .select()
+      .single();
+    await supabase
+      .from("orders")
+      .update({ payout_withheld: true, withheld_by_warning_id: inserted?.id })
+      .eq("id", order.id);
     setStartingInvestigation(false);
     load();
   }
