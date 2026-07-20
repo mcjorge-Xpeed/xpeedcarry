@@ -37,6 +37,16 @@ const WARNING_CATEGORIES: Record<"yellow" | "red", string[]> = {
   ],
 };
 
+// Sugerencia por categoría al registrar una roja, el admin puede cambiarla
+// antes de guardar.
+const RED_DEFAULTS: Record<string, { scope: "order" | "total"; fine: number }> = {
+  "Harassment, threats, discrimination, or abusive language": { scope: "order", fine: 0 },
+  "Solicited off-platform payment or contact": { scope: "total", fine: 750 },
+  "Broke account-handling confidentiality": { scope: "order", fine: 0 },
+  "Repeated or severe scope violation": { scope: "order", fine: 0 },
+  Other: { scope: "order", fine: 0 },
+};
+
 export default function AdminOrderDetail() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -56,6 +66,12 @@ export default function AdminOrderDetail() {
   const [warningNote, setWarningNote] = useState("");
   const [submittingWarning, setSubmittingWarning] = useState(false);
   const [warningSaved, setWarningSaved] = useState(false);
+  const [withholdScope, setWithholdScope] = useState<"order" | "total">("order");
+  const [fineAmount, setFineAmount] = useState("0");
+  const [proWarningCounts, setProWarningCounts] = useState({ yellow: 0, red: 0 });
+  const [showEscalationPrompt, setShowEscalationPrompt] = useState(false);
+  const [showBanPrompt, setShowBanPrompt] = useState(false);
+  const [startingInvestigation, setStartingInvestigation] = useState(false);
   const supabase = createClient();
   const isAdmin = role === "admin";
 
@@ -79,8 +95,23 @@ export default function AdminOrderDetail() {
     if (orderData?.pro_id) {
       const { data: proData } = await supabase.from("profiles").select("*").eq("id", orderData.pro_id).single();
       setPro(proData);
+
+      const { count: yellowCount } = await supabase
+        .from("pro_warnings")
+        .select("id", { count: "exact", head: true })
+        .eq("pro_id", orderData.pro_id)
+        .eq("type", "yellow");
+      const { count: redCount } = await supabase
+        .from("pro_warnings")
+        .select("id", { count: "exact", head: true })
+        .eq("pro_id", orderData.pro_id)
+        .eq("type", "red");
+      setProWarningCounts({ yellow: yellowCount ?? 0, red: redCount ?? 0 });
+      setShowEscalationPrompt((yellowCount ?? 0) >= 3);
+      setShowBanPrompt((redCount ?? 0) >= 2 && proData?.active !== false);
     } else {
       setPro(null);
+      setProWarningCounts({ yellow: 0, red: 0 });
     }
 
     const { data: conv } = await supabase
@@ -125,10 +156,25 @@ export default function AdminOrderDetail() {
     // order status), the pro can accept/decline right away, but only gets
     // chat access and can only start once the client has actually paid
     // (that link is made server-side in the Stripe webhook).
-    await supabase
-      .from("orders")
-      .update({ pro_id: selectedPro, pro_accepted: false })
-      .eq("id", id);
+    const assignedProProfile = pros.find((p) => p.id === selectedPro);
+    const updates: any = { pro_id: selectedPro, pro_accepted: false };
+    const hasPenalty = (assignedProProfile?.penalty_orders_remaining ?? 0) > 0;
+
+    if (hasPenalty) {
+      updates.pro_cut_percent = assignedProProfile.is_house_pro ? 30 : 20;
+    }
+
+    await supabase.from("orders").update(updates).eq("id", id);
+
+    if (hasPenalty) {
+      await supabase
+        .from("profiles")
+        .update({ penalty_orders_remaining: assignedProProfile.penalty_orders_remaining - 1 })
+        .eq("id", selectedPro);
+      alert(
+        `${assignedProProfile.full_name ?? "This pro"} has an active rate penalty (${assignedProProfile.penalty_orders_remaining} order(s) left) — their cut was set to the reduced rate for this order.`
+      );
+    }
 
     load();
   }
@@ -143,16 +189,81 @@ export default function AdminOrderDetail() {
     if (!pro || !adminId) return;
     setSubmittingWarning(true);
     setWarningSaved(false);
+
+    const scope = warningType === "red" ? withholdScope : "order";
+    const fine = warningType === "red" ? Number(fineAmount) || 0 : 0;
+
     await supabase.from("pro_warnings").insert({
       pro_id: pro.id,
+      order_id: order.id,
       type: warningType,
       category: warningCategory,
       note: warningNote || null,
       issued_by: adminId,
+      withhold_scope: scope,
+      fine_amount: fine || null,
     });
+
+    if (scope === "total") {
+      await supabase
+        .from("orders")
+        .update({ payout_withheld: true })
+        .eq("pro_id", pro.id)
+        .eq("status", "completed")
+        .is("pro_paid_at", null);
+    } else {
+      await supabase.from("orders").update({ payout_withheld: true }).eq("id", order.id);
+    }
+
+    // 2da amarilla: activa tarifa reducida en las próximas 3 órdenes.
+    if (warningType === "yellow" && proWarningCounts.yellow + 1 === 2) {
+      await supabase.from("profiles").update({ penalty_orders_remaining: 3 }).eq("id", pro.id);
+    }
+
     setWarningNote("");
     setSubmittingWarning(false);
     setWarningSaved(true);
+    load();
+  }
+
+  async function startInvestigation() {
+    if (!pro || !adminId) return;
+    if (!confirm(`Put ${pro.full_name ?? "this pro"} under investigation? This blocks their account entirely and withholds this order's payout until you resolve it.`)) return;
+    setStartingInvestigation(true);
+    await supabase.from("profiles").update({ under_investigation: true }).eq("id", pro.id);
+    await supabase.from("orders").update({ payout_withheld: true }).eq("id", order.id);
+    await supabase.from("pro_warnings").insert({
+      pro_id: pro.id,
+      order_id: order.id,
+      type: "investigating",
+      category: "Under investigation",
+      note: warningNote || null,
+      issued_by: adminId,
+    });
+    setStartingInvestigation(false);
+    load();
+  }
+
+  async function resolveInvestigation(cleared: boolean) {
+    if (!pro) return;
+    await supabase.from("profiles").update({ under_investigation: false }).eq("id", pro.id);
+    if (cleared) {
+      await supabase.from("orders").update({ payout_withheld: false }).eq("id", order.id);
+    }
+    load();
+  }
+
+  async function permanentlyBanPro() {
+    if (!pro) return;
+    if (!confirm(`Permanently ban ${pro.full_name ?? "this pro"}? This is meant to be final, reactivating later should be a deliberate exception.`)) return;
+    await supabase.from("profiles").update({ active: false, permanently_banned: true }).eq("id", pro.id);
+    setShowBanPrompt(false);
+    load();
+  }
+
+  async function undoWithhold() {
+    await supabase.from("orders").update({ payout_withheld: false }).eq("id", id);
+    load();
   }
 
   async function toggleSuspend(profileId: string, currentlyActive: boolean) {
@@ -243,6 +354,16 @@ export default function AdminOrderDetail() {
             <p className="text-xs text-gray-500 mt-1">
               Est. Stripe fee: ${confirmedFee.toFixed(2)} · Pro gets: ${Number(order.pro_earnings ?? 0).toFixed(2)}
               {" "}({order.pro_cut_percent ?? 0}%) · You keep: ${(confirmedNet - Number(order.pro_earnings ?? 0)).toFixed(2)}
+            </p>
+          )}
+          {order.payout_withheld && (
+            <p className="text-xs text-red-400 mt-1">
+              ⚠ Payout withheld for this order (from a warning).{" "}
+              {isAdmin && (
+                <button className="underline hover:text-red-300" onClick={undoWithhold}>
+                  Undo
+                </button>
+              )}
             </p>
           )}
         </div>
@@ -424,52 +545,159 @@ export default function AdminOrderDetail() {
 
         {pro && (
           <div className="border-t border-white/10 pt-4">
-            <p className="text-xs uppercase tracking-widest text-yellow-400 font-bold mb-2">Log a warning ({pro.full_name ?? "pro"})</p>
-            <p className="text-xs text-gray-500 mb-3">
-              Just a record for now, no automatic consequence yet.
+            <p className="text-xs uppercase tracking-widest text-yellow-400 font-bold mb-2">
+              Log a warning ({pro.full_name ?? "pro"})
             </p>
-            <form onSubmit={submitWarning} className="flex flex-col gap-2 max-w-md">
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => { setWarningType("yellow"); setWarningCategory(WARNING_CATEGORIES.yellow[0]); }}
-                  className={`flex-1 text-sm px-3 py-2 rounded border transition ${
-                    warningType === "yellow" ? "border-yellow-400 text-yellow-400 bg-yellow-400/10" : "border-white/10 text-gray-400"
-                  }`}
-                >
-                  🟡 Yellow
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setWarningType("red"); setWarningCategory(WARNING_CATEGORIES.red[0]); }}
-                  className={`flex-1 text-sm px-3 py-2 rounded border transition ${
-                    warningType === "red" ? "border-red-400 text-red-400 bg-red-400/10" : "border-white/10 text-gray-400"
-                  }`}
-                >
-                  🔴 Red
+            <p className="text-xs text-gray-500 mb-3">
+              History: 🟡 {proWarningCounts.yellow} · 🔴 {proWarningCounts.red}
+              {pro.penalty_orders_remaining > 0 && ` · ⚠ Reduced rate active (${pro.penalty_orders_remaining} order(s) left)`}
+              {pro.under_investigation && " · 🔍 Under investigation"}
+            </p>
+
+            {pro.under_investigation && (
+              <div className="border border-blue-400/40 rounded-lg p-3 mb-3">
+                <p className="text-sm text-blue-300 font-semibold mb-2">🔍 This pro is under investigation</p>
+                <div className="flex gap-2">
+                  <button className="btn-secondary text-sm" onClick={() => resolveInvestigation(true)}>
+                    Clear (no violation found)
+                  </button>
+                  <button className="btn-secondary text-sm text-yellow-400" onClick={() => resolveInvestigation(false)}>
+                    End investigation, log a warning below
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {showEscalationPrompt && !pro.under_investigation && (
+              <div className="border border-yellow-400/40 rounded-lg p-3 mb-3">
+                <p className="text-sm text-yellow-400 font-semibold">
+                  ⚠ This pro has 3+ yellow warnings. Per policy, consider logging a Red for "Repeated or severe scope violation."
+                </p>
+              </div>
+            )}
+
+            {showBanPrompt && !pro.under_investigation && (
+              <div className="border border-red-500/50 rounded-lg p-3 mb-3">
+                <p className="text-sm text-red-400 font-semibold mb-2">
+                  🚫 This pro has 2+ red warnings. Per policy, this is a permanent-ban case.
+                </p>
+                <button className="btn-secondary text-sm text-red-400" onClick={permanentlyBanPro}>
+                  Permanently ban this pro
                 </button>
               </div>
-              <select
-                className="input text-sm"
-                value={warningCategory}
-                onChange={(e) => setWarningCategory(e.target.value)}
-              >
-                {WARNING_CATEGORIES[warningType].map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-              <input
-                type="text"
-                placeholder="Note (optional)"
-                className="input text-sm"
-                value={warningNote}
-                onChange={(e) => setWarningNote(e.target.value)}
-              />
-              <button className="btn-secondary text-sm" disabled={submittingWarning}>
-                {submittingWarning ? "Saving..." : "Log Warning"}
-              </button>
-              {warningSaved && <p className="text-accent2 text-xs">✅ Logged.</p>}
-            </form>
+            )}
+
+            {!pro.under_investigation && (
+              <>
+                <button
+                  type="button"
+                  onClick={startInvestigation}
+                  disabled={startingInvestigation}
+                  className="text-xs text-blue-300 border border-blue-400/30 rounded px-3 py-1.5 mb-3 hover:bg-blue-400/10"
+                >
+                  🔍 Start Investigation (blocks account, withholds this order, decide later)
+                </button>
+                <form onSubmit={submitWarning} className="flex flex-col gap-2 max-w-md">
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => { setWarningType("yellow"); setWarningCategory(WARNING_CATEGORIES.yellow[0]); }}
+                      className={`flex-1 text-sm px-3 py-2 rounded border transition ${
+                        warningType === "yellow" ? "border-yellow-400 text-yellow-400 bg-yellow-400/10" : "border-white/10 text-gray-400"
+                      }`}
+                    >
+                      🟡 Yellow
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setWarningType("red");
+                        const cat = WARNING_CATEGORIES.red[0];
+                        setWarningCategory(cat);
+                        const d = RED_DEFAULTS[cat];
+                        setWithholdScope(d.scope);
+                        setFineAmount(String(d.fine));
+                      }}
+                      className={`flex-1 text-sm px-3 py-2 rounded border transition ${
+                        warningType === "red" ? "border-red-400 text-red-400 bg-red-400/10" : "border-white/10 text-gray-400"
+                      }`}
+                    >
+                      🔴 Red
+                    </button>
+                  </div>
+                  <select
+                    className="input text-sm"
+                    value={warningCategory}
+                    onChange={(e) => {
+                      setWarningCategory(e.target.value);
+                      if (warningType === "red") {
+                        const d = RED_DEFAULTS[e.target.value] ?? { scope: "order", fine: 0 };
+                        setWithholdScope(d.scope);
+                        setFineAmount(String(d.fine));
+                      }
+                    }}
+                  >
+                    {WARNING_CATEGORIES[warningType].map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+
+                  {warningType === "yellow" && (
+                    <p className="text-xs text-gray-500">Withholds this order's payout automatically.</p>
+                  )}
+
+                  {warningType === "red" && (
+                    <div className="border border-white/10 rounded-lg p-2 flex flex-col gap-2">
+                      <label className="text-xs text-gray-400">Withhold payout:</label>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setWithholdScope("order")}
+                          className={`flex-1 text-xs px-2 py-1.5 rounded border transition ${
+                            withholdScope === "order" ? "border-accent text-accent bg-accent/10" : "border-white/10 text-gray-400"
+                          }`}
+                        >
+                          This order only
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setWithholdScope("total")}
+                          className={`flex-1 text-xs px-2 py-1.5 rounded border transition ${
+                            withholdScope === "total" ? "border-accent text-accent bg-accent/10" : "border-white/10 text-gray-400"
+                          }`}
+                        >
+                          Entire pending balance
+                        </button>
+                      </div>
+                      <label className="text-xs text-gray-400">Fine (record only, $0 if none):</label>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm">$</span>
+                        <input
+                          type="number"
+                          min={0}
+                          step="1"
+                          className="input py-1 px-2 text-sm"
+                          value={fineAmount}
+                          onChange={(e) => setFineAmount(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <input
+                    type="text"
+                    placeholder="Note (optional)"
+                    className="input text-sm"
+                    value={warningNote}
+                    onChange={(e) => setWarningNote(e.target.value)}
+                  />
+                  <button className="btn-secondary text-sm" disabled={submittingWarning}>
+                    {submittingWarning ? "Saving..." : "Log Warning"}
+                  </button>
+                  {warningSaved && <p className="text-accent2 text-xs">✅ Logged.</p>}
+                </form>
+              </>
+            )}
           </div>
         )}
 

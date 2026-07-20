@@ -31,10 +31,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Cuenta suspendida: bloquea el acceso a todo excepto la propia página de suspendido
+  // Cuenta suspendida o en investigación: bloquea el acceso a todo excepto /suspended
   if (user && !request.nextUrl.pathname.startsWith("/suspended")) {
-    const { data: profile } = await supabase.from("profiles").select("active").eq("id", user.id).maybeSingle();
-    if (profile && profile.active === false) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("active, under_investigation")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (profile && (profile.active === false || profile.under_investigation === true)) {
       return NextResponse.redirect(new URL("/suspended", request.url));
     }
   }

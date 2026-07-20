@@ -28,7 +28,7 @@ export default function ProOrderDetail() {
 
     const { data: orderData } = await supabase
       .from("orders")
-      .select("id, order_number, title, description, status, pro_accepted, pro_earnings, delivered_at, evidence_urls, pro_payout_due_at, pro_paid_at, tip_pro_payout, tip_paid_at")
+      .select("id, order_number, title, description, status, pro_accepted, pro_earnings, delivered_at, evidence_urls, pro_payout_due_at, pro_paid_at, tip_pro_payout, tip_paid_at, payout_withheld")
       .eq("id", id)
       .single();
     setOrder(orderData);
@@ -129,7 +129,17 @@ export default function ProOrderDetail() {
         <p className="text-sm text-gray-400">{order.order_number}</p>
         <h1 className="text-xl font-bold">{order.title}</h1>
         <p className="text-gray-400 text-sm mt-2 whitespace-pre-line">{order.description}</p>
-        <p className="mt-3 font-bold">Your payout: ${Number(order.pro_earnings ?? 0).toFixed(2)}, {statusLabels[order.status] ?? order.status}</p>
+        <p className="mt-3 font-bold">
+          {order.payout_withheld
+            ? "Payout withheld for this order"
+            : `Your payout: $${Number(order.pro_earnings ?? 0).toFixed(2)}`}
+          , {statusLabels[order.status] ?? order.status}
+        </p>
+        {order.payout_withheld && (
+          <p className="text-xs text-red-400 mt-1">
+            A warning was logged on this order and its payout was withheld. Reach out to support if you have questions.
+          </p>
+        )}
         {order.tip_paid_at && (
           <p className="text-sm text-yellow-400 mt-1">🎉 Client left a tip: +${Number(order.tip_pro_payout ?? 0).toFixed(2)}</p>
         )}

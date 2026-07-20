@@ -23,7 +23,8 @@ export async function POST(req: Request) {
   const { data: orders, error: fetchError } = await admin
     .from("orders")
     .select("id, order_number, pro_id, pro_earnings, tip_pro_payout")
-    .in("id", orderIds);
+    .in("id", orderIds)
+    .eq("payout_withheld", false);
 
   if (fetchError || !orders || orders.length === 0) {
     return NextResponse.json({ error: "Orders not found" }, { status: 404 });

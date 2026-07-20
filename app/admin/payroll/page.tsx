@@ -42,6 +42,7 @@ export default function PayrollPage() {
       .from("orders")
       .select("id, order_number, pro_earnings, pro_payout_due_at, pro_id, tip_pro_payout, pro:pro_id(full_name)")
       .eq("status", "completed")
+      .eq("payout_withheld", false)
       .order("pro_payout_due_at", { ascending: true });
 
     const byPro: Record<string, { proName: string; orders: OrderRow[] }> = {};

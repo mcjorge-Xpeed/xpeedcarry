@@ -207,6 +207,15 @@ export default function AdminUsersPage() {
                           {p.is_house_pro ? "🏠 De casa (40% neto)" : "Normal (30% neto)"}
                         </button>
                       )}
+                      {r === "pro" && p.under_investigation && (
+                        <p className="text-xs text-blue-300 mt-1">🔍 Under investigation</p>
+                      )}
+                      {r === "pro" && p.permanently_banned && (
+                        <p className="text-xs text-red-400 mt-1">🚫 Permanently banned</p>
+                      )}
+                      {r === "pro" && p.penalty_orders_remaining > 0 && (
+                        <p className="text-xs text-yellow-400 mt-1">⚠ Reduced rate ({p.penalty_orders_remaining} order(s) left)</p>
+                      )}
                       {r === "pro" && (() => {
                         const warnings = warningsByPro[p.id] ?? [];
                         const yellowCount = warnings.filter((w) => w.type === "yellow").length;
