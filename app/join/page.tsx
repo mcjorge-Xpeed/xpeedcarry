@@ -13,7 +13,7 @@ export default async function JoinPage() {
         <span className="text-xs font-bold uppercase tracking-widest text-accent2">Join the team</span>
         <h1 className="text-3xl sm:text-4xl font-bold mt-1">Become a Booster</h1>
         <p className="text-gray-400 mt-2">
-          Real players, flexible hours, paid twice a month. Tell us what you play and how good you are.
+          Real players, flexible hours. Tell us what you play and how good you are.
         </p>
       </div>
 
