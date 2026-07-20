@@ -162,7 +162,7 @@ export default function AdminUsersPage() {
                             onClick={handleLockClick}
                             className="w-full text-xs px-2 py-1.5 rounded border border-accent/40 text-accent bg-accent/5"
                           >
-                            🛡️ Protected (CEO)
+                            🛡️ Don't Touch This One
                           </button>
                           {showEasterEgg && (
                             <p className="text-xs text-yellow-400 mt-1 text-center">
