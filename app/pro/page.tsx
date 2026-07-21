@@ -21,7 +21,12 @@ export default function ProDashboard() {
   const [openOrders, setOpenOrders] = useState<any[]>([]);
   const [myInterestIds, setMyInterestIds] = useState<Set<string>>(new Set());
   const [togglingInterestId, setTogglingInterestId] = useState<string | null>(null);
+  const [collapsed, setCollapsed] = useState({ payment: true, pool: false, games: true, orders: false });
   const supabase = createClient();
+
+  function toggleSection(key: keyof typeof collapsed) {
+    setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
+  }
 
   useEffect(() => {
     (async () => {
@@ -205,49 +210,63 @@ export default function ProDashboard() {
       </div>
 
       <div className="card p-5 mb-8">
-        <h2 className="font-semibold mb-1">Payment details</h2>
-        <p className="text-xs text-gray-500 mb-3">
-          Only visible to admin, used to transfer your payouts. Not shared with anyone else.
-        </p>
-        <form onSubmit={savePayoutInfo} className="flex flex-col gap-2 max-w-sm">
-          <input
-            type="text"
-            placeholder="Full name (as it appears on your bank account)"
-            className="input"
-            value={payoutFullName}
-            onChange={(e) => setPayoutFullName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Bank name"
-            className="input"
-            value={payoutBankName}
-            onChange={(e) => setPayoutBankName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="CLABE (18 digits)"
-            maxLength={18}
-            className="input"
-            value={payoutClabe}
-            onChange={(e) => setPayoutClabe(e.target.value.replace(/\D/g, ""))}
-          />
-          <button className="btn-primary text-sm" disabled={savingPayout}>
-            {savingPayout ? "Saving..." : "Save Payment Details"}
-          </button>
-          {payoutSaved && <p className="text-accent2 text-xs">✅ Saved.</p>}
-          {payoutUpdatedAt && (
-            <p className="text-xs text-gray-500">
-              Last updated: {new Date(payoutUpdatedAt).toLocaleString()}
+        <button className="w-full flex items-center justify-between" onClick={() => toggleSection("payment")}>
+          <h2 className="font-semibold">Payment details</h2>
+          <span className="text-xs text-gray-400">
+            {collapsed.payment ? (payoutUpdatedAt ? "✓ Saved" : "Not set") : ""} {collapsed.payment ? "▼" : "▲"}
+          </span>
+        </button>
+        {!collapsed.payment && (
+          <>
+            <p className="text-xs text-gray-500 mb-3 mt-1">
+              Only visible to admin, used to transfer your payouts. Not shared with anyone else.
             </p>
-          )}
-        </form>
+            <form onSubmit={savePayoutInfo} className="flex flex-col gap-2 max-w-sm">
+              <input
+                type="text"
+                placeholder="Full name (as it appears on your bank account)"
+                className="input"
+                value={payoutFullName}
+                onChange={(e) => setPayoutFullName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Bank name"
+                className="input"
+                value={payoutBankName}
+                onChange={(e) => setPayoutBankName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="CLABE (18 digits)"
+                maxLength={18}
+                className="input"
+                value={payoutClabe}
+                onChange={(e) => setPayoutClabe(e.target.value.replace(/\D/g, ""))}
+              />
+              <button className="btn-primary text-sm" disabled={savingPayout}>
+                {savingPayout ? "Saving..." : "Save Payment Details"}
+              </button>
+              {payoutSaved && <p className="text-accent2 text-xs">✅ Saved.</p>}
+              {payoutUpdatedAt && (
+                <p className="text-xs text-gray-500">
+                  Last updated: {new Date(payoutUpdatedAt).toLocaleString()}
+                </p>
+              )}
+            </form>
+          </>
+        )}
       </div>
 
       {openOrders.length > 0 && (
         <div className="card p-5 mb-8">
-          <h2 className="font-semibold mb-1">Open orders you can claim</h2>
-          <p className="text-xs text-gray-500 mb-3">
+          <button className="w-full flex items-center justify-between" onClick={() => toggleSection("pool")}>
+            <h2 className="font-semibold">Open orders you can claim</h2>
+            <span className="text-xs text-gray-400">{openOrders.length} {collapsed.pool ? "▼" : "▲"}</span>
+          </button>
+          {!collapsed.pool && (
+          <>
+          <p className="text-xs text-gray-500 mb-3 mt-1">
             Say you're interested and support will confirm who gets it — first to mark interest isn't
             automatically assigned.
           </p>
@@ -274,12 +293,19 @@ export default function ProDashboard() {
               );
             })}
           </div>
+          </>
+          )}
         </div>
       )}
 
       <div className="card p-5 mb-8">
-        <h2 className="font-semibold mb-1">Games I can boost</h2>
-        <p className="text-xs text-gray-500 mb-3">
+        <button className="w-full flex items-center justify-between" onClick={() => toggleSection("games")}>
+          <h2 className="font-semibold">Games I can boost</h2>
+          <span className="text-xs text-gray-400">{myGameIds.size} selected {collapsed.games ? "▼" : "▲"}</span>
+        </button>
+        {!collapsed.games && (
+        <>
+        <p className="text-xs text-gray-500 mb-3 mt-1">
           Keep this up to date, it's how support knows who to offer new orders to.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -301,9 +327,18 @@ export default function ProDashboard() {
             </label>
           ))}
         </div>
+        </>
+        )}
       </div>
 
-      {orders.length === 0 ? (
+      <div className="card p-5 mb-8">
+        <button className="w-full flex items-center justify-between" onClick={() => toggleSection("orders")}>
+          <h2 className="font-semibold">My Orders</h2>
+          <span className="text-xs text-gray-400">{orders.length} {collapsed.orders ? "▼" : "▲"}</span>
+        </button>
+      </div>
+
+      {!collapsed.orders && (orders.length === 0 ? (
         <p className="text-gray-500">No orders assigned to you yet.</p>
       ) : (
         <div className="flex flex-col gap-3">
@@ -325,7 +360,7 @@ export default function ProDashboard() {
             </Link>
           ))}
         </div>
-      )}
+      ))}
     </div>
   );
 }
