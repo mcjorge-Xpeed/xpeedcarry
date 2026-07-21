@@ -56,10 +56,13 @@ export default function ProDashboard() {
         setPayoutUpdatedAt(payoutInfo.updated_at ?? null);
       }
 
+      // Sin filtro de "active": queremos que el pro pueda marcar cualquier
+      // juego del catálogo (incluso los que todavía no están publicados en
+      // la home), así la cobertura del admin siempre coincide con lo que
+      // el pro ve aquí.
       const { data: gamesData } = await supabase
         .from("games")
         .select("id, name")
-        .eq("active", true)
         .order("name");
       setGames(gamesData ?? []);
 
