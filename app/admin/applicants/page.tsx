@@ -111,9 +111,10 @@ export default async function ApplicantsPage() {
     );
   }
 
-  const [{ data: games }, applicants] = await Promise.all([
-    supabase.from("games").select("name").order("name"),
+  const [{ data: games }, applicants, { data: proGames }] = await Promise.all([
+    supabase.from("games").select("id, name").order("name"),
     fetchApplicants(),
+    supabase.from("pro_games").select("game_id"),
   ]);
 
   const coverage = (games ?? []).map((g) => {
@@ -127,6 +128,11 @@ export default async function ApplicantsPage() {
     ).length;
     return { name: g.name, count };
   });
+
+  const activeCoverage = (games ?? []).map((g) => ({
+    name: g.name,
+    count: (proGames ?? []).filter((pg) => pg.game_id === g.id).length,
+  }));
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
@@ -142,7 +148,20 @@ export default async function ApplicantsPage() {
         . {applicants.length} applicant(s) so far.
       </p>
 
-      <h2 className="text-lg font-semibold mb-3">Game coverage (applicants who can boost each game)</h2>
+      <h2 className="text-lg font-semibold mb-3">Active pro coverage (self-reported by your hired pros)</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-10">
+        {activeCoverage.map((g) => (
+          <div
+            key={g.name}
+            className={`card p-3 text-center ${g.count === 0 ? "border-red-500/40" : ""}`}
+          >
+            <p className="text-sm truncate">{g.name}</p>
+            <p className={`text-xl font-bold ${g.count === 0 ? "text-red-400" : "text-accent2"}`}>{g.count}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-lg font-semibold mb-3">Applicant coverage (from Jotform, snapshot at time of applying)</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-10">
         {coverage.map((g) => (
           <div

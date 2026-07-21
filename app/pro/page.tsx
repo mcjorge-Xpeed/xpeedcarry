@@ -15,6 +15,9 @@ export default function ProDashboard() {
   const [savingPayout, setSavingPayout] = useState(false);
   const [payoutSaved, setPayoutSaved] = useState(false);
   const [payoutUpdatedAt, setPayoutUpdatedAt] = useState<string | null>(null);
+  const [games, setGames] = useState<{ id: string; name: string }[]>([]);
+  const [myGameIds, setMyGameIds] = useState<Set<string>>(new Set());
+  const [togglingGameId, setTogglingGameId] = useState<string | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -53,6 +56,16 @@ export default function ProDashboard() {
         setPayoutUpdatedAt(payoutInfo.updated_at ?? null);
       }
 
+      const { data: gamesData } = await supabase
+        .from("games")
+        .select("id, name")
+        .eq("active", true)
+        .order("name");
+      setGames(gamesData ?? []);
+
+      const { data: myGames } = await supabase.from("pro_games").select("game_id").eq("pro_id", user.id);
+      setMyGameIds(new Set((myGames ?? []).map((g) => g.game_id)));
+
       setLoading(false);
     })();
   }, []);
@@ -73,6 +86,24 @@ export default function ProDashboard() {
     setPayoutUpdatedAt(now);
     setSavingPayout(false);
     setPayoutSaved(true);
+  }
+
+  async function toggleGame(gameId: string) {
+    if (!userId) return;
+    setTogglingGameId(gameId);
+    const has = myGameIds.has(gameId);
+    if (has) {
+      await supabase.from("pro_games").delete().eq("pro_id", userId).eq("game_id", gameId);
+    } else {
+      await supabase.from("pro_games").insert({ pro_id: userId, game_id: gameId });
+    }
+    setMyGameIds((prev) => {
+      const next = new Set(prev);
+      if (has) next.delete(gameId);
+      else next.add(gameId);
+      return next;
+    });
+    setTogglingGameId(null);
   }
 
   if (loading) return <p className="text-center mt-20">Loading...</p>;
@@ -170,6 +201,32 @@ export default function ProDashboard() {
             </p>
           )}
         </form>
+      </div>
+
+      <div className="card p-5 mb-8">
+        <h2 className="font-semibold mb-1">Games I can boost</h2>
+        <p className="text-xs text-gray-500 mb-3">
+          Keep this up to date, it's how support knows who to offer new orders to.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {games.map((g) => (
+            <label
+              key={g.id}
+              className={`flex items-center gap-2 text-sm px-3 py-2 rounded border cursor-pointer transition ${
+                myGameIds.has(g.id) ? "border-accent text-accent bg-accent/10" : "border-white/10 text-gray-400"
+              }`}
+            >
+              <input
+                type="checkbox"
+                className="accent-[#8b5cf6]"
+                checked={myGameIds.has(g.id)}
+                disabled={togglingGameId === g.id}
+                onChange={() => toggleGame(g.id)}
+              />
+              {g.name}
+            </label>
+          ))}
+        </div>
       </div>
 
       {orders.length === 0 ? (
