@@ -73,6 +73,7 @@ export default function AdminOrderDetail() {
   const [showEscalationPrompt, setShowEscalationPrompt] = useState(false);
   const [showBanPrompt, setShowBanPrompt] = useState(false);
   const [startingInvestigation, setStartingInvestigation] = useState(false);
+  const [interestedPros, setInterestedPros] = useState<any[]>([]);
   const supabase = createClient();
   const isAdmin = role === "admin";
 
@@ -88,6 +89,13 @@ export default function AdminOrderDetail() {
     setSelectedPro(orderData?.pro_id ?? "");
     const { data: prosData } = await supabase.from("profiles").select("*").eq("role", "pro");
     setPros(prosData ?? []);
+
+    const { data: interestData } = await supabase
+      .from("order_interest")
+      .select("pro_id, created_at, pro:pro_id(id, full_name, is_house_pro)")
+      .eq("order_id", id)
+      .order("created_at", { ascending: true });
+    setInterestedPros(interestData ?? []);
 
     if (orderData?.client_id) {
       const { data: clientData } = await supabase.from("profiles").select("*").eq("id", orderData.client_id).single();
@@ -176,6 +184,8 @@ export default function AdminOrderDetail() {
         `${assignedProProfile.full_name ?? "This pro"} has an active rate penalty (${assignedProProfile.penalty_orders_remaining} order(s) left) — their cut was set to the reduced rate for this order.`
       );
     }
+
+    await supabase.from("order_interest").delete().eq("order_id", id);
 
     load();
   }
@@ -451,6 +461,26 @@ export default function AdminOrderDetail() {
 
         {order.price_confirmed && (
           <div className="border-t border-white/10 pt-4">
+            {interestedPros.length > 0 && (
+              <div className="mb-3">
+                <p className="text-xs text-gray-400 mb-1">Interested pros (self-reported):</p>
+                <div className="flex flex-wrap gap-2">
+                  {interestedPros.map((i: any) => (
+                    <button
+                      key={i.pro_id}
+                      type="button"
+                      onClick={() => setSelectedPro(i.pro_id)}
+                      className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition ${
+                        selectedPro === i.pro_id ? "border-accent text-accent bg-accent/10" : "border-white/10 text-gray-400 hover:border-accent"
+                      }`}
+                    >
+                      {i.pro?.is_house_pro && <span className="text-accent">🏠</span>}
+                      {i.pro?.full_name ?? "Pro"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             <label className="text-sm text-gray-400">Assign pro</label>
             <div className="flex gap-2 mt-1">
               <div className="relative flex-1">

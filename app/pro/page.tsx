@@ -18,6 +18,9 @@ export default function ProDashboard() {
   const [games, setGames] = useState<{ id: string; name: string }[]>([]);
   const [myGameIds, setMyGameIds] = useState<Set<string>>(new Set());
   const [togglingGameId, setTogglingGameId] = useState<string | null>(null);
+  const [openOrders, setOpenOrders] = useState<any[]>([]);
+  const [myInterestIds, setMyInterestIds] = useState<Set<string>>(new Set());
+  const [togglingInterestId, setTogglingInterestId] = useState<string | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -67,7 +70,24 @@ export default function ProDashboard() {
       setGames(gamesData ?? []);
 
       const { data: myGames } = await supabase.from("pro_games").select("game_id").eq("pro_id", user.id);
-      setMyGameIds(new Set((myGames ?? []).map((g) => g.game_id)));
+      const myGameIdSet = new Set((myGames ?? []).map((g) => g.game_id));
+      setMyGameIds(myGameIdSet);
+
+      const { data: openOrdersData } = await supabase
+        .from("orders")
+        .select("id, order_number, title, description, pro_earnings, game_id, created_at, game:game_id(name)")
+        .eq("price_confirmed", true)
+        .is("pro_id", null)
+        .eq("status", "pending_payment")
+        .order("created_at", { ascending: false });
+      // Solo mostramos las que coinciden con los juegos del pro, más las
+      // órdenes custom/servicios especiales (sin game_id) que aplican a todos.
+      setOpenOrders(
+        (openOrdersData ?? []).filter((o: any) => !o.game_id || myGameIdSet.has(o.game_id))
+      );
+
+      const { data: myInterest } = await supabase.from("order_interest").select("order_id").eq("pro_id", user.id);
+      setMyInterestIds(new Set((myInterest ?? []).map((i) => i.order_id)));
 
       setLoading(false);
     })();
@@ -107,6 +127,24 @@ export default function ProDashboard() {
       return next;
     });
     setTogglingGameId(null);
+  }
+
+  async function toggleInterest(orderId: string) {
+    if (!userId) return;
+    setTogglingInterestId(orderId);
+    const has = myInterestIds.has(orderId);
+    if (has) {
+      await supabase.from("order_interest").delete().eq("order_id", orderId).eq("pro_id", userId);
+    } else {
+      await supabase.from("order_interest").insert({ order_id: orderId, pro_id: userId });
+    }
+    setMyInterestIds((prev) => {
+      const next = new Set(prev);
+      if (has) next.delete(orderId);
+      else next.add(orderId);
+      return next;
+    });
+    setTogglingInterestId(null);
   }
 
   if (loading) return <p className="text-center mt-20">Loading...</p>;
@@ -205,6 +243,39 @@ export default function ProDashboard() {
           )}
         </form>
       </div>
+
+      {openOrders.length > 0 && (
+        <div className="card p-5 mb-8">
+          <h2 className="font-semibold mb-1">Open orders you can claim</h2>
+          <p className="text-xs text-gray-500 mb-3">
+            Say you're interested and support will confirm who gets it — first to mark interest isn't
+            automatically assigned.
+          </p>
+          <div className="flex flex-col gap-2">
+            {openOrders.map((o) => {
+              const interested = myInterestIds.has(o.id);
+              return (
+                <div key={o.id} className="border border-white/10 rounded-lg p-3 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs text-gray-400">{o.order_number}{o.game?.name ? ` · ${o.game.name}` : ""}</p>
+                    <p className="text-sm font-medium">{o.title}</p>
+                    <p className="text-xs text-accent2 mt-1">You'd earn: ${Number(o.pro_earnings ?? 0).toFixed(2)}</p>
+                  </div>
+                  <button
+                    className={`text-xs px-3 py-1.5 rounded border transition whitespace-nowrap ${
+                      interested ? "border-accent text-accent bg-accent/10" : "border-white/10 text-gray-400 hover:border-accent"
+                    }`}
+                    disabled={togglingInterestId === o.id}
+                    onClick={() => toggleInterest(o.id)}
+                  >
+                    {interested ? "✓ Interested" : "I'm interested"}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <div className="card p-5 mb-8">
         <h2 className="font-semibold mb-1">Games I can boost</h2>
