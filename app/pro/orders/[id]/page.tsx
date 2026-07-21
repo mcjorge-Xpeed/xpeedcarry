@@ -101,10 +101,11 @@ export default function ProOrderDetail() {
   async function confirmDelivery() {
     if (stagedUrls.length === 0) return;
     setSubmitting(true);
-    await supabase
-      .from("orders")
-      .update({ status: "delivered", delivered_at: new Date().toISOString(), evidence_urls: stagedUrls })
-      .eq("id", id);
+    await fetch("/api/pro/confirm-delivery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderId: id, evidenceUrls: stagedUrls }),
+    });
     setSubmitting(false);
     setStagedUrls([]);
     load();
@@ -218,20 +219,20 @@ export default function ProOrderDetail() {
           </div>
         )}
 
-        {order.status === "delivered" && (
+        {(order.evidence_urls ?? []).length > 0 && (
           <div className="mt-4 border-t border-white/10 pt-4">
-            {(order.evidence_urls ?? []).length > 0 && (
-              <div className="flex flex-col gap-1">
-                {order.evidence_urls.map((url: string, i: number) => (
-                  <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm">
-                    View uploaded evidence {order.evidence_urls.length > 1 ? `#${i + 1}` : ""} →
-                  </a>
-                ))}
-              </div>
+            <div className="flex flex-col gap-1">
+              {order.evidence_urls.map((url: string, i: number) => (
+                <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm">
+                  View uploaded evidence {order.evidence_urls.length > 1 ? `#${i + 1}` : ""} →
+                </a>
+              ))}
+            </div>
+            {order.status === "delivered" && (
+              <p className="text-xs text-gray-500 mt-2">
+                Waiting for the client to confirm. If they don't respond, support can override after 12 hours.
+              </p>
             )}
-            <p className="text-xs text-gray-500 mt-2">
-              Waiting for the client to confirm. If they don't respond, support can override after 12 hours.
-            </p>
           </div>
         )}
 

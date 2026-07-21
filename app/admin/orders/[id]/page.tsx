@@ -542,6 +542,16 @@ export default function AdminOrderDetail() {
           </p>
         )}
 
+        {(order.evidence_urls ?? []).length > 0 && (
+          <div className="flex flex-col gap-1 mb-3">
+            {order.evidence_urls.map((url: string, i: number) => (
+              <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm block">
+                View proof of completion {order.evidence_urls.length > 1 ? `#${i + 1}` : ""} →
+              </a>
+            ))}
+          </div>
+        )}
+
         {order.status === "delivered" && (
           <div className="border border-yellow-500/30 rounded-lg p-4">
             <p className="text-sm text-yellow-400 font-semibold mb-1">Delivered, waiting for client confirmation</p>
@@ -549,15 +559,6 @@ export default function AdminOrderDetail() {
               Delivered {order.delivered_at ? new Date(order.delivered_at).toLocaleString() : "-"} (
               {hoursSinceDelivered.toFixed(1)}h ago)
             </p>
-            {(order.evidence_urls ?? []).length > 0 && (
-              <div className="flex flex-col gap-1 mb-3">
-                {order.evidence_urls.map((url: string, i: number) => (
-                  <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm block">
-                    View proof of completion {order.evidence_urls.length > 1 ? `#${i + 1}` : ""} →
-                  </a>
-                ))}
-              </div>
-            )}
             <button className="btn-primary" onClick={overrideConfirm} disabled={!overrideAvailable}>
               {overrideAvailable ? "Override & Confirm Completion" : `Available in ${(12 - hoursSinceDelivered).toFixed(1)}h`}
             </button>
