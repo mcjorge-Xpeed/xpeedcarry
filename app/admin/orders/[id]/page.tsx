@@ -56,6 +56,7 @@ export default function AdminOrderDetail() {
   const [pro, setPro] = useState<any>(null);
   const [pros, setPros] = useState<any[]>([]);
   const [selectedPro, setSelectedPro] = useState("");
+  const [proDropdownOpen, setProDropdownOpen] = useState(false);
   const [finalPrice, setFinalPrice] = useState("");
   const [proCutPercent, setProCutPercent] = useState("40");
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -418,9 +419,20 @@ export default function AdminOrderDetail() {
                 >
                   Normal (30% neto)
                 </button>
+                <input
+                  type="number"
+                  min={0}
+                  max={45}
+                  step="1"
+                  placeholder="Custom %"
+                  className="input w-28 text-sm"
+                  value={proCutPercent}
+                  onChange={(e) => setProCutPercent(e.target.value)}
+                />
               </div>
               <p className="text-xs text-gray-400 mt-1">
-                The pro only ever sees the dollar amount, never the total price.
+                The pro only ever sees the dollar amount, never the total price. Use the buttons for the
+                usual rates, or type any % directly (capped at 45%).
               </p>
             </div>
             {enteredPrice > 0 && (
@@ -441,12 +453,45 @@ export default function AdminOrderDetail() {
           <div className="border-t border-white/10 pt-4">
             <label className="text-sm text-gray-400">Assign pro</label>
             <div className="flex gap-2 mt-1">
-              <select className="input" value={selectedPro} onChange={(e) => setSelectedPro(e.target.value)}>
-                <option value="">Select a pro</option>
-                {pros.map((p) => (
-                  <option key={p.id} value={p.id}>{p.full_name}</option>
-                ))}
-              </select>
+              <div className="relative flex-1">
+                <button
+                  type="button"
+                  onClick={() => setProDropdownOpen((o) => !o)}
+                  className="input text-left flex items-center justify-between"
+                >
+                  {selectedPro ? (
+                    (() => {
+                      const p = pros.find((pr) => pr.id === selectedPro);
+                      return (
+                        <span className="flex items-center gap-2">
+                          {p?.is_house_pro && <span className="text-accent">🏠</span>}
+                          {p?.full_name ?? "Select a pro"}
+                        </span>
+                      );
+                    })()
+                  ) : (
+                    <span className="text-gray-500">Select a pro</span>
+                  )}
+                  <span className="text-xs text-gray-500">▾</span>
+                </button>
+                {proDropdownOpen && (
+                  <div className="absolute left-0 top-full mt-1 w-full card p-2 shadow-xl z-10 max-h-64 overflow-y-auto">
+                    {pros.map((p) => (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => { setSelectedPro(p.id); setProDropdownOpen(false); }}
+                        className={`w-full flex items-center gap-2 text-left px-3 py-2 rounded hover:bg-white/5 text-sm ${
+                          p.is_house_pro ? "border-l-2 border-accent" : ""
+                        }`}
+                      >
+                        {p.is_house_pro && <span className="text-accent">🏠</span>}
+                        <span className={p.is_house_pro ? "text-accent" : ""}>{p.full_name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               <button className="btn-primary" onClick={assignPro}>Assign</button>
             </div>
             {order.pro_id && (
