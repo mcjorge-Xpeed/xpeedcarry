@@ -33,6 +33,10 @@ export default function AdminUsersPage() {
   const [expandedWarnings, setExpandedWarnings] = useState<Record<string, boolean>>({});
   const [lockClicks, setLockClicks] = useState(0);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [allGames, setAllGames] = useState<{ id: string; name: string }[]>([]);
+  const [gamesByPro, setGamesByPro] = useState<Record<string, Set<string>>>({});
+  const [expandedGames, setExpandedGames] = useState<Record<string, boolean>>({});
+  const [togglingGame, setTogglingGame] = useState<string | null>(null);
   const supabase = createClient();
 
   async function load() {
@@ -63,7 +67,35 @@ export default function AdminUsersPage() {
     }
     setWarningsByPro(byPro);
 
+    const { data: gamesData } = await supabase.from("games").select("id, name").order("name");
+    setAllGames(gamesData ?? []);
+
+    const { data: proGamesData } = await supabase.from("pro_games").select("pro_id, game_id");
+    const byGamePro: Record<string, Set<string>> = {};
+    for (const pg of proGamesData ?? []) {
+      if (!byGamePro[pg.pro_id]) byGamePro[pg.pro_id] = new Set();
+      byGamePro[pg.pro_id].add(pg.game_id);
+    }
+    setGamesByPro(byGamePro);
+
     setLoading(false);
+  }
+
+  async function toggleProGame(proId: string, gameId: string) {
+    setTogglingGame(`${proId}:${gameId}`);
+    const has = gamesByPro[proId]?.has(gameId);
+    if (has) {
+      await supabase.from("pro_games").delete().eq("pro_id", proId).eq("game_id", gameId);
+    } else {
+      await supabase.from("pro_games").insert({ pro_id: proId, game_id: gameId });
+    }
+    setGamesByPro((prev) => {
+      const next = { ...prev, [proId]: new Set(prev[proId] ?? []) };
+      if (has) next[proId].delete(gameId);
+      else next[proId].add(gameId);
+      return next;
+    });
+    setTogglingGame(null);
   }
 
   useEffect(() => {
@@ -275,6 +307,45 @@ export default function AdminUsersPage() {
                                   </li>
                                 ))}
                               </ul>
+                            )}
+                          </div>
+                        );
+                      })()}
+                      {r === "pro" && (() => {
+                        const myGames = gamesByPro[p.id] ?? new Set<string>();
+                        const expanded = expandedGames[p.id];
+                        return (
+                          <div className="mt-2">
+                            <button
+                              onClick={() => setExpandedGames((prev) => ({ ...prev, [p.id]: !prev[p.id] }))}
+                              className="text-xs text-gray-400 hover:underline"
+                            >
+                              🎮 {myGames.size} game(s) {expanded ? "▲" : "▼"}
+                            </button>
+                            {expanded && (
+                              <div className="mt-1 grid grid-cols-2 gap-1">
+                                {allGames.map((g) => {
+                                  const checked = myGames.has(g.id);
+                                  const key = `${p.id}:${g.id}`;
+                                  return (
+                                    <label
+                                      key={g.id}
+                                      className={`flex items-center gap-1.5 text-[11px] px-1.5 py-1 rounded border cursor-pointer transition ${
+                                        checked ? "border-accent text-accent bg-accent/10" : "border-white/10 text-gray-500"
+                                      }`}
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        className="accent-[#8b5cf6]"
+                                        checked={checked}
+                                        disabled={togglingGame === key}
+                                        onChange={() => toggleProGame(p.id, g.id)}
+                                      />
+                                      {g.name}
+                                    </label>
+                                  );
+                                })}
+                              </div>
                             )}
                           </div>
                         );
