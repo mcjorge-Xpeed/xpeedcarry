@@ -34,6 +34,10 @@ export default function OrderDetailPage() {
 
       const { data: orderData } = await supabase.from("orders").select("*").eq("id", id).single();
       setOrder(orderData);
+      if (orderData?.rating) {
+        setRatingValue(orderData.rating);
+        setRatingComment(orderData.rating_comment ?? "");
+      }
 
       const { data: conv } = await supabase
         .from("conversations")
@@ -196,57 +200,57 @@ export default function OrderDetailPage() {
               )}
             </div>
 
-            {order.rated_at ? (
-              <div>
-                <p className="text-sm text-gray-300 mb-2">✅ Thanks for rating this order!</p>
-                <p className="text-xs text-gray-400 mb-2">Mind sharing it on Trustpilot too? Really helps us out.</p>
-                <div className="flex flex-wrap gap-2">
-                  {order.rating_comment && (
-                    <button className="btn-secondary text-sm" onClick={copyReview}>
-                      {copied ? "Copied!" : "Copy my review"}
-                    </button>
-                  )}
-                  <a
-                    href="https://www.trustpilot.com/review/xpeedcarry.net"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-secondary text-sm"
+            <div>
+              <p className="text-sm text-gray-300 mb-2">
+                {order.rated_at ? "How was your experience?" : "How was your experience? (optional)"}
+              </p>
+              <div className="flex gap-1 mb-2">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setRatingValue(n)}
+                    className={`text-2xl leading-none ${n <= ratingValue ? "text-yellow-400" : "text-gray-600"}`}
                   >
-                    Open Trustpilot →
-                  </a>
-                </div>
+                    ★
+                  </button>
+                ))}
               </div>
-            ) : (
-              <div>
-                <p className="text-sm text-gray-300 mb-2">How was your experience? (optional)</p>
-                <div className="flex gap-1 mb-2">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <button
-                      key={n}
-                      type="button"
-                      onClick={() => setRatingValue(n)}
-                      className={`text-2xl leading-none ${n <= ratingValue ? "text-yellow-400" : "text-gray-600"}`}
+              {ratingValue > 0 && (
+                <div className="flex flex-col gap-2">
+                  <textarea
+                    className="input text-sm"
+                    placeholder="Anything to add? (optional)"
+                    value={ratingComment}
+                    onChange={(e) => setRatingComment(e.target.value)}
+                    rows={2}
+                  />
+                  <button className="btn-secondary text-sm w-fit" onClick={submitRating} disabled={savingRating}>
+                    {savingRating ? "Saving..." : order.rated_at ? "Update rating" : "Submit rating"}
+                  </button>
+                </div>
+              )}
+              {order.rated_at && (
+                <div className="mt-3 pt-3 border-t border-white/5">
+                  <p className="text-xs text-gray-400 mb-2">✅ Thanks for rating! Mind sharing it on Trustpilot too?</p>
+                  <div className="flex flex-wrap gap-2">
+                    {order.rating_comment && (
+                      <button className="btn-secondary text-sm" onClick={copyReview}>
+                        {copied ? "Copied!" : "Copy my review"}
+                      </button>
+                    )}
+                    <a
+                      href="https://www.trustpilot.com/review/xpeedcarry.net"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-secondary text-sm"
                     >
-                      ★
-                    </button>
-                  ))}
-                </div>
-                {ratingValue > 0 && (
-                  <div className="flex flex-col gap-2">
-                    <textarea
-                      className="input text-sm"
-                      placeholder="Anything to add? (optional)"
-                      value={ratingComment}
-                      onChange={(e) => setRatingComment(e.target.value)}
-                      rows={2}
-                    />
-                    <button className="btn-secondary text-sm w-fit" onClick={submitRating} disabled={savingRating}>
-                      {savingRating ? "Saving..." : "Submit rating"}
-                    </button>
+                      Open Trustpilot →
+                    </a>
                   </div>
-                )}
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
