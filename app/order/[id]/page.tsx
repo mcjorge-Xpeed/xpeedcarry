@@ -155,9 +155,49 @@ export default function OrderDetailPage() {
         )}
 
         {order.status === "completed" && (
-          <div className="mt-4 border-t border-white/10 pt-4">
+          <div className="mt-4 card hero-gradient p-4 border border-accent/30">
+            <p className="text-sm font-semibold mb-3">🎉 Order completed! A couple quick things:</p>
+
+            <div className="mb-5">
+              {order.tip_paid_at ? (
+                <p className="text-sm text-gray-300">🎉 You tipped ${Number(order.tip_amount).toFixed(2)} — thank you!</p>
+              ) : !tipSkipped ? (
+                <div>
+                  <p className="text-sm text-gray-300 mb-2">Happy with your pro? Leave them a tip (optional).</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {[3, 5, 10].map((amt) => (
+                      <button key={amt} className="btn-secondary text-sm" onClick={() => sendTip(amt)} disabled={sendingTip}>
+                        ${amt}
+                      </button>
+                    ))}
+                    <input
+                      type="number"
+                      min={1}
+                      step="1"
+                      placeholder="Other"
+                      className="input w-20 text-sm"
+                      value={tipCustom}
+                      onChange={(e) => setTipCustom(e.target.value)}
+                    />
+                    <button
+                      className="btn-secondary text-sm"
+                      disabled={sendingTip || !tipCustom}
+                      onClick={() => sendTip(Number(tipCustom))}
+                    >
+                      Send
+                    </button>
+                    <button className="text-xs text-gray-500 hover:text-gray-300" onClick={() => setTipSkipped(true)}>
+                      No, thanks
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-xs text-gray-500">No tip this time — no worries!</p>
+              )}
+            </div>
+
             {order.rated_at ? (
-              <div className="mb-4">
+              <div>
                 <p className="text-sm text-gray-300 mb-2">✅ Thanks for rating this order!</p>
                 <p className="text-xs text-gray-400 mb-2">Mind sharing it on Trustpilot too? Really helps us out.</p>
                 <div className="flex flex-wrap gap-2">
@@ -177,7 +217,7 @@ export default function OrderDetailPage() {
                 </div>
               </div>
             ) : (
-              <div className="mb-5">
+              <div>
                 <p className="text-sm text-gray-300 mb-2">How was your experience? (optional)</p>
                 <div className="flex gap-1 mb-2">
                   {[1, 2, 3, 4, 5].map((n) => (
@@ -207,40 +247,6 @@ export default function OrderDetailPage() {
                 )}
               </div>
             )}
-
-            {order.tip_paid_at ? (
-              <p className="text-sm text-gray-300">🎉 You tipped ${Number(order.tip_amount).toFixed(2)} — thank you!</p>
-            ) : !tipSkipped ? (
-              <div>
-                <p className="text-sm text-gray-300 mb-2">Happy with your pro? Leave them a tip (optional).</p>
-                <div className="flex flex-wrap items-center gap-2">
-                  {[3, 5, 10].map((amt) => (
-                    <button key={amt} className="btn-secondary text-sm" onClick={() => sendTip(amt)} disabled={sendingTip}>
-                      ${amt}
-                    </button>
-                  ))}
-                  <input
-                    type="number"
-                    min={1}
-                    step="1"
-                    placeholder="Other"
-                    className="input w-20 text-sm"
-                    value={tipCustom}
-                    onChange={(e) => setTipCustom(e.target.value)}
-                  />
-                  <button
-                    className="btn-secondary text-sm"
-                    disabled={sendingTip || !tipCustom}
-                    onClick={() => sendTip(Number(tipCustom))}
-                  >
-                    Send
-                  </button>
-                  <button className="text-xs text-gray-500 hover:text-gray-300" onClick={() => setTipSkipped(true)}>
-                    No, thanks
-                  </button>
-                </div>
-              </div>
-            ) : null}
           </div>
         )}
       </div>
