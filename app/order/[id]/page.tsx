@@ -21,6 +21,7 @@ export default function OrderDetailPage() {
   const [tipSkipped, setTipSkipped] = useState(false);
   const [sendingTip, setSendingTip] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [evidenceSignedUrls, setEvidenceSignedUrls] = useState<Record<string, string>>({});
   const supabase = createClient();
 
   useEffect(() => {
@@ -49,6 +50,20 @@ export default function OrderDetailPage() {
     }
     init();
   }, [id]);
+
+  useEffect(() => {
+    const paths: string[] = order?.evidence_urls ?? [];
+    if (paths.length === 0) return;
+    (async () => {
+      const entries = await Promise.all(
+        paths.map(async (path) => {
+          const { data } = await supabase.storage.from("order-evidence").createSignedUrl(path, 3600);
+          return [path, data?.signedUrl ?? ""] as const;
+        })
+      );
+      setEvidenceSignedUrls(Object.fromEntries(entries));
+    })();
+  }, [order?.evidence_urls]);
 
   async function confirmCompletion() {
     setConfirming(true);
@@ -132,10 +147,10 @@ export default function OrderDetailPage() {
               {order.status === "delivered" ? "Your pro says this order is done. Please review:" : "Proof of completion:"}
             </p>
             <div className="flex flex-col gap-1 mb-1">
-              {order.evidence_urls.map((url: string, i: number) => (
+              {order.evidence_urls.map((path: string, i: number) => (
                 <a
-                  key={url}
-                  href={url}
+                  key={path}
+                  href={evidenceSignedUrls[path] ?? "#"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-accent hover:underline text-sm block"

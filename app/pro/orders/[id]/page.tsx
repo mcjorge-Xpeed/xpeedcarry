@@ -13,7 +13,8 @@ export default function ProOrderDetail() {
   const [updating, setUpdating] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
-  const [stagedUrls, setStagedUrls] = useState<string[]>([]);
+  const [stagedFiles, setStagedFiles] = useState<{ path: string; previewUrl: string }[]>([]);
+  const [evidenceSignedUrls, setEvidenceSignedUrls] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
@@ -45,6 +46,22 @@ export default function ProOrderDetail() {
   useEffect(() => {
     load();
   }, [id]);
+
+  // El bucket es privado: cada vez que hay rutas de evidencia guardadas,
+  // generamos links firmados temporales para poder mostrarlas.
+  useEffect(() => {
+    const paths: string[] = order?.evidence_urls ?? [];
+    if (paths.length === 0) return;
+    (async () => {
+      const entries = await Promise.all(
+        paths.map(async (path) => {
+          const { data } = await supabase.storage.from("order-evidence").createSignedUrl(path, 3600);
+          return [path, data?.signedUrl ?? ""] as const;
+        })
+      );
+      setEvidenceSignedUrls(Object.fromEntries(entries));
+    })();
+  }, [order?.evidence_urls]);
 
   async function acceptOrder() {
     setUpdating(true);
@@ -86,28 +103,31 @@ export default function ProOrderDetail() {
         setError(uploadError.message);
         continue;
       }
-      const { data: publicUrl } = supabase.storage.from("order-evidence").getPublicUrl(path);
-      setStagedUrls((prev) => [...prev, publicUrl.publicUrl]);
+      // El bucket es privado: para previsualizar el archivo recién subido
+      // (antes de confirmar la entrega) usamos un link firmado temporal.
+      // Lo que se guarda de verdad es la ruta (path), no este link.
+      const { data: signed } = await supabase.storage.from("order-evidence").createSignedUrl(path, 3600);
+      setStagedFiles((prev) => [...prev, { path, previewUrl: signed?.signedUrl ?? "" }]);
     }
 
     setUploading(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
-  function removeStaged(url: string) {
-    setStagedUrls((prev) => prev.filter((u) => u !== url));
+  function removeStaged(path: string) {
+    setStagedFiles((prev) => prev.filter((f) => f.path !== path));
   }
 
   async function confirmDelivery() {
-    if (stagedUrls.length === 0) return;
+    if (stagedFiles.length === 0) return;
     setSubmitting(true);
     await fetch("/api/pro/confirm-delivery", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ orderId: id, evidenceUrls: stagedUrls }),
+      body: JSON.stringify({ orderId: id, evidenceUrls: stagedFiles.map((f) => f.path) }),
     });
     setSubmitting(false);
-    setStagedUrls([]);
+    setStagedFiles([]);
     load();
   }
 
@@ -190,16 +210,16 @@ export default function ProOrderDetail() {
             {uploading && <p className="text-xs text-gray-400 mt-2">Uploading...</p>}
             {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
 
-            {stagedUrls.length > 0 && (
+            {stagedFiles.length > 0 && (
               <div className="mt-3 flex flex-col gap-2">
-                {stagedUrls.map((url) => (
-                  <div key={url} className="flex items-center justify-between bg-[#121018] border border-white/10 rounded px-3 py-2">
-                    <a href={url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm truncate">
-                      {url.split("/").pop()}
+                {stagedFiles.map((f) => (
+                  <div key={f.path} className="flex items-center justify-between bg-[#121018] border border-white/10 rounded px-3 py-2">
+                    <a href={f.previewUrl} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm truncate">
+                      {f.path.split("/").pop()}
                     </a>
                     <button
                       type="button"
-                      onClick={() => removeStaged(url)}
+                      onClick={() => removeStaged(f.path)}
                       className="text-red-400 text-xs hover:underline ml-3 flex-shrink-0"
                     >
                       Remove
@@ -212,9 +232,9 @@ export default function ProOrderDetail() {
             <button
               className="btn-primary w-full mt-3"
               onClick={confirmDelivery}
-              disabled={stagedUrls.length === 0 || submitting || uploading}
+              disabled={stagedFiles.length === 0 || submitting || uploading}
             >
-              {submitting ? "Submitting..." : `Mark as Complete (${stagedUrls.length} file${stagedUrls.length === 1 ? "" : "s"})`}
+              {submitting ? "Submitting..." : `Mark as Complete (${stagedFiles.length} file${stagedFiles.length === 1 ? "" : "s"})`}
             </button>
           </div>
         )}
@@ -222,8 +242,8 @@ export default function ProOrderDetail() {
         {(order.evidence_urls ?? []).length > 0 && (
           <div className="mt-4 border-t border-white/10 pt-4">
             <div className="flex flex-col gap-1">
-              {order.evidence_urls.map((url: string, i: number) => (
-                <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm">
+              {order.evidence_urls.map((path: string, i: number) => (
+                <a key={path} href={evidenceSignedUrls[path] ?? "#"} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm">
                   View uploaded evidence {order.evidence_urls.length > 1 ? `#${i + 1}` : ""} →
                 </a>
               ))}

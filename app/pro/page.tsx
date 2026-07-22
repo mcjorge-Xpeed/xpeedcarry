@@ -78,12 +78,11 @@ export default function ProDashboard() {
       const myGameIdSet = new Set((myGames ?? []).map((g) => g.game_id));
       setMyGameIds(myGameIdSet);
 
+      // open_order_pool es una vista que nunca incluye price (ni de casualidad
+      // con una llamada directa) — solo lo que un pro debe poder ver.
       const { data: openOrdersData } = await supabase
-        .from("orders")
+        .from("open_order_pool")
         .select("id, order_number, title, description, pro_earnings, game_id, created_at, game:game_id(name)")
-        .eq("price_confirmed", true)
-        .is("pro_id", null)
-        .eq("status", "pending_payment")
         .order("created_at", { ascending: false });
       // Solo mostramos las que coinciden con los juegos del pro, más las
       // órdenes custom/servicios especiales (sin game_id) que aplican a todos.

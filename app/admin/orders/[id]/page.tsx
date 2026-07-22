@@ -74,6 +74,7 @@ export default function AdminOrderDetail() {
   const [showBanPrompt, setShowBanPrompt] = useState(false);
   const [startingInvestigation, setStartingInvestigation] = useState(false);
   const [interestedPros, setInterestedPros] = useState<any[]>([]);
+  const [evidenceSignedUrls, setEvidenceSignedUrls] = useState<Record<string, string>>({});
   const supabase = createClient();
   const isAdmin = role === "admin";
 
@@ -135,6 +136,20 @@ export default function AdminOrderDetail() {
   useEffect(() => {
     load();
   }, [id]);
+
+  useEffect(() => {
+    const paths: string[] = order?.evidence_urls ?? [];
+    if (paths.length === 0) return;
+    (async () => {
+      const entries = await Promise.all(
+        paths.map(async (path) => {
+          const { data } = await supabase.storage.from("order-evidence").createSignedUrl(path, 3600);
+          return [path, data?.signedUrl ?? ""] as const;
+        })
+      );
+      setEvidenceSignedUrls(Object.fromEntries(entries));
+    })();
+  }, [order?.evidence_urls]);
 
   async function confirmPrice() {
     const price = Number(finalPrice);
@@ -544,8 +559,8 @@ export default function AdminOrderDetail() {
 
         {(order.evidence_urls ?? []).length > 0 && (
           <div className="flex flex-col gap-1 mb-3">
-            {order.evidence_urls.map((url: string, i: number) => (
-              <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm block">
+            {order.evidence_urls.map((path: string, i: number) => (
+              <a key={path} href={evidenceSignedUrls[path] ?? "#"} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm block">
                 View proof of completion {order.evidence_urls.length > 1 ? `#${i + 1}` : ""} →
               </a>
             ))}
