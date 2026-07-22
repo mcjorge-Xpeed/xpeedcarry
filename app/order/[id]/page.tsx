@@ -225,9 +225,15 @@ export default function OrderDetailPage() {
                     onChange={(e) => setRatingComment(e.target.value)}
                     rows={2}
                   />
-                  <button className="btn-secondary text-sm w-fit" onClick={submitRating} disabled={savingRating}>
-                    {savingRating ? "Saving..." : order.rated_at ? "Update rating" : "Submit rating"}
-                  </button>
+                  {order.rated_at ? (
+                    <button className="text-xs text-gray-400 hover:text-accent2 hover:underline w-fit" onClick={submitRating} disabled={savingRating}>
+                      {savingRating ? "Saving..." : "Update rating"}
+                    </button>
+                  ) : (
+                    <button className="btn-secondary text-sm w-fit" onClick={submitRating} disabled={savingRating}>
+                      {savingRating ? "Saving..." : "Submit rating"}
+                    </button>
+                  )}
                 </div>
               )}
               {order.rated_at && (
